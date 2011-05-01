@@ -1,7 +1,7 @@
 let g:CSApprox_verbose_level=0
 
 let mapleader = ","
-asdf
+
 
 if has("win32") || has("win64")
   set directory=$TMP
