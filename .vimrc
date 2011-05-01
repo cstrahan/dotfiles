@@ -17,4 +17,7 @@ if has("gui_win32") || has("gui_win32s")
   colorscheme solarized
 endif
 
+" Taggle Solarized background
+call togglebg#map("<F5>")
+
 set linespace=2
