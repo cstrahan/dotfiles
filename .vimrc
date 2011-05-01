@@ -20,4 +20,4 @@ endif
 " Taggle Solarized background
 call togglebg#map("<F5>")
 
-set linespace=2
+set linespace=0
