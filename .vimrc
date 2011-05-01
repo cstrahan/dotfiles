@@ -1,12 +1,20 @@
 let g:CSApprox_verbose_level=0
 
-source ~/vimfiles/vimrc  "windows
+let mapleader = ","
 
+
+if has("win32") || has("win64")
+  set directory=$TMP
+  source ~/vimfiles/vimrc
+else
+  set directory=~/tmp
+  source ~/.vim/vimrc
+end
 
 if has("gui_win32") || has("gui_win32s")
-    set guifont=PragmataPro:h10
-    set background=dark
-    colorscheme solarized
+  set guifont=PragmataPro:h10
+  set background=dark
+  colorscheme solarized
 endif
 
-set linespace=2 
+set linespace=2
