@@ -1,42 +1,43 @@
 begin
 
-  IS_IRON_RUBY = Module.constants.any? { |c| c.to_s == 'System' }
+  IS_IRON_RUBY = RUBY_ENGINE == "ironruby"
 
   # require 'rubygems'
   require 'interactive_editor'
   require 'pp'
+  
+  if RUBY_PLATFORM =~ /mingw32/ && !IS_IRON_RUBY
+    require 'Win32/Console/ANSI'
+  elsif IS_IRON_RUBY
+    require 'iron-term-ansicolor'
+    
+    # TOPLEVEL_BINDING#eval is screwed up in IR...
+    # This is an evil hack to get interactive_editor working.
+    MAIN_SELF = self
+    class << TOPLEVEL_BINDING
+      def eval(*args)
+        MAIN_SELF
+      end
+    end
+  end
+  
+  # Use blackwinter-wirble
+  require 'wirble'
+  Wirble.init
+  Wirble.colorize unless IS_IRON_RUBY
+  
+  colors = Wirble::Colorize.colors.merge({
+    # set the comma color to blue
+    :comma => :white,
+    :refers => :white,
+  })
+  Wirble::Colorize.colors = colors
   
   require 'irb/completion'
   ARGV.concat [ "--readline", "--prompt-mode", "simple" ]
   
   def cls; system 'cls'; end
   
-  #===================================
-  # HACK: Make interactive_editor close its file handle
-  # See:  https://github.com/jberkel/interactive_editor/issues/6
-  if InteractiveEditor::VERSION != "0.0.6"
-    puts "Dude: Check if `interactive_editor' has been fixed in version #{InteractiveEditor::VERSION}"
-  end
-  class InteractiveEditor
-    def edit(file=nil)
-      @file = if file
-         FileUtils.touch(file) unless File.exist?(file)
-         File.new(file)
-        else
-         (@file && File.exist?(@file.path)) ? @file : Tempfile.new(["irb_tempfile", ".rb"])
-      end
-      mtime = File.stat(@file.path).mtime
-  
-      args = Shellwords.shellwords(@editor) #parse @editor as arguments could be complexe
-      args << @file.path
-      @file.close # <------------ HACK ATTACK
-      Exec.system(*args) 
-  
-      execute if mtime < File.stat(@file.path).mtime
-    end
-  end
-  #===================================
-
   # IronRuby has some problem with Kernel::system(cmd, *args)
   if IS_IRON_RUBY
     module InteractiveEditor::Exec
@@ -46,8 +47,10 @@ begin
     end
   end
 
-
-rescue => error
+rescue Exception => error
   puts "Could not load `.irbrc':"
   puts error
+  puts ""
+  puts "Backtrace:"
+  puts error.backtrace
 end
