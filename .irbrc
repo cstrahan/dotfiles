@@ -27,9 +27,16 @@ begin
   Wirble.colorize unless IS_IRON_RUBY
   
   colors = Wirble::Colorize.colors.merge({
-    # set the comma color to blue
-    :comma => :white,
-    :refers => :white,
+    :comma        => :light_purple,
+    :refers       => :light_purple,
+    :open_hash    => :light_purple,
+    :close_hash   => :light_purple,
+    :open_array   => :light_purple,
+    :close_array  => :light_purple,
+    :open_string  => :light_red,
+    :string       => :dark_gray,
+    :close_string => :light_red,
+    :range        => :light_red,
   })
   Wirble::Colorize.colors = colors
   
