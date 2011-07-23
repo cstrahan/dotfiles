@@ -1,6 +1,10 @@
 begin
 
-  IS_IRON_RUBY = RUBY_ENGINE == "ironruby"
+  if RUBY_VERSION.split('.')[1] == '8'
+    require 'rubygems'
+  end
+
+  IS_IRON_RUBY = defined?(::RUBY_ENGINE) && RUBY_ENGINE == "ironruby"
 
   # require 'rubygems'
   require 'interactive_editor'
@@ -54,6 +58,7 @@ begin
     end
   end
 
+  
 rescue Exception => error
   puts "Could not load `.irbrc':"
   puts error
