@@ -1,3 +1,4 @@
+# vim: set filetype=ruby
 begin
 
   if RUBY_VERSION.split('.')[1] == '8'
