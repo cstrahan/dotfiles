@@ -1,4 +1,4 @@
-" vim: set filetype=viml
+" vim: set filetype=vim
 
 let g:CSApprox_verbose_level=0
 
@@ -17,11 +17,16 @@ end
 
 " Aesthetics
 if has("gui_running")
-  set guifont=PragmataPro:h10
   set background=dark
   colorscheme solarized
   call togglebg#map("<F5>")
 endif
+
+if has("gui_macvim") || has("gui_win32")
+  set guifont=PragmataPro:h10
+elseif has("gui_gtk")
+  set guifont=PragmataPro\ 10
+end
 
 set linespace=0
 
