@@ -1,0 +1,52 @@
+# Reload key
+bind r source-file ~/.tmux.conf
+
+# 256 colors
+set -g default-terminal "screen-256color"
+
+set -g mouse-select-pane on
+set-window-option -g mode-mouse on
+set-window-option -g utf8 on
+
+# Set the prefix to C-a
+unbind C-b
+set-option -g prefix C-a
+
+# Vim style splitting
+# (vim's definition of a horizontal/vertical split is reversed from tmux's)
+bind s split-window -v
+bind v split-window -h
+
+# Move around panes with hjkl
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# vi-style controls for copy mode
+set-window-option -g mode-keys vi
+set-option -g status-keys vi
+
+# Status
+set -g status-bg black
+set -g status-fg white
+
+# Status: Left
+set -g status-left-length 20
+set -g status-left '#[fg=green][#[bg=black,fg=cyan]#S#[bg=black,fg=blue,dim]:#H#[fg=green]]'
+
+# Status: Inactive
+set-window-option -g window-status-format '#[fg=cyan,dim]#I#[fg=blue]:#[default]#W#[fg=grey,dim]#F'
+
+# Status: Current
+set-window-option -g window-status-current-format '#[bg=blue,fg=cyan,bold]#I#[bg=blue,fg=cyan]:#[fg=white]#W#[fg=dim]#F'
+
+# Status: Alerted
+set-window-option -g window-status-alert-fg red
+set-window-option -g window-status-alert-bg white
+
+# Status: Right
+set -g status-right '#[fg=green][#[fg=white]#T#[fg=green]][#[fg=blue]%Y-%m-%d #[fg=white]%H:%M#[default]#[fg=green]]'
+
+# Keep messages open longer
+set -g display-time 3000
