@@ -1,0 +1,3 @@
+"\C-i": menu-complete
+set completion-ignore-case On
+set expand-tilde Off
