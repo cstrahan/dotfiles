@@ -18,6 +18,13 @@
 : ${INPUTRC=~/.inputrc}
 
 # ----------------------------------------------------------------------
+#  RVM
+# ----------------------------------------------------------------------
+
+if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then source "$HOME/.rvm/scripts/rvm" ; fi
+if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
+
+# ----------------------------------------------------------------------
 #  SHELL OPTIONS
 # ----------------------------------------------------------------------
 
@@ -199,6 +206,7 @@ alias du1='du -h --max-depth=1'
 alias fn='find . -name'
 alias hi='history | tail -20'
 
+# Make tmux use 256 colors by default
 alias tmux='tmux -2'
 
 function pless {
@@ -333,9 +341,6 @@ man () {
 # -------------------------------------------------------------------
 # USER SHELL ENVIRONMENT
 # -------------------------------------------------------------------
-
-# bring in rbdev functions
-. rbdev 2>/dev/null || true
 
 # source ~/.shenv now if it exists
 test -r ~/.shenv &&
