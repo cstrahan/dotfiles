@@ -1,4 +1,48 @@
 # vim: set filetype=ruby
+
+# TODO - Look at: http://lucapette.com/pry/pry-everywhere/
+
+def IRB.reload
+  load __FILE__
+end
+
+# https://github.com/carlhuda/bundler/issues/183#issuecomment-1149953
+# NOTE - consider this option, too: https://gist.github.com/794915
+# Add all gems in the global gemset to the $LOAD_PATH so they can be used even
+# in places like 'rails console'.
+if defined?(::Bundler) && ENV['GEM_PATH']
+  global_gemset = ENV['GEM_PATH'].split(':').grep(/ruby.*@global/).first
+  if global_gemset
+    all_global_gem_paths = Dir.glob("#{global_gemset}/gems/*")
+    all_global_gem_paths.each do |p|
+      gem_path = "#{p}/lib"
+      $LOAD_PATH << gem_path
+    end
+  end
+end
+
+# Determines if a shell command exists by searching for it in ENV['PATH'].
+def command_exists?(command)
+  ENV['PATH'].split(File::PATH_SEPARATOR).any? {|d| File.exists? File.join(d, command) }
+end
+
+# https://github.com/cldwalker/hirb/blob/0df53628bd07845feed43030477b65106e75c7dd/lib/hirb/util.rb#L55-73
+# Returns [width, height] of terminal when detected, nil if not detected.
+# Think of this as a simpler version of Highline's Highline::SystemExtensions.terminal_size()
+def detect_terminal_size
+  if (ENV['COLUMNS'] =~ /^\d+$/) && (ENV['LINES'] =~ /^\d+$/)
+    [ENV['COLUMNS'].to_i, ENV['LINES'].to_i]
+  elsif (RUBY_PLATFORM =~ /java/ || (!STDIN.tty? && ENV['TERM'])) && command_exists?('tput')
+    [`tput cols`.to_i, `tput lines`.to_i]
+  elsif STDIN.tty? && command_exists?('stty')
+    `stty size`.scan(/\d+/).map { |s| s.to_i }.reverse
+  else
+    nil
+  end
+rescue
+  nil
+end
+
 begin
 
   if RUBY_VERSION.split('.')[1] == '8'
@@ -72,23 +116,21 @@ begin
   end
 
   def ls(obj=self)
-    width = `stty size 2>/dev/null`.split(/\s+/, 2).last.to_i
-    width = 80 if width == 0
+    width, height = detect_terminal_size
     local_methods(obj).each_slice(3) do |meths|
       pattern = "%-#{width / 3}s" * meths.length
       puts pattern % meths
     end
   end
 
-  # reload this .irbrc
-  def IRB.reload
-    load __FILE__
-  end
-
 rescue Exception => error
-  puts "Could not load `.irbrc':"
+  width, height = detect_terminal_size
+  sep = "-" * width;
+  
+  print sep
+  puts "Could not load .irbrc:"
   puts error
-  puts ""
-  puts "Backtrace:"
-  puts error.backtrace
+  puts error.backtrace.first
+  print sep
+  
 end

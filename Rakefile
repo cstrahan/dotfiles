@@ -52,7 +52,7 @@ task :install do
     FileUtils.rm_rf(target) if overwrite || overwrite_all
     FileUtils.mv(File.join(HOME, ".#{file}"), File.join(HOME, ".#{file}.backup")) if backup || backup_all
 
-    sym(File.join(TOPLEVEL, linkable), target) unless skip
+    sym(File.join(TOPLEVEL, linkable), target) unless skip || skip_all
   end
 end
 task :default => 'install'
