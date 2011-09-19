@@ -1,0 +1,7 @@
+[user]
+	name = Charles Strahan
+	email = charles.c.strahan@gmail.com
+[color]
+	ui = true
+[init]
+	templatedir = ~/.git_template
