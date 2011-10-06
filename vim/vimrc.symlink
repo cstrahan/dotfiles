@@ -4,26 +4,31 @@ let g:CSApprox_verbose_level=0
 
 let mapleader = ","
 
-
 " Default dirs & source
 if has("win32") || has("win64")
   set directory+=$TMP
   source ~/vimfiles/vimrc
 else
-  set directory+=~/tmp
+  if exists("mkdir")
+    call mkdir("~/tmp")
+  end
+
+  set directory=~/tmp//,/var/tmp//,/tmp//,.
   source ~/.vim/vimrc
 end
 
 if has("unix") && (!has("gui_running"))
   set ttymouse=xterm
-endif
+end
 
 " Aesthetics
 if has("gui_running")
   set background=dark
   colorscheme solarized
   call togglebg#map("<F5>")
-endif
+else
+  colorscheme railscasts
+end
 
 if has("gui_macvim") || has("gui_win32")
   set guifont=PragmataPro:h10
@@ -33,10 +38,8 @@ end
 
 set linespace=0
 
-
 " File types
 autocmd FileType cs setlocal expandtab shiftwidth=4 softtabstop=4
-
 
 " <leader>s to substitute word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
