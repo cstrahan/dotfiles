@@ -1,0 +1,71 @@
+! vim: ft=xdefaults
+
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.antialias:  true
+Xft.hinting:    true
+Xft.hintstyle:  hintslight
+Xft.dpi: 96
+Xft.rgba: rgb
+
+! -------------------------
+! URXVT
+! -------------------------
+
+! Look & feel
+URxvt.transparent: false
+URxvt.depth: 32
+URxvt.scrollBar: true
+URxvt.scrollBar_right: true
+URxvt.scrollstyle: plain
+URxvt.termName:  rxvt-256color
+URxvt.cursorBlink:true
+
+! Fonts
+URxvt.font:\
+    xft:PragmataPro:pixelsize=12,\
+    xft:Monospace
+URxvt.boldFont:\
+    xft:PragmataPro:pixelsize=12:style=Bold,\
+    xft:Monospace
+URxvt.italicFont:\
+    xft:PragmataPro:pixelsize=12:style=Italic,\
+    xft:Monospace
+URxvt.boldItalicFont:\
+    xft:PragmataPro:pixelsize=12:style=Bold Italic,\
+    xft:Monospace
+
+! Fix font width
+URxvt.letterSpace: -1
+
+! Perl extensions (default,matcher,tabbedex,clipboard)
+! urxvt.perl-ext-common: default,matcher
+
+! Match gnome-terminal "Tango" scheme
+! foreground/background
+URxvt.background: #000000
+URxvt.foreground: #FFFFFF
+! black
+URxvt.color0  : #000000
+URxvt.color8  : #555753
+! red
+URxvt.color1  : #CC0000
+URxvt.color9  : #EF2929
+! green
+URxvt.color2  : #4E9A06
+URxvt.color10 : #8AE234
+! yellow
+URxvt.color3  : #C4A000
+URxvt.color11 : #FCE94F
+! blue
+URxvt.color4  : #3465A4
+URxvt.color12 : #729FCF
+! magenta
+URxvt.color5  : #75507B
+URxvt.color13 : #AD7FA8
+! cyan
+URxvt.color6  : #06989A
+URxvt.color14 : #34E2E2
+! white
+URxvt.color7  : #D3D7CF
+URxvt.color15 : #EEEEEC
