@@ -23,10 +23,11 @@ end
 
 " Aesthetics
 if has("gui_running")
-  set background=dark
-  colorscheme solarized
   call togglebg#map("<F5>")
+  set background=light
+  colorscheme solarized
 else
+  let g:solarized_termcolors=256
   colorscheme railscasts
 end
 
@@ -51,7 +52,13 @@ let g:haskell_indent_case = 5
 if has('win32') || has("win64")
   let g:haddock_browser = 'cmd.exe /c start ""'
   let g:haddock_browser_callformat = '%s %s'
-else
-  let g:haddock_browser = 'open'
-  let g:haddock_browser_callformat = '%s %s'
+elseif has("unix")
+  let s:uname = system("uname")
+  if s:uname == "Darwin\n"
+    let g:haddock_browser = 'open'
+    let g:haddock_browser_callformat = '%s %s'
+  elseif s:uname == "Linux\n"
+    let g:haddock_browser = 'xdg-open'
+    let g:haddock_browser_callformat = '%s %s'
+  endif
 endif
