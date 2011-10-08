@@ -1,9 +1,6 @@
 # Reload key
 bind r source-file ~/.tmux.conf
 
-# 256 colors
-set -g default-terminal "screen-256color"
-
 set -g mouse-select-pane on
 set-window-option -g mode-mouse on
 set-window-option -g utf8 on
@@ -50,3 +47,6 @@ set -g status-right '#[fg=green][#[fg=white]#T#[fg=green]][#[fg=blue]%Y-%m-%d #[
 
 # Keep messages open longer
 set -g display-time 3000
+
+# 256 colors
+set -g default-terminal "screen-256color"
