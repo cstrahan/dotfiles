@@ -1,0 +1,137 @@
+###################################################################
+# Jamis Buck's Tricks
+###################################################################
+
+define rb_bt
+  set $ary = backtrace(-1)
+  set $count = ((struct RArray) *$ary).len
+  set $index = 0
+  while $index < $count
+    x/1s ((struct RString) *rb_ary_entry($ary, $index)  ).ptr
+    set $index = $index + 1
+  end
+end
+document rb_bt
+  Print the ruby stack trace interpreting backtrace as a Ruby array of string.
+end
+
+define rb_raise
+  call rb_raise(rb_eException, "Forced exception from GDB to get a valid ruby stack trace")
+end
+document rb_raise
+  Raise a Ruby exception from gdb.
+end
+
+###################################################################
+# Mauricio Fernandez's Ruby macros (Eigenclass.org)
+###################################################################
+
+define eval
+  call(rb_p(rb_eval_string_protect($arg0,(int*)0)))
+end
+document eval
+   Evaluate an arbitrary Ruby expression from current gdb context.
+end
+
+define redirect_stdout
+  call rb_eval_string("$_old_stdout, $stdout = $stdout, File.open('/tmp/ruby-debug.' + Process.pid.to_s, 'a'); $stdout.sync = true")
+end
+document redirect_stdout
+  Hijack Ruby $stdout and redirect it to /tmp/ruby-debug-<pid>.
+  Useful to redirect ruby macro output to a separate file.
+end
+
+define restore_stdout
+  call rb_eval_string("$stdout = $_old_stdout")
+end
+document restore_stdout
+  Restore Ruby $stdout to its original value after hijacking it with
+  redirect_stdout.
+end
+
+define rb_finish
+  call rb_eval_string_protect("set_trace_func lambda{|event, file, line, id, binding, classname| if /return/ =~ event; sleep 0; set_trace_func(nil) end}",(int*)0)
+  tbreak rb_f_sleep
+  cont
+end
+document rb_finish
+  Execute the current Ruby method until it returns and interrupts the
+  process at a safe point (the rb_f_sleep function). You should
+  always call this macro before evaling Ruby code in gdb.
+end
+
+define rb_object_counts
+  call rb_eval_string_protect("counts = Hash.new{|h,k| h[k] = 0}; ObjectSpace.each_object{|o| counts[o.class] += 1}; counts.sort_by{|k,c| c}.reverse.each{|k,c| puts '%7d  %s' % [c, k] } ",(int*)0)
+end
+document rb_object_counts
+  Count and print all living objects by type.
+end
+
+define rb_locals
+  eval "local_variables.map{|x| puts '%s = %s' % [x, eval(x)]}; nil"
+end
+document rb_locals
+  Print local variables and their values.
+end
+
+define rb_p
+  call rb_p($arg0)
+end
+
+define rb_id2name
+  call rb_id2name($arg0)
+end
+
+define rb_classname
+  call classname($arg0)
+  rb_p $
+  p *(struct RClass*)$arg0
+end
+
+define rb_backtrace
+  call rb_backtrace()
+end
+
+##############################
+#  Method on Object in Ruby  #
+##############################
+
+define rb_method
+  #  we always have
+  #  * $arg0 == object
+  #  * $arg1 == C string for method
+  set var $ruby_method_count = $argc - 2
+  if $ruby_method_count == 0
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 0 ) ) )
+  end
+  if $ruby_method_count == 1
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 1 ), $arg2 ) )
+  end
+  if $ruby_method_count == 2
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 2 ), $arg2, $arg3 ) )
+  end
+  if $ruby_method_count == 3
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 3 ), $arg2, $arg3, $arg4 ) )
+  end
+  if $ruby_method_count == 4
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 4 ), $arg2, $arg3, $arg4, $arg5 ) )
+  end
+  if $ruby_method_count == 5
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 5 ), $arg2, $arg3, $arg4, $arg5, $arg6 ) )
+  end
+  if $ruby_method_count == 6
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 6 ), $arg2, $arg3, $arg4, $arg5, $arg6, $arg7 ) )
+  end
+  if $ruby_method_count == 7
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 7 ), $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8 ) )
+  end
+  if $ruby_method_count == 8
+          call( rb_p( rb_funcall( $arg0, rb_intern( $arg1 ), 8 ), $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8, $arg9 ) )
+  end
+  #  GDB only permits 10 parameters to user macros
+end
+document rb_method
+  Call Ruby method on Ruby Object.
+end
+
+echo **** Loaded Ruby Macros Successfully ****\n
