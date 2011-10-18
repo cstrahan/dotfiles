@@ -19,6 +19,12 @@ end
 
 if has("unix") && (!has("gui_running"))
   set ttymouse=xterm
+
+  " Fix the ABCD problem when in insert mode
+  imap 0A <ESC>ki
+  imap 0B <ESC>ji
+  imap 0C <ESC>li
+  imap 0D <ESC>hi
 end
 
 " Aesthetics

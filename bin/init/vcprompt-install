@@ -12,3 +12,4 @@ cd vcprompt
 make
 mkdir -p ~/bin
 cp vcprompt ~/bin/vcprompt
+rm -rf ~/src/vcprompt

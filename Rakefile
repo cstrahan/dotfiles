@@ -9,10 +9,11 @@ end
 HOME = if windows?
          ENV['USERPROFILE']
        else
-         ENV['HOME']
-       end
+         File.expand_path("~")
+       end.gsub(%r{(\\|/)+$}, "")
 
 def sym(linkable, target)
+  target.gsub("~", HOME)
   if windows?
     `cmd /C mklink "#{target}" "#{linkable}"`
   else
@@ -23,6 +24,8 @@ end
 desc "Hook our dotfiles into system-standard positions."
 task :install do
   linkables = Dir.glob('*/**{.symlink}')
+  linkables << "bin" # special case
+
   skip_all = false
   overwrite_all = false
   backup_all = false
@@ -33,7 +36,12 @@ task :install do
     backup = false
 
     file = linkable.split('/').last.split('.symlink')[0]
-    target = "#{HOME}/.#{file}"
+    target =
+      if file == "bin"
+        "#{HOME}/bin"
+      else
+        "#{HOME}/.#{file}"
+      end
 
     if File.exists?(target) || File.symlink?(target)
       unless skip_all || overwrite_all || backup_all
@@ -53,7 +61,7 @@ task :install do
     FileUtils.mv(File.join(HOME, ".#{file}"), File.join(HOME, ".#{file}.backup")) if backup || backup_all
 
     unless skip || skip_all
-      puts "#{target} => #{linkable}"
+      puts "#{target.gsub(HOME, "~")} => #{linkable}"
       sym(File.join(TOPLEVEL, linkable), target)
     end
   end

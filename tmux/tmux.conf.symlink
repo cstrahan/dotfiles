@@ -8,6 +8,7 @@ set-window-option -g utf8 on
 # Set the prefix to C-a
 unbind C-b
 set-option -g prefix C-a
+bind-key a send-prefix
 
 # Vim style splitting
 # (vim's definition of a horizontal/vertical split is reversed from tmux's)
