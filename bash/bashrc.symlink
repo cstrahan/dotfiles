@@ -29,6 +29,10 @@ if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/complet
 #  SHELL OPTIONS
 # ----------------------------------------------------------------------
 
+# Don't use CTRL+s and CTRL+q for terminal control flow:
+stty stop undef
+stty start undef
+
 # bring in system bashrc
 test -r /etc/bashrc &&
       . /etc/bashrc
