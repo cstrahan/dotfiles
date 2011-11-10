@@ -46,6 +46,7 @@ end
 set linespace=0
 
 " File types
+set expandtab shiftwidth=2 softtabstop=2
 autocmd FileType cs setlocal expandtab shiftwidth=4 softtabstop=4
 
 " <leader>s to substitute word under cursor
