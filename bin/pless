@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+# pless - A Pygments based pager.
+# Author: Charles Strahan
+
+require 'shellwords'
+
+class Pless
+  class << self
+    def exec path
+      lexer = resolve_lexer(path)
+      lexer_arg = "-l #{lexer}" if lexer
+
+      cmd = "pygmentize #{lexer_arg} -O encoding=utf-8 #{escape(path)} | less -Lr"
+      super cmd
+    end
+
+    def lexer_for path
+      lexer = `pygmentize -N #{escape(path)}`.chomp
+      lexer
+    end
+
+    def escape path
+      Shellwords.escape(path)
+    end
+
+    def resolve_lexer path
+      # resolve by file name
+      basename = File.basename(path)
+
+      (@patterns ||= []).each do |pattern, lexer|
+        return lexer if basename =~ pattern
+      end
+
+      # resolve by shebang
+      pattern = %r{^#!/usr/bin/env ([^ ]+)}
+      first_line = File.open(path, &:readline).chomp
+
+      @scripts[$1] if pattern =~ first_line
+    end
+
+    def pattern pattern, lexer
+      (@patterns ||= []) << [pattern, lexer]
+    end
+
+    def script script, lexer
+      (@scripts ||= {})[script] = lexer
+    end
+  end
+
+  pattern /^\.bashrc$/,  "bash"
+  pattern /^\.irbrc$/,   "rb"
+
+  script "ruby",  "rb"
+  script "sh",    "bash"
+  script "bash",  "bash"
+end
+
+if __FILE__ == $0
+  file = ARGV[0]
+  Pless.exec(file)
+end

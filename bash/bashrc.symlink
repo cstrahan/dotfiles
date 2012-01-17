@@ -286,10 +286,6 @@ alias hi='history | tail -20'
 # Make tmux use 256 colors by default
 alias tmux='tmux -2'
 
-function pless {
-  pygmentize $1 | less -r
-}
-
 # ----------------------------------------------------------------------
 # BASH COMPLETION
 # ----------------------------------------------------------------------
