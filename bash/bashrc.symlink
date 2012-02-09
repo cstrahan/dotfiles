@@ -172,6 +172,9 @@ EDITOR=vi
 export EDITOR
 
 # PAGER
+LESS="FirSwX"
+export LESS
+
 if test -n "$(command -v less)" ; then
     PAGER="less -FirSwX"
     MANPAGER="less -FiRswX"
