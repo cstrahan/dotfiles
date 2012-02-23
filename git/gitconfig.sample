@@ -9,6 +9,8 @@
   cmd = vim -d -c 'wincmd J' "$MERGED" "$LOCAL" "$BASE" "$REMOTE"
 [mergetool.gvimdiff3]
   cmd = gvim -d -c 'wincmd J' "$MERGED" "$LOCAL" "$BASE" "$REMOTE"
+[mergetool.fugitive]
+  cmd = vim -f -c "Gdiff" "$MERGED"
 [alias]
   st = status
   ci = commit
