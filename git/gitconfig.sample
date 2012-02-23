@@ -5,6 +5,10 @@
   ui = true
 [init]
   templatedir = ~/.git_template
+[mergetool.vimdiff3]
+  cmd = vim -d -c 'wincmd J' "$MERGED" "$LOCAL" "$BASE" "$REMOTE"
+[mergetool.gvimdiff3]
+  cmd = gvim -d -c 'wincmd J' "$MERGED" "$LOCAL" "$BASE" "$REMOTE"
 [alias]
   st = status
   ci = commit
