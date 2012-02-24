@@ -1,0 +1,5 @@
+#!/bin/bash
+
+DIR=$( cd -P "$( dirname "$0" )" && pwd )
+
+exec $DIR/apache-maven/bin/mvn $*
