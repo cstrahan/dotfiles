@@ -431,6 +431,31 @@ test -n "$PS1" &&
 prompt_color
 
 # -------------------------------------------------------------------
+# RUBY
+# -------------------------------------------------------------------
+
+# http://www.engineyard.com/blog/2011/tuning-the-garbage-collector-with-ruby-1-9-2/
+# http://www.engineyard.com/blog/2010/mri-memory-allocation-a-primer-for-developers/
+# http://www.viddler.com/v/87ae120a
+
+ruby_gc_default () {
+    export RUBY_HEAP_MIN_SLOTS           = 10000
+    export RUBY_HEAP_SLOTS_INCREMENT     = 10000
+    export RUBY_HEAP_SLOTS_GROWTH_FACTOR = 1.8
+    export RUBY_GC_MALLOC_LIMIT          = 8000000
+    export RUBY_HEAP_FREE_MIN            = 4096
+}
+
+ruby_gc_tuned () {
+    export RUBY_HEAP_MIN_SLOTS           = 1250000
+    export RUBY_HEAP_SLOTS_INCREMENT     = 100000
+    export RUBY_HEAP_SLOTS_GROWTH_FACTOR = 1
+    export RUBY_GC_MALLOC_LIMIT          = 30000000
+    export RUBY_HEAP_FREE_MIN            = 12500
+}
+
+
+# -------------------------------------------------------------------
 # MOTD / FORTUNE
 # -------------------------------------------------------------------
 
