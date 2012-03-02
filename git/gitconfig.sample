@@ -30,6 +30,11 @@
   rp = remote prune
   sm = submodule
   ign = ls-files -o -i --exclude-standard
+  aa = add --all
+  ff = merge --ff-only
+  pullff = pull --ff-only
+  noff = merge --no-ff
+  pom = push origin master
 
   rmd = !"git ls-files --deleted -z | xargs -0 git rm"
   staged = diff --cached
