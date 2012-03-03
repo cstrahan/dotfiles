@@ -1,6 +1,8 @@
 [user]
   name = Charles Strahan
   email = charles.c.strahan@gmail.com
+[core]
+  excludesfile = ~/.gitignore
 [color]
   ui = true
 [init]
