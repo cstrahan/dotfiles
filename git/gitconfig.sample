@@ -13,8 +13,8 @@
   cmd = gvim -d -c 'wincmd J' "$MERGED" "$LOCAL" "$BASE" "$REMOTE"
 [mergetool.fugitive]
   cmd = vim -f -c "Gdiff" "$MERGED"
-[difftool "Kaleidoscope"]
-    cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+[difftool "kaleidoscope"]
+  cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [alias]
   st = status
   ci = commit
