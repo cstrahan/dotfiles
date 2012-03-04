@@ -281,6 +281,9 @@ fi
 # ALIASES / FUNCTIONS
 # ----------------------------------------------------------------------
 
+# make man colorful
+alias man="TERMINFO=~/.terminfo/ LESS=C TERM=mostlike PAGER=less man"
+
 # disk usage with human sizes and minimal depth
 alias du1='du -h --max-depth=1'
 alias fn='find . -name'
@@ -406,12 +409,6 @@ ppush () { eval "${2:-PATH}='$(eval echo \$${2:-PATH})':$1"; }
 puniq () {
     echo "$1" |tr : '\n' |nl |sort -u -k 2,2 |sort -n |
     cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
-}
-
-# use gem-man(1) if available:
-man () {
-    gem man -s "$@" 2>/dev/null ||
-    command man "$@"
 }
 
 # -------------------------------------------------------------------
