@@ -472,3 +472,5 @@ test -n "$INTERACTIVE" -a -n "$LOGIN" && {
     uptime
 }
 
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

@@ -1,28 +1,68 @@
 require 'rake'
+require 'shellwords'
 
-TOPLEVEL = File.expand_path('.')
+TOPLEVEL = File.expand_path(File.dirname(__FILE__))
+FileUtils.cd(TOPLEVEL)
 
-def windows?
-  ENV['OS'] =~ /windows/i
+module DotSettings
+  extend self
+
+  def is_windows?
+    @is_windows ||= !!(Config::CONFIG['host_os'] =~ /windows/i)
+  end
+
+  def is_ubuntu?
+    @is_ubuntu ||= !is_windows? && !!(`uname -a` =~ /ubuntu/i)
+  end
+
+  def is_mac?
+    @is_mac ||= !is_windows? && !!(`uname -a` =~ /darwin/i)
+  end
+
+  def sublime_basedir
+    if is_windows?
+      File.expand_path('%APPDATA%/Sublime Text 2/')
+    elsif is_ubuntu?
+      File.expand_path('~/.Sublime Text 2/')
+    elsif is_mac?
+      File.expand_path('~/Library/Application Support/Sublime Text 2/')
+    end
+  end
+
+  def sublime_installed?
+    File.exist?(File.expand_path(sublime_basedir))
+  end
+
+  def sublime_user_prefs
+    File.join(sublime_basedir,  "Packages/User/Preferences.sublime-settings")
+  end
+
+  def sublime_installed_packages
+    File.join(sublime_basedir, "Installed Packages")
+  end
 end
+include DotSettings
 
-HOME = if windows?
+HOME = if is_windows?
          ENV['USERPROFILE']
        else
          File.expand_path("~")
        end.gsub(%r{(\\|/)+$}, "")
 
 def sym(linkable, target)
-  target.gsub("~", HOME)
-  if windows?
+  target   = target.gsub("~", HOME)
+  target   = File.expand_path(target)
+  linkable = File.expand_path(linkable)
+
+  puts target, linkable
+  if is_windows?
     `cmd /C mklink "#{target}" "#{linkable}"`
   else
     `ln -s "#{linkable}" "#{target}"`
   end
 end
 
-desc "Hook our dotfiles into system-standard positions."
-task :install do
+task :install_basic do
   linkables = Dir.glob('*/**{.symlink}')
   linkables << "bin" # special case
 
@@ -66,4 +106,19 @@ task :install do
     end
   end
 end
+
+task :install_sublime do
+  next unless sublime_installed?
+
+  FileUtils.rm_rf(sublime_installed_packages) if File.exist?(sublime_installed_packages)
+  FileUtils.rm_rf(sublime_user_prefs) if File.exist?(sublime_user_prefs)
+
+  sym("./sublime/user/Preferences.sublime-settings", sublime_user_prefs)
+  sym("./sublime/packages", sublime_installed_packages)
+end
+
+desc "Hook our dotfiles into system-standard positions."
+#task :install => [:install_basic, :install_sublime]
+task :install => :install_sublime
+
 task :default => 'install'
