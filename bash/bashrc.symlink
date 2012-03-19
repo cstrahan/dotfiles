@@ -296,7 +296,7 @@ alias fn='find . -name'
 alias hi='history | tail -20'
 
 # Make tmux use 256 colors by default
-alias tmux='tmux -2'
+alias tmux='command tmux -2'
 
 # ----------------------------------------------------------------------
 # BASH COMPLETION
