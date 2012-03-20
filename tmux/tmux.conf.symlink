@@ -1,7 +1,9 @@
 # Reload key
 bind r source-file ~/.tmux.conf
 
-set -g mouse-select-pane on
+set-option -g mouse-select-pane on
+set-option -g mouse-resize-pane on
+set-option -g mouse-select-window on
 set-window-option -g mode-mouse on
 set-window-option -g utf8 on
 
@@ -9,6 +11,11 @@ set-window-option -g utf8 on
 unbind C-b
 set-option -g prefix C-a
 bind-key a send-prefix
+
+# Rather than constraining window size to the maximum size of any client
+# connected to the *session*, constrain window size to the maximum size of any
+# client connected to *that window*. Much more reasonable.
+setw -g aggressive-resize on
 
 # Vim style splitting
 # (vim's definition of a horizontal/vertical split is reversed from tmux's)
@@ -40,8 +47,8 @@ set-window-option -g window-status-format '#[fg=cyan,dim]#I#[fg=blue]:#[default]
 set-window-option -g window-status-current-format '#[bg=blue,fg=cyan,bold]#I#[bg=blue,fg=cyan]:#[fg=white]#W#[fg=dim]#F'
 
 # Status: Alerted
-set-window-option -g window-status-alert-fg red
-set-window-option -g window-status-alert-bg white
+#set-window-option -g window-status-alert-fg red
+#set-window-option -g window-status-alert-bg white
 
 # Status: Right
 set -g status-right '#[fg=green][#[fg=white]#T#[fg=green]][#[fg=blue]%Y-%m-%d #[fg=white]%H:%M#[default]#[fg=green]]'
@@ -51,3 +58,7 @@ set -g display-time 3000
 
 # 256 colors
 set -g default-terminal "screen-256color"
+
+# tmux changed some commands between 1.5 and 1.6
+if-shell 'test "$(tmux -V)" = "tmux 1.5"' 'source-file ~/.tmux.1.5.conf'
+if-shell 'test "$(tmux -V)" = "tmux 1.6"' 'source-file ~/.tmux.1.6.conf'
