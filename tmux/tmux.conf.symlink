@@ -1,6 +1,9 @@
 # Reload key
 bind r source-file ~/.tmux.conf
 
+# Use $SHELL
+set-option -g default-shell $SHELL
+
 set-option -g mouse-select-pane on
 set-option -g mouse-resize-pane on
 set-option -g mouse-select-window on
