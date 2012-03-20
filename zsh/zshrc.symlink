@@ -1,0 +1,26 @@
+function reload! {
+  source ~/.zshrc
+}
+
+autoload -U compinit && compinit
+fpath=(~/.zsh/completion $fpath)
+
+autoload colors && colors
+ls --color -d . &>/dev/null 2>&1 && alias ls='ls --color=tty' || alias ls='ls -G'
+
+source ~/.zsh/aliases.zsh
+source ~/.zsh/bindkeys.zsh
+source ~/.zsh/completion.zsh
+source ~/.zsh/completion_rake.zsh
+source ~/.zsh/exports.zsh
+source ~/.zsh/functions.zsh
+source ~/.zsh/history.zsh
+source ~/.zsh/prompt.zsh
+source ~/.zsh/set_options.zsh
+
+if [[ -s ~/.zsh/custom.zsh ]] ; then source ~/.zsh/custom.zsh ; fi
+
+if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
+
+# TODO: Check this stuff out:
+#http://stackoverflow.com/questions/3622943/zsh-vi-mode-status-line
