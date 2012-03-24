@@ -1,3 +1,7 @@
+function internet\? {
+  (ping -c 3 -t 3 google.com >/dev/null 2>&1 && echo 'yep') || echo 'nope'
+}
+
 # credit: http://nparikh.org/notes/zshrc.txt
 # Usage: smartextract <file>
 # Description: extracts archived files / mounts disk images

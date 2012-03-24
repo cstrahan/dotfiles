@@ -118,7 +118,7 @@ task :install_sublime do
 end
 
 desc "Hook our dotfiles into system-standard positions."
-#task :install => [:install_basic, :install_sublime]
-task :install => :install_sublime
+task :install => [:install_basic, :install_sublime]
+#task :install => :install_sublime
 
 task :default => 'install'

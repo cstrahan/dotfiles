@@ -5,11 +5,20 @@ let g:CSApprox_verbose_level=0
 let mapleader = ","
 
 " Main settings
-if has("win32") || has("win64")
+if has("win32") | has("win64")
   source ~/vimfiles/vimrc
 else
   source ~/.vim/vimrc
 end
+
+" Cursor shape
+if exists('$TMUX')
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
 
 " Default dirs
 if has("win32") || has("win64")
@@ -41,7 +50,7 @@ if has("gui_running")
   colorscheme solarized
 else
   let g:solarized_termcolors=256
-  colorscheme railscasts
+  colorscheme solarized
 end
 
 if has("gui_macvim") || has("gui_win32")

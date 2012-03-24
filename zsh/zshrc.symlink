@@ -20,7 +20,5 @@ source ~/.zsh/set_options.zsh
 
 if [[ -s ~/.zsh/custom.zsh ]] ; then source ~/.zsh/custom.zsh ; fi
 
-if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
-
 # TODO: Check this stuff out:
 #http://stackoverflow.com/questions/3622943/zsh-vi-mode-status-line
