@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # vim: set filetype=ruby
 
 # TODO - Look at: http://lucapette.com/pry/pry-everywhere/
@@ -220,3 +221,32 @@ end
 
 # Show results of all extension-loading
 puts "#{ANSI[:GRAY]}~> Console extensions:#{ANSI[:RESET]} #{$console_extensions.join(' ')}#{ANSI[:RESET]}"
+
+# Oh yes I did, girlfriend.
+class Object
+  def λ; Proc.new end
+  private :λ
+end
+
+Y = λ { |generator|
+      λ { |x|
+          λ { |*args|
+              generator.call(x.call(x)).call(*args)
+            }
+        }.call(λ { |x|
+                  λ { |*args|
+                      generator.call(x.call(x)).call(*args)
+                    }
+                 })
+      }
+
+def Y.memoized
+  λ { |functional|
+      table = {}
+      Y.call(λ { |fun|
+                λ { |*args|
+                  table[args] ||= functional.call(fun).call(*args)
+                  }
+               })
+    }
+end
