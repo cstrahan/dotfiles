@@ -29,7 +29,7 @@ end
 has_libedit = false
 begin
   Readline.emacs_editing_mode
-rescue NotImplementedError
+rescue
   has_libedit = true
 end
 has_readline = !has_libedit
@@ -79,14 +79,15 @@ end
 
 
 require 'irb/completion'
-require 'irb/ext/save-history'
-ARGV.concat [ "--readline", "--prompt-mode", "simple" ]
+if RUBY_ENGINE != 'macruby'
+  ARGV.concat [ "--readline", "--prompt-mode", "simple" ]
+  require 'irb/ext/save-history'
+end
 
-#IRB.conf[:USE_READLINE] = true
 IRB.conf[:SAVE_HISTORY] = 1000
 IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb_history"
 
-ANSI = {}
+::ANSI = {}
 ANSI[:RESET]         = "\e[0m"
 ANSI[:BOLD]          = "\e[1m"
 ANSI[:UNDERLINE]     = "\e[4m"
@@ -99,20 +100,6 @@ ANSI[:BLUE]          = "\e[34m"
 ANSI[:MAGENTA]       = "\e[35m"
 ANSI[:CYAN]          = "\e[36m"
 ANSI[:WHITE]         = "\e[37m"
-
-
-# Build a simple colorful IRB prompt
-#http://bugs.ruby-lang.org/issues/show/3616
-IRB.conf[:PROMPT][:SIMPLE_COLOR] = {
-  :PROMPT_I => "#{ANSI[:BLUE]}>>#{ANSI[:RESET]} ",
-  :PROMPT_N => "#{ANSI[:BLUE]}>>#{ANSI[:RESET]} ",
-  :PROMPT_C => "#{ANSI[:RED]}?>#{ANSI[:RESET]} ",
-  :PROMPT_S => "#{ANSI[:YELLOW]}?>#{ANSI[:RESET]} ",
-  :RETURN   => "#{ANSI[:GREEN]}=>#{ANSI[:RESET]} %s\n",
-  :AUTO_INDENT => true
-}
-
-#IRB.conf[:PROMPT_MODE] = :SIMPLE_COLOR
 
 # Loading extensions of the console. This is wrapped
 # because some might not be included in your Gemfile
