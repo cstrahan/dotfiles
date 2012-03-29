@@ -54,7 +54,6 @@ def sym(linkable, target)
   target   = File.expand_path(target)
   linkable = File.expand_path(linkable)
 
-  puts target, linkable
   if is_windows?
     `cmd /C mklink "#{target}" "#{linkable}"`
   else
