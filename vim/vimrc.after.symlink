@@ -103,7 +103,6 @@ nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
 
-" :p:h
 fun! RangerChooser()
   try
     silent !ranger --choosefile=/tmp/chosenfile `[ -z '%' ] && echo -n . || dirname %`
@@ -116,4 +115,4 @@ fun! RangerChooser()
   endif
   redraw!
 endfun
-map ,r :call RangerChooser()<CR>
+map <Leader>r :call RangerChooser()<CR>
