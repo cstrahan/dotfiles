@@ -57,7 +57,7 @@ function smartcompress { # compress a file or folder
 
 # http://xanana.ucsc.edu/xtal/iterm_tab_customization.html
 # make finder cd to pwd or arg
-function fcd {
+function cdf {
   if [ -n "$1" ]; then
     if [ "${1%%/*}" = "" ]; then
       local thePath="$1"
@@ -79,8 +79,7 @@ END
 }
 
 # cd to current finder folder
-cdf ()
-{
+function fcd {
   local currFolderPath=$( /usr/bin/osascript <<EOT
       tell application "Finder"
           try
@@ -93,4 +92,65 @@ cdf ()
 EOT
   )
   cd "$currFolderPath"
+}
+
+function rcd {
+  tempfile=/tmp/chosendir
+  command ranger --choosedir=$tempfile "$@"
+  if [ -f $tempfile -a "$(cat $tempfile)" != "$(pwd | tr -d "\n")" ]
+  then
+    cd "$(cat $tempfile)"
+    rm $tempfile
+  fi
+}
+
+# By @ieure; copied from https://gist.github.com/1474072
+#
+# It finds a file, looking up through parent directories until it finds one.
+# Use it like this:
+#
+#   $ ls .tmux.conf
+#   ls: .tmux.conf: No such file or directory
+#
+#   $ ls `up .tmux.conf`
+#   /Users/grb/.tmux.conf
+#
+#   $ cat `up .tmux.conf`
+#   set -g default-terminal "screen-256color"
+#
+function up {
+    if [ "$1" != "" -a "$2" != "" ]; then
+        local DIR=$1
+        local TARGET=$2
+    elif [ "$1" ]; then
+        local DIR=$PWD
+        local TARGET=$1
+    fi
+    while [ ! -e $DIR/$TARGET -a $DIR != "/" ]; do
+        DIR=$(dirname $DIR)
+    done
+    test $DIR != "/" && echo $DIR/$TARGET
+}
+
+# Because:
+#  1. I'm forgetful.
+#  2. I'm lazy.
+function rake {
+  if [ -f Gemfile ]; then
+    bundle exec rake $@
+  else
+    command rake $@
+  fi
+}
+
+function guard {
+  if [ -f Gemfile ]; then
+    bundle exec guard $@
+  else
+    command guard $@
+  fi
+}
+
+function gcim {
+  git commit -m "$*"
 }

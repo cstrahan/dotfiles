@@ -20,8 +20,10 @@ alias ru='bundle exec rackup config.ru'
 # Git
 
 alias rebase='git fetch; git rebase origin/master'
+alias gp='git push origin HEAD'
+alias gaa='git add --all'
 alias gpom='git push origin master'
-alias gst='git status'
+alias gst='git status -sb'
 alias gci='git commit'
 alias gcia='git commit --amend'
 alias gco='git co'
@@ -30,3 +32,5 @@ alias gdc='git diff --cached'
 alias glg='git lg'
 alias getch='git fetch'
 alias gitx='gitx --all'
+
+alias less='command less -R'
