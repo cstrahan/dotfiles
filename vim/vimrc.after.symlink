@@ -116,3 +116,26 @@ fun! RangerChooser()
   redraw!
 endfun
 map <Leader>r :call RangerChooser()<CR>
+
+" http://src.chuckg.org/rcfiles/src/6b15c9ad4d29/vimrc/.vimrc
+" https://github.com/cdlm/infrastructure/blob/master/dotfiles/vim/after/plugin/tabular-patterns.vim
+if exists(":Tabularize")
+  function! CustomTabularPatterns()
+      if exists('g:tabular_loaded')
+          AddTabularPattern! assignment      /=/
+          AddTabularPattern! chunks          / \S\+/l0
+          AddTabularPattern! colon           /:\zs /l0
+          AddTabularPattern! comma           /^[^,]*,/l1
+          AddTabularPattern! hash            /^[^>]*\zs=>/
+          AddTabularPattern! options_hashes  /:\w\+ =>/
+          AddTabularPattern! symbols         / :/l0
+          AddTabularPattern! space           /^\s*\S*\zs\s/l0
+      endif
+  endfunction
+  autocmd VimEnter * call CustomTabularPatterns()
+
+  map <leader>a= :Tabularize assignment<CR>
+  map <leader>a: :Tabularize colon<CR>
+  map <leader>a, :Tabularize comma<CR>
+  map <leader>a> :Tabularize hash<CR>
+endif
