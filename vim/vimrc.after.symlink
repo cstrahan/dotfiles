@@ -122,11 +122,13 @@ map <Leader>r :call RangerChooser()<CR>
 if exists(":Tabularize")
   function! CustomTabularPatterns()
       if exists('g:tabular_loaded')
-          AddTabularPattern! assignment      /=/
+          AddTabularPattern! assignment      / = /
           AddTabularPattern! chunks          / \S\+/l0
           AddTabularPattern! colon           /:\zs /l0
-          AddTabularPattern! comma           /^[^,]*,/l1
-          AddTabularPattern! hash            /^[^>]*\zs=>/
+          AddTabularPattern! first_comma     /^[^,]*,/l1
+          AddTabularPattern! comma           /,\zs /l0
+          AddTabularPattern! first_hash      /^[^>]*\zs=>/
+          AddTabularPattern! hash            / => \|,\zs /l0
           AddTabularPattern! options_hashes  /:\w\+ =>/
           AddTabularPattern! symbols         / :/l0
           AddTabularPattern! space           /^\s*\S*\zs\s/l0
@@ -138,4 +140,5 @@ if exists(":Tabularize")
   map <leader>a: :Tabularize colon<CR>
   map <leader>a, :Tabularize comma<CR>
   map <leader>a> :Tabularize hash<CR>
+  map <leader>a<SPACE> :Tabularize chunks<CR>
 endif
