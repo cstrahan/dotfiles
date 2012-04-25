@@ -1,0 +1,18 @@
+[submodule "vim/janus.symlink/slim"]
+	path = vim/janus.symlink/slim
+	url = https://github.com/bbommarito/vim-slim.git
+[submodule "vim/janus.symlink/copy-as-rtf"]
+	path = vim/janus.symlink/copy-as-rtf
+	url = https://github.com/aniero/vim-copy-as-rtf.git
+[submodule "vim/janus.symlink/grb256"]
+	path = vim/janus.symlink/grb256
+	url = https://github.com/cstrahan/grb256.git
+[submodule "vim/janus.symlink/ragtag"]
+	path = vim/janus.symlink/ragtag
+	url = https://github.com/tpope/vim-ragtag.git
+[submodule "vim/janus.symlink/tabular"]
+	path = vim/janus.symlink/tabular
+	url = https://github.com/godlygeek/tabular.git
+[submodule "vim/janus.symlink/zencoding"]
+	path = vim/janus.symlink/zencoding
+	url = https://github.com/mattn/zencoding-vim.git
