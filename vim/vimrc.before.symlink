@@ -1,1 +1,6 @@
 let mapleader = ","
+
+" Configure ctrlp
+let g:ctrlp_extensions = ["tag", "buffertag"]
+let g:ctrlp_max_height = 100
+let g:ctrlp_match_window_reversed = 1

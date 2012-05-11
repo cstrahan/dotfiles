@@ -8,6 +8,10 @@ let g:CSApprox_verbose_level=0
 "let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
 "let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
 
+" Highlght cursor and column width
+set cursorline
+set colorcolumn=80
+
 " Cursor shape
 if exists('$TMUX')
   let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
@@ -122,7 +126,7 @@ map <Leader>r :call RangerChooser()<CR>
 if exists(":Tabularize")
   function! CustomTabularPatterns()
       if exists('g:tabular_loaded')
-          AddTabularPattern! assignment      / = /
+          AddTabularPattern! assignment      / = /l0
           AddTabularPattern! chunks          / \S\+/l0
           AddTabularPattern! colon           /:\zs /l0
           AddTabularPattern! first_comma     /^[^,]*,/l1
@@ -142,3 +146,15 @@ if exists(":Tabularize")
   map <leader>a> :Tabularize hash<CR>
   map <leader>a<SPACE> :Tabularize chunks<CR>
 endif
+
+" Configure ctrlp
+map <leader>gv :CtrlP app/views<cr>
+map <leader>gc :CtrlP app/controllers<cr>
+map <leader>gm :CtrlP app/models<cr>
+map <leader>gh :CtrlP app/helpers<cr>
+map <leader>gl :CtrlP lib<cr>
+map <leader>gp :CtrlP public<cr>
+map <leader>gs :CtrlP public/stylesheets/sass<cr>
+map <leader>gf :CtrlP features<cr>
+map <leader>gt :CtrlPTag<cr>
+map <leader>gb :CtrlPBufTag<cr>
