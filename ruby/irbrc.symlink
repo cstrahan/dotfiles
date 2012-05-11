@@ -25,16 +25,6 @@ if defined?(::Bundler) && ENV['GEM_PATH']
 end
 
 
-# Detect libedit/readline
-has_libedit = false
-begin
-  Readline.emacs_editing_mode
-rescue
-  has_libedit = true
-end
-has_readline = !has_libedit
-
-
 # Determines if a shell command exists by searching for it in ENV['PATH'].
 def command_exists?(command)
   ENV['PATH'].split(File::PATH_SEPARATOR).any? {|d| File.exists? File.join(d, command) }
@@ -159,7 +149,7 @@ extend_console 'rails2', (ENV.include?('RAILS_ENV') && !Object.const_defined?('R
 end
 
 # When you're using Rails 3 console, show queries in the console
-extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
+extend_console 'rails3', false && defined?(ActiveSupport::Notifications), false do
   $odd_or_even_queries = false
   ActiveSupport::Notifications.subscribe('sql.active_record') do |*args|
     $odd_or_even_queries = !$odd_or_even_queries
@@ -210,28 +200,23 @@ end
 puts "#{ANSI[:GRAY]}~> Console extensions:#{ANSI[:RESET]} #{$console_extensions.join(' ')}#{ANSI[:RESET]}"
 
 # Oh yes I did, girlfriend.
-class Object
-  def λ; Proc.new end
-  private :λ
-end
-
-Y = λ { |generator|
-      λ { |x|
-          λ { |*args|
+Y = lambda { |generator|
+      lambda { |x|
+          lambda { |*args|
               generator.call(x.call(x)).call(*args)
             }
-        }.call(λ { |x|
-                  λ { |*args|
+        }.call(lambda { |x|
+                  lambda { |*args|
                       generator.call(x.call(x)).call(*args)
                     }
                  })
       }
 
 def Y.memoized
-  λ { |functional|
+  lambda { |functional|
       table = {}
-      Y.call(λ { |fun|
-                λ { |*args|
+      Y.call(lambda { |fun|
+                lambda { |*args|
                   table[args] ||= functional.call(fun).call(*args)
                   }
                })
