@@ -1,3 +1,7 @@
 #!/bin/sh
+
+# Use hombrew's ctags if available
+export PATH=/usr/local/bin:$PATH
+
 rm -f .git/tags
 ctags --tag-relative -Rf.git/tags --exclude=.git --languages=-javascript,sql
