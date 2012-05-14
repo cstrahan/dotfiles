@@ -1,7 +1,5 @@
 # Misc.
 
-alias ll='ls -lF' # long format listing; add / to end of directories
-alias la='ls -alF' # include dot files in listing; add / to end of directories
 alias cpwd="pwd | ruby -pe'\$_.chomp!' | pbcopy" # copy path to clipboard
 alias preview='open -a Preview'
 

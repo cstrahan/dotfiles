@@ -1,3 +1,6 @@
+# http://stackoverflow.com/questions/689765/
+autoload -U colors && colors
+
 zmodload zsh/datetime
 zmodload zsh/stat
 
@@ -32,7 +35,7 @@ function should_reload_battery_meter {
 
 function reload_battery_meter {
   mkdir -p "$BATTERY_METER:h"
-  echo $(battery_charge) > ~/.zsh/tmp/battery
+  echo $(battery_charge) >! ~/.zsh/tmp/battery
   RPROMPT='$(cat $HOME/.zsh/tmp/battery)'
 }
 
