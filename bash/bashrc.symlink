@@ -26,6 +26,14 @@ if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then source "$HOME/.rvm/scripts/rvm" ; fi
 if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
 
 # ----------------------------------------------------------------------
+#  Auto Jump
+# ----------------------------------------------------------------------
+
+if [ -f `brew --prefix`/etc/autojump ]; then
+  . `brew --prefix`/etc/autojump
+fi
+
+# ----------------------------------------------------------------------
 #  SHELL OPTIONS
 # ----------------------------------------------------------------------
 
