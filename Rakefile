@@ -11,8 +11,8 @@ module DotSettings
     @is_windows ||= !!(Config::CONFIG['host_os'] =~ /windows/i)
   end
 
-  def is_ubuntu?
-    @is_ubuntu ||= !is_windows? && !!(`uname -a` =~ /ubuntu/i)
+  def is_linux?
+    @is_linux ||= !is_windows? && !!(`uname -a` =~ /linux|ubuntu/i)
   end
 
   def is_mac?
@@ -22,7 +22,7 @@ module DotSettings
   def sublime_basedir
     if is_windows?
       File.expand_path('%APPDATA%/Sublime Text 2/')
-    elsif is_ubuntu?
+    elsif is_linux?
       File.expand_path('~/.Sublime Text 2/')
     elsif is_mac?
       File.expand_path('~/Library/Application Support/Sublime Text 2/')
