@@ -30,20 +30,24 @@ function age_in_seconds {
 }
 
 function should_reload_battery_meter {
-  [[ ! -e $BATTERY_METER ]] || [[ $(age_in_seconds $BATTERY_METER) -gt 300 ]]
+  can_get_battery_meter && ([[ ! -e $BATTERY_METER ]] || [[ $(age_in_seconds $BATTERY_METER) -gt 300 ]])
+}
+
+function can_get_battery_meter {
+  [[ -x '/usr/sbin/ioreg' ]]
 }
 
 function reload_battery_meter {
   mkdir -p "$BATTERY_METER:h"
   echo $(battery_charge) >! ~/.zsh/tmp/battery
-  RPROMPT='$(cat $HOME/.zsh/tmp/battery)'
+  RPROMPT="$(cat $BATTERY_METER)"
 }
 
 # Prep the battery meter.
 if should_reload_battery_meter; then
   reload_battery_meter
 else
-  RPROMPT='$(cat $HOME/.zsh/tmp/battery)'
+  RPROMPT="$(cat $BATTERY_METER)"
 fi
 
 function set_prompt {
