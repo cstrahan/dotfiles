@@ -22,8 +22,13 @@
 #  RVM
 # ----------------------------------------------------------------------
 
-if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then source "$HOME/.rvm/scripts/rvm" ; fi
-if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
+if [[ -f "/usr/local/rvm/scripts/rvm" ]] && groups | grep -q rvm ; then
+    source "/usr/local/rvm/scripts/rvm"
+    if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
+elif [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
+    source "$HOME/.rvm/scripts/rvm"
+    if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
+fi
 
 # ----------------------------------------------------------------------
 #  Auto Jump
