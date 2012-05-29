@@ -29,7 +29,7 @@ if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/complet
 #  Auto Jump
 # ----------------------------------------------------------------------
 
-if [ -f `brew --prefix`/etc/autojump ]; then
+if command -v brew >/dev/null 2>&1 && [ -f `brew --prefix`/etc/autojump ]; then
   . `brew --prefix`/etc/autojump
 fi
 
