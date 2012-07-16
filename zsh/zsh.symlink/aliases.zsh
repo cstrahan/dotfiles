@@ -33,6 +33,9 @@ alias gitx='gitx --all'
 
 alias less='command less -R'
 
+# undo OMZ's annoying safe delete alias
+alias rm='nocorrect rm'
+
 # fasd
 alias a='fasd -a'    # any
 alias s='fasd -s'    # show / search / select

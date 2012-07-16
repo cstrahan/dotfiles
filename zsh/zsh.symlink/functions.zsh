@@ -2,6 +2,32 @@ function internet\? {
   (ping -c 3 -t 3 google.com >/dev/null 2>&1 && echo 'yep') || echo 'nope'
 }
 
+# Types text from stdin into the last active window
+function sendkeys {
+  # Switch to previously active app
+  local script="
+    tell application \"System Events\"
+      tell process \"finder\"
+        activate
+        keystroke tab using {command down}
+      end tell
+    end tell
+    delay 0.1
+    "
+  echo "$script" | osascript
+
+  # Send the keys
+  ruby -e "
+    begin; require 'rubygems'; rescue ImportError; end
+    require 'appscript'
+    include Appscript
+    ARGF.each_line do |line|
+      app('System Events').keystroke(line)
+      app('System Events').key_code(36)
+    end
+  "
+}
+
 # credit: http://nparikh.org/notes/zshrc.txt
 # Usage: smartextract <file>
 # Description: extracts archived files / mounts disk images
