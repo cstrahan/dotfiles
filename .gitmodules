@@ -19,3 +19,6 @@
 [submodule "vim/janus.symlink/powerline"]
 	path = vim/janus.symlink/powerline
 	url = https://github.com/Lokaltog/vim-powerline.git
+[submodule "vim/janus.symlink/vim-io"]
+	path = vim/janus.symlink/vim-io
+	url = git://github.com/xhr/vim-io.git
