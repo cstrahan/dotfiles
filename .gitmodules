@@ -22,3 +22,6 @@
 [submodule "vim/janus.symlink/vim-io"]
 	path = vim/janus.symlink/vim-io
 	url = git://github.com/xhr/vim-io.git
+[submodule "vim/janus.symlink/VimClojure"]
+	path = vim/janus.symlink/VimClojure
+	url = git://github.com/vim-scripts/VimClojure.git
