@@ -7,8 +7,4 @@ rm -f .git/tags
 ctags \
   --tag-relative -Rf.git/tags \
   --exclude=.git \
-  --langdef=Clojure \
-  --langmap=Clojure:.clj \
-  --regex-Clojure='/[ \t\(]*def[a-z]* \([a-z!-]+\)/\1/' \
-  --regex-Clojure='/[ \t\(]*ns \([a-z.]+\)/\1/' \
   --languages=-javascript,sql
