@@ -1,7 +1,3 @@
-export PATH=/usr/local/bin:/usr/local/sbin:~/bin:$PATH
-
-export CDPATH=:~/projects
-export RUBYOPT='rubygems -Itest'
 export GIT_EDITOR="vim"
 export EDITOR="vim"
 export JAVA_HOME='/System/Library/Frameworks/JavaVM.framework/Home'
@@ -22,3 +18,10 @@ export LESS_TERMCAP_us=$'\E[04;33;5;146m' # begin underline
 # syntax highlight code with less
 command -v src-hilite-lesspipe.sh >/dev/null 2>&1 &&
   export LESSOPEN="| src-hilite-lesspipe.sh %s"
+
+# REE for LivingSocial
+export RUBY_HEAP_FREE_MIN=1024
+export RUBY_HEAP_MIN_SLOTS=4000000
+export RUBY_HEAP_SLOTS_INCREMENT=250000
+export RUBY_GC_MALLOC_LIMIT=500000000
+export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
