@@ -18,10 +18,10 @@ end
 # https://github.com/carlhuda/bundler/issues/183#issuecomment-1149953
 # https://gist.github.com/794915
 if defined?(::Bundler) && ENV['GEM_PATH']
-  global_gemset = ENV['GEM_PATH'].split(':').grep(/ruby.*@global/).first
-  $LOAD_PATH.concat Dir.glob("#{global_gemset}/gems/*/lib")
-  global_gemset = global_gemset.split('@').first
-  $LOAD_PATH.concat Dir.glob("#{global_gemset}/gems/*/lib")
+  gemsets = ENV['GEM_PATH'].split(':')
+  gemsets.each do |gemset|
+    $LOAD_PATH.concat Dir.glob("#{gemset}/gems/*/lib")
+  end
 end
 
 
@@ -109,9 +109,6 @@ $console_extensions = []
 
 
 extend_console "awesome_print" do
-  require 'pp' rescue nil
-  alias pp ap
-
   IRB::Irb.class_eval do
     def output_value
       puts "#{ANSI[:BOLD]}#{ANSI[:BLUE]}#=> #{ANSI[:RESET]}"
