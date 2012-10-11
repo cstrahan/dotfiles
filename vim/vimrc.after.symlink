@@ -2,6 +2,8 @@
 
 let g:CSApprox_verbose_level=0
 
+" Insert lambda with <C-l>
+inoremap <silent> <C-l> <C-k>l*
 
 " Custom CommandT bindings
 "let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
