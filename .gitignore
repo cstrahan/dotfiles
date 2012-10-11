@@ -3,3 +3,4 @@
 *.swo
 \#*#
 zsh/zsh.symlink/tmp/*
+zsh/zsh.symlink/private.zsh

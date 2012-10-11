@@ -63,7 +63,7 @@ source ~/.zsh/exports.zsh
 source ~/.zsh/functions.zsh
 source ~/.zsh/prompt.zsh
 
-if [[ -s ~/.zsh/custom.zsh ]] ; then source ~/.zsh/custom.zsh ; fi
+if [[ -s ~/.zsh/private.zsh ]] ; then source ~/.zsh/private.zsh ; fi
 
 # TODO: Check this stuff out:
 #http://stackoverflow.com/questions/3622943/zsh-vi-mode-status-line
