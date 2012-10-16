@@ -31,6 +31,7 @@ alias gdc='git diff --cached'
 alias glg='git lg'
 alias getch='git fetch'
 alias gitx='gitx --all'
+alias gfix='git fix'
 
 alias less='command less -R'
 
