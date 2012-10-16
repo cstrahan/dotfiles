@@ -7,6 +7,8 @@
   ui = true
 [init]
   templatedir = ~/.git_template
+[merge]
+  tool = "fugitive"
 [mergetool.vimdiff3]
   cmd = vim -d -c 'wincmd J' "$MERGED" "$LOCAL" "$BASE" "$REMOTE"
 [mergetool.gvimdiff3]
@@ -15,15 +17,17 @@
   cmd = vim -f -c "Gdiff" "$MERGED"
 [difftool "kaleidoscope"]
   cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+[branch]
+  autosetuprebase = always
 [alias]
   st = status
   ci = commit
-  cia = commit --amend
   co = checkout
   br = branch
   sb = show-branch
   cp = cherry-pick
-  staged = diff --cached
+  di = diff
+  dc = diff --cached
   rb = rebase
   rbc = rebase --continue
   rbs = rebase --skip
@@ -33,7 +37,7 @@
   ru = remote update
   rp = remote prune
   sm = submodule
-  ign = ls-files -o -i --exclude-standard
+  ign = ls-files -o -i --exclude-standard --directory
   aa = add --all
   ff = merge --ff-only
   pullff = pull --ff-only
@@ -43,7 +47,7 @@
   rmd = !"git ls-files --deleted -z | xargs -0 git rm"
   staged = diff --cached
   fix = commit --amend -C HEAD
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(blue)<%an>%Creset' --abbrev-commit --date=relative
 
   wip = !"git add -A; git ls-files --deleted -z | xargs -0 git rm; git commit -m \"wip\""
   unwip = !"git log -n 1 | grep -q -c wip && git reset HEAD~1"
@@ -52,3 +56,10 @@
   head = !"git log -n1"
   lost = !"git fsck | awk '/dangling commit/ {print $3}' | git show --format='SHA1: %C(yellow)%h%Creset %f' --stdin | awk '/SHA1/ {sub(\"SHA1: \", \"\"); print}'"
   heads = !"git log origin/master.. --format='%Cred%h%Creset;%C(yellow)%an%Creset;%H;%Cblue%f%Creset' | git name-rev --stdin --always --name-only | column -t -s';'"
+[push]
+  default = tracking
+[difftool "diffmerge"]
+  cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
+[mergetool "diffmerge"]
+  cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
+  trustExitCode = true
