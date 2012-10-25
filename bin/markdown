@@ -30,10 +30,13 @@ end
 CSS = <<-EOF
 .container{width:920px;margin: 0 auto}
 .markdown-body{background-color:white;border:1px solid #CACACA;padding:30px}
+.markdown-body code{white-space:nowrap}
 pre,code,tt{font-size:12px;font-family:Consolas,"Liberation Mono",Courier,monospace}
 body{font:13px Helvetica, arial, freesans, clean, sans-serif}
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;margin:0;padding:0}
 .markdown-body h1 + p,.markdown-body h2 + p,.markdown-body h3 + p,.markdown-body h4 + p,.markdown-body h5 + p,.markdown-body h6 + p{margin-top:0}
+.markdown-body ul li > :first-child,.markdown-body ul li ul:first-of-type,.markdown-body ol li > :first-child,.markdown-body ol li ul:first-of-type{margin-top:0px}
+.markdown-body ul ul,.markdown-body ul ol,.markdown-body ol ol,.markdown-body ol ul{margin-bottom: 0}
 .markdown-body p,.markdown-body blockquote,.markdown-body ul,.markdown-body ol,.markdown-body dl,.markdown-body table,.markdown-body pre{margin:15px 0}
 .markdown-body{font-size:14px;line-height:1.6;overflow:hidden}
 .markdown-body>:first-child{margin-top:0!important}
