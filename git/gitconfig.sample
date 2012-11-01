@@ -45,6 +45,7 @@
   pom = push origin master
 
   rmd = !"git ls-files --deleted -z | xargs -0 git rm"
+  rms = "!f(){ git rm --cached \"$1\";rm -r \"$1\";rm -rf \".git/modules/$1\";git config -f .gitmodules --remove-section \"submodule.$1\";git config -f .git/config --remove-section \"submodule.$1\";git add .gitmodules; }; f"
   staged = diff --cached
   fix = commit --amend -C HEAD
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(blue)<%an>%Creset' --abbrev-commit --date=relative
