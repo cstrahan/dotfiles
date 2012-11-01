@@ -34,3 +34,6 @@
 	path = vim/janus.symlink/php.vim
 	url = git://github.com/StanAngeloff/php.vim.git
 	ignore = dirty
+[submodule "vim/janus.symlink/vimclojure"]
+	path = vim/janus.symlink/vimclojure
+	url = git://github.com/kotarak/vimclojure.git
