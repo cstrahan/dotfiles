@@ -1,5 +1,4 @@
 " vim: set filetype=vim
-
 let g:CSApprox_verbose_level=0
 
 " Insert lambda with <C-l>
@@ -81,6 +80,9 @@ endif
 " File types
 set expandtab shiftwidth=2 softtabstop=2
 autocmd FileType cs setlocal expandtab shiftwidth=4 softtabstop=4
+autocmd FileType php setlocal expandtab shiftwidth=4 softtabstop=4
+autocmd FileType md setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd BufNewFile,BufRead composer.lock set filetype=javascript
 
 " <leader>s to substitute word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>

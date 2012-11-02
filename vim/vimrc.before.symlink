@@ -13,3 +13,7 @@ let g:Powerline_symbols = 'fancy'
 
 " File types
 au BufNewFile,BufRead *.sbt set filetype=scala
+
+" Clojure
+let vimclojure#FuzzyIndent = 1
+"autocmd FileType clojure setlocal lispwords+=foo,bar,baz
