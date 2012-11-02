@@ -1,4 +1,9 @@
 " vim: set filetype=vim
+"
+" Clojure
+autocmd FileType clojure setlocal lispwords+=testing
+let vimclojure#FuzzyIndent = 1
+
 let g:CSApprox_verbose_level=0
 
 " Insert lambda with <C-l>
