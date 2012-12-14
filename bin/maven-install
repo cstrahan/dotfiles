@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+require 'shellwords'
+
+# Arguments:
+#   <filename> <[groupId/]artifactId> <version> <pom>
+
+def main
+  opts = parse_args(ARGV.dup)
+
+  if opts[:pom]
+    install_with_pom(opts)
+  else
+    install_without_pom(opts)
+  end
+end
+
+def parse_args(args)
+  jar = pluck(args) {|arg| arg.downcase.end_with?(".jar")}
+  pom = pluck(args) {|arg| arg.downcase.end_with?(".xml")}
+
+  if args[0]
+    if args[0].include?("/")
+      group, artifact = args[0].split("/")
+    else
+      group = artifact = args[0]
+    end
+    version = args[1]
+  else
+    group, artifact, version = coords(jar)
+  end
+
+  opts = {:jar => jar,
+          :group => group,
+          :artifact => artifact,
+          :version => version,
+          :pom => pom}
+  opts
+end
+
+def pluck(args, &block)
+  found = args.detect(&block)
+  args.delete(found)
+  found
+end
+
+def coords(jar)
+  basename = File.basename(jar)
+  m = /(.+)\-(\d.+)\.(\w+)/.match(basename)
+  [m[1], m[1], m[2]] if m
+end
+
+def sh(str)
+  puts str
+  system str
+end
+
+def install(jar_path)
+end
+
+def install_without_pom(opts)
+  sh <<-CODE
+mvn install:install-file -Dfile=#{opts[:jar].shellescape} -DgroupId=#{opts[:group].shellescape} -DartifactId=#{opts[:artifact].shellescape} -Dversion=#{opts[:version].shellescape} -Dpackaging=jar -DcreateChecksum=true
+CODE
+end
+
+def install_with_pom(opts)
+  sh <<-CODE
+mvn install:install-file -Dfile=#{opts[:jar].shellescape} -DgroupId=#{opts[:group].shellescape} -DartifactId=#{opts[:artifact].shellescape} -Dversion=#{opts[:version].shellescape} -Dpackaging=jar -DcreateChecksum=true -DgeneratePom=false
+  CODE
+  sh <<-CODE
+mvn install:install-file -Dfile=#{opts[:pom].shellescape} -DgroupId=#{opts[:group].shellescape} -DartifactId=#{opts[:artifact].shellescape} -Dversion=#{opts[:version].shellescape} -Dpackaging=pom -DgeneratePom=false
+  CODE
+end
+
+main()
