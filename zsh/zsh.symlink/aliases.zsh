@@ -1,5 +1,6 @@
 # Misc.
 
+alias mate="nocorrect mate"
 alias cpwd="pwd | ruby -pe'\$_.chomp!' | pbcopy" # copy path to clipboard
 alias preview='open -a Preview'
 
@@ -45,3 +46,9 @@ alias d='fasd -d'    # directory
 alias f='fasd -f'    # file
 alias z='fasd_cd -d' # cd, same functionality as j in autojump
 alias v='f -e vim'   # quick opening files with vim
+
+# steam
+alias cdsteam='cd ~/Library/Application\ Support/Steam/SteamApps/'
+
+# Python
+alias ipyqt='ipython qtconsole --pylab=inline < /dev/null &>/dev/null & disown'

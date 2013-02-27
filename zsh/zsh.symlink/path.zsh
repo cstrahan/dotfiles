@@ -45,9 +45,7 @@ puniq () {
     cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
 }
 
-
-
-export PATH=/usr/local/bin:/usr/local/sbin:~/bin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/share/python:~/bin:$PATH
 
 # RVM
 # ---
