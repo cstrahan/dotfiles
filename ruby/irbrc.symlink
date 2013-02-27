@@ -1,17 +1,16 @@
 # -*- encoding: utf-8 -*-
 # vim: set filetype=ruby
-
 # TODO - Look at: http://lucapette.com/pry/pry-everywhere/
+
+require 'shellwords' rescue nil
 
 def IRB.reload
   load __FILE__
 end
 
-
 if RUBY_VERSION < '1.9'
   require 'rubygems'
 end
-
 
 # Add all gems in the global gemset to the $LOAD_PATH so they can be used even
 # in places like 'rails console'.
@@ -69,7 +68,7 @@ end
 
 
 require 'irb/completion'
-if RUBY_ENGINE != 'macruby'
+if Object.const_defined?(:RUBY_ENGINE) && RUBY_ENGINE != 'macruby'
   ARGV.concat [ "--readline", "--prompt-mode", "simple" ]
   require 'irb/ext/save-history'
 end
@@ -191,6 +190,14 @@ extend_console 'pm', true, false do
     end
     data.size
   end
+end
+
+def paste
+  `pbpaste`
+end
+
+def copy(str)
+  `pbcopy <<< #{str.shellescape}`
 end
 
 # Show results of all extension-loading
