@@ -43,3 +43,15 @@
 --regex-latex=/\\ref[[:space:]]*\{([^}]+)\}/\1/r,ref/
 --regex-latex=/\\pageref[[:space:]]*\{([^}]+)\}/\1/p,pageref/
 --regex-make=/^([^:# \t]+)[ \t]*[:]{1,2}/\1/t,targets/
+--langdef=rust
+--langmap=rust:.rs
+--regex-rust=/[ \t]*fn[ \t]+([a-zA-Z0-9_]+)/\1/f,function/
+--regex-rust=/[ \t]*type[ \t]+([a-zA-Z0-9_]+)/\1/T,types/
+--regex-rust=/[ \t]*enum[ \t]+([a-zA-Z0-9_]+)/\1/T,types/
+--regex-rust=/[ \t]*struct[ \t]+([a-zA-Z0-9_]+)/\1/m,types/
+--regex-rust=/[ \t]*class[ \t]+([a-zA-Z0-9_]+)/\1/m,types/
+--regex-rust=/[ \t]*mod[ \t]+([a-zA-Z0-9_]+)/\1/m,modules/
+--regex-rust=/[ \t]*const[ \t]+([a-zA-Z0-9_]+)/\1/m,consts/
+--regex-rust=/[ \t]*trait[ \t]+([a-zA-Z0-9_]+)/\1/m,traits/
+--regex-rust=/[ \t]*impl[ \t]+([a-zA-Z0-9_]+)/\1/m,impls/
+--regex-rust=/[ \t]*impl[ \t]+of[ \t]([a-zA-Z0-9_]+)/\1/m,impls/
