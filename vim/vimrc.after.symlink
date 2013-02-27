@@ -1,7 +1,7 @@
 " vim: set filetype=vim
 "
 " Clojure
-autocmd FileType clojure setlocal lispwords+=testing
+autocmd FileType clojure setlocal lispwords+=testing,GET,PUT,POST
 let vimclojure#FuzzyIndent = 1
 
 let g:CSApprox_verbose_level=0
