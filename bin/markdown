@@ -1,4 +1,12 @@
 #!/usr/bin/env ruby
+
+if defined?(::Bundler) && ENV['GEM_PATH']
+  gemsets = ENV['GEM_PATH'].split(':')
+  gemsets.each do |gemset|
+    $LOAD_PATH.concat Dir.glob("#{gemset}/gems/*/lib")
+  end
+end
+
 require 'redcarpet'
 require 'pygments'
 
