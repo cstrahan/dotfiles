@@ -100,6 +100,8 @@ chatnets = {
 };
 
 channels = (
+  { name = "#vim"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#shitfire"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; }
 );
@@ -265,14 +267,16 @@ statusbar = {
     };
   };
 };
+
 settings = {
   core = {
     real_name = "Charles Strahan";
-    user_name = "charlesstrahan";
-    nick = "charlesstrahan";
+    user_name = "cstrahan";
+    nick = "cstrahan";
   };
   "fe-text" = { actlist_sort = "refnum"; };
 };
+
 keyboard = ( 
   { key = "meta-[M"; id = "command"; data = "mouse_xterm "; }
 );
