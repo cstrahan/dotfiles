@@ -1,3 +1,10 @@
+# See:
+# http://quadpoint.org/articles/irssi/
+# http://carina.org.uk/irssiconfig
+# https://github.com/averi/config-files/blob/master/irssi/config
+# http://pthree.org/2010/01/22/hilight_win-pl-for-irssi-and-other-script-goodies/
+# http://blog.dale.id.au/archives/587
+
 servers = (
   { address = "eu.irc6.net"; chatnet = "IRCnet"; port = "6667"; },
   { address = "open.ircnet.net"; chatnet = "IRCnet"; port = "6667"; },
@@ -101,6 +108,7 @@ chatnets = {
 
 channels = (
   { name = "#vim"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#rubyonrails"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#shitfire"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; }
@@ -215,7 +223,9 @@ statusbar = {
         window = { };
         window_empty = { };
         lag = { priority = "-1"; };
-        act = { priority = "10"; };
+        # AWL makes act pointless
+        #act = { priority = "10"; };
+        inputlength = { };
         more = { priority = "-1"; alignment = "right"; };
         barend = { priority = "100"; alignment = "right"; };
       };
@@ -265,6 +275,13 @@ statusbar = {
         topicbarend = { priority = "100"; alignment = "right"; };
       };
     };
+    awl_0 = {
+      items = {
+        barstart = { priority = "100"; };
+        awl_0 = { };
+        barend = { priority = "100"; alignment = "right"; };
+      };
+    };
   };
 };
 
@@ -275,6 +292,34 @@ settings = {
     nick = "cstrahan";
   };
   "fe-text" = { actlist_sort = "refnum"; };
+  "fe-common/core" = {
+    theme = "xchat";
+    bell_beeps = "no";
+    beep_msg_level = "MSGS NOTICES DCC DCCMSGS HILIGHT";
+    beep_when_away = "no";
+    beep_when_window_active = "yes";
+  };
+  "perl/core/scripts" = {
+    awl_display_key = "$Q%K|%n$H$C$S";
+    inputlength_width = "3";
+    inputlength_padding_char = "0";
+  };
+};
+
+hilights = (
+  { text = "charles"; nick = "no"; word = "yes"; },
+  { text = "strahan"; nick = "no"; word = "yes"; },
+  { text = "cstrahan"; nick = "no"; word = "yes"; }
+);
+
+windows = {
+  1 = { immortal = "yes"; name = "(status)"; level = "ALL"; };
+  99 = { name = "hilight"; sticky = "yes"; };
+};
+
+mainwindows = {
+  1 = { first_line = "6"; lines = "55"; };
+  99 = { first_line = "1"; lines = "5"; };
 };
 
 keyboard = ( 
