@@ -109,7 +109,7 @@ chatnets = {
 channels = (
   { name = "#vim"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#rubyonrails"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#shitfire"; chatnet = "Freenode"; autojoin = "yes"; },
+  #{ name = "#shitfire"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; }
 );
@@ -228,6 +228,7 @@ statusbar = {
         inputlength = { };
         more = { priority = "-1"; alignment = "right"; };
         barend = { priority = "100"; alignment = "right"; };
+        usercount = { };
       };
     };
 
@@ -303,6 +304,9 @@ settings = {
     awl_display_key = "$Q%K|%n$H$C$S";
     inputlength_width = "3";
     inputlength_padding_char = "0";
+    growl_on_regex = "cstrahan";
+    growl_channel_regex = ".*";
+    growl_icon = "irssi-white.png";
   };
 };
 
