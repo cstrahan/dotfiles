@@ -4,32 +4,19 @@
 # https://github.com/averi/config-files/blob/master/irssi/config
 # http://pthree.org/2010/01/22/hilight_win-pl-for-irssi-and-other-script-goodies/
 # http://blog.dale.id.au/archives/587
+# https://github.com/msparks/irssiscripts
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=664603
+#
+# BitlBee:
+# http://wiki.bitlbee.org/IrssiTips
+# http://wiki.bitlbee.org/HowtoPurple
+#
+# Custom channel:
+#   /join &gtalk
+#   channel gtalk set fill_by account
+#   channel gtalk set account 0
 
 servers = (
-  { address = "eu.irc6.net"; chatnet = "IRCnet"; port = "6667"; },
-  { address = "open.ircnet.net"; chatnet = "IRCnet"; port = "6667"; },
-  { address = "irc.efnet.org"; chatnet = "EFNet"; port = "6667"; },
-  { 
-    address = "irc.undernet.org";
-    chatnet = "Undernet";
-    port = "6667";
-  },
-  { address = "irc.dal.net"; chatnet = "DALnet"; port = "6667"; },
-  { 
-    address = "irc.quakenet.org";
-    chatnet = "QuakeNet";
-    port = "6667";
-  },
-  { address = "irc.oftc.net"; chatnet = "OFTC"; port = "6667"; },
-  {
-    address = "irc.gamesurge.net";
-    chatnet = "GameSurge";
-    port = "6667";
-  },
-  { address = "irc.webchat.org"; chatnet = "WebChat"; port = "6667"; },
-  { address = "irc.rizon.net"; chatnet = "Rizon"; port = "6667"; },
-  { address = "irc.link-net.org"; chatnet = "LinkNet"; port = "6667"; },
-  { address = "silc.silcnet.org"; chatnet = "SILC"; port = "706"; },
   {
     address = "irc.freenode.net";
     chatnet = "Freenode";
@@ -37,81 +24,25 @@ servers = (
     use_ssl = "yes";
     ssl_verify = "yes";
     autoconnect = "yes";
+  },
+  {
+    address = "localhost";
+    chatnet = "localhost";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
   }
 );
 
-chatnets = {
-  IRCnet = {
-    type = "IRC";
-    max_kicks = "4";
-    max_msgs = "5";
-    max_whois = "4";
-    max_query_chans = "5";
-  };
-  EFNet = { 
-    type = "IRC";
-    max_kicks = "4";
-    max_msgs = "3";
-    max_whois = "1";
-  };
-  Undernet = {
-    type = "IRC";
-    max_kicks = "1";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  DALnet = {
-    type = "IRC";
-    max_kicks = "4";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  QuakeNet = {
-    type = "IRC";
-    max_kicks = "1";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  OFTC = { 
-    type = "IRC";
-    max_kicks = "1";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  GameSurge = {
-    type = "IRC";
-    max_kicks = "1";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  WebChat = {
-    type = "IRC";
-    max_kicks = "1";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  Rizon = { 
-    type = "IRC";
-    max_kicks = "1";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  LinkNet = {
-    type = "IRC";
-    max_kicks = "1";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  SILC = { type = "SILC"; };
-  Freenode = { type = "IRC"; };
-};
+chatnets = { Freenode = { type = "IRC"; }; localhost = { type = "IRC"; }; };
 
 channels = (
   { name = "#vim"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#rubyonrails"; chatnet = "Freenode"; autojoin = "yes"; },
-  #{ name = "#shitfire"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
-  { name = "silc"; chatnet = "silc"; autojoin = "No"; }
+  { name = "#ruby-lang"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#shitfire"; chatnet = "Freenode"; autojoin = "yes"; },
+  { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; }
 );
 
 aliases = {
@@ -147,7 +78,11 @@ aliases = {
   UNIG = "unignore";
   SB = "scrollback";
   UMODE = "mode $N";
-  WC = "window close";
+  # WC = "window close";
+  # Closing the current window kills splits.
+  # We can keep the splits by moving to the left and then closing the target window.
+  WC = "WCC $winref";
+  WCC = "window left; window close $0;";
   WN = "window new hide";
   SV = "say Irssi $J ($V) - http://irssi.org/";
   GOTO = "sb goto";
@@ -162,6 +97,7 @@ aliases = {
   ATAG = "WINDOW SERVER";
   UNSET = "set -clear";
   RESET = "set -default";
+  QMSG = "quote privmsg $0 :$1-";
 };
 
 statusbar = {
@@ -295,10 +231,18 @@ settings = {
   "fe-text" = { actlist_sort = "refnum"; };
   "fe-common/core" = {
     theme = "xchat";
+    # bell_beeps seems to cover the case where a beep is caused by a printed
+    # message/format. It's unrelated to activity beeps.
     bell_beeps = "no";
-    beep_msg_level = "MSGS NOTICES DCC DCCMSGS HILIGHT";
+    # beep_msg_level = "MSGS NOTICES DCC DCCMSGS HILIGHT";
+    beep_msg_level = "HILIGHT";
     beep_when_away = "no";
     beep_when_window_active = "yes";
+    autolog_path = "~/irclogs/$tag/%Y/${0}-%m-%d.log";
+    autolog = "yes";
+    # Disable automatic window closing when /PARTing channel or /UNQUERYing query:
+    autoclose_windows = "no";
+    reuse_unused_windows = "yes";
   };
   "perl/core/scripts" = {
     awl_display_key = "$Q%K|%n$H$C$S";
@@ -307,6 +251,7 @@ settings = {
     growl_on_regex = "cstrahan";
     growl_channel_regex = ".*";
     growl_icon = "irssi-white.png";
+    queryresume_lines = "15";
   };
 };
 
@@ -326,6 +271,9 @@ mainwindows = {
   99 = { first_line = "1"; lines = "5"; };
 };
 
-keyboard = ( 
-  { key = "meta-[M"; id = "command"; data = "mouse_xterm "; }
+keyboard = (
+  { key = "meta-[M"; id = "command"; data = "mouse_xterm "; },
+  { key = "meta-y"; id = "command"; data = "window last"; }
 );
+
+logs = { };
