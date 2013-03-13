@@ -119,7 +119,8 @@ Irssi::signal_add(
     'window changed' => sub {
         my (undef, $oldwindow) = @_;
 
-        if ($oldwindow) {
+        #if ($oldwindow) {
+        if ($oldwindow && $oldwindow->{'name'} ne 'hilight') {
             my $line = $oldwindow->view()->get_bookmark('trackbar');
             $oldwindow->view()->remove_line($line) if defined $line;
             $oldwindow->print(line($oldwindow->{'width'}), MSGLEVEL_NEVER);
