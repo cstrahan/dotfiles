@@ -267,8 +267,8 @@ windows = {
 };
 
 mainwindows = {
-  1 = { first_line = "6"; lines = "55"; };
-  99 = { first_line = "1"; lines = "5"; };
+  1 = { first_line = "9"; lines = "55"; };
+  99 = { first_line = "1"; lines = "8"; };
 };
 
 keyboard = (
