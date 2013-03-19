@@ -17,7 +17,7 @@ end
 
 # Dump the theme
 FileUtils.rm(TMP_VIM) if File.exist?(TMP_VIM)
-system "vim -c 'source #{VIM_THEME}' -c 'redir >> #{TMP_VIM.shellescape} | silent hi' -c 'q'"
+system "vim -c 'source #{VIM_THEME}' -c 'redir >> #{TMP_VIM.shellescape} | silent hi | redir END' -c 'q'"
 
 # Clean the theme up for vim2pygments.py
 lines = File.readlines(TMP_VIM)
