@@ -46,6 +46,6 @@ FileUtils.cp(py, File.join(PYGMENTS_STYLES, py))
 
 # Generate css
 puts "Generating #{css} from style \"#{BASENAME}\""
-system "pygmentize -S #{BASENAME.shellescape} -f html > #{css.shellescape} -a .highlight"
+system "pygmentize -S #{BASENAME.shellescape} -f html -a .highlight > #{css.shellescape}"
 
 puts "Done!"
