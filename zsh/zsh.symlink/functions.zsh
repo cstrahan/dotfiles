@@ -180,3 +180,13 @@ function guard {
 function gcim {
   git commit -m "$*"
 }
+
+function cdgem {
+  cd `gem env gemdir`/gems/; cd `ls|grep $1|sort|tail -1`
+}
+
+function btmm {
+  echo -ne "$(whoami)"@
+  echo -ne ${$(hostname | sed -n 's/\(.*\)\.local$/\1/p' )%\n}.
+  echo show Setup:/Network/BackToMyMac | scutil | sed -n 's/.* : *\(.*\).$/\1/p'
+}

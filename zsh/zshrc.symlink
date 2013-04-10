@@ -1,3 +1,6 @@
+# TODO: Check this stuff out:
+#http://stackoverflow.com/questions/3622943/zsh-vi-mode-status-line
+
 # Set the path to Oh My Zsh.
 export OMZ="$HOME/.oh-my-zsh"
 
@@ -36,7 +39,7 @@ zstyle ':omz:load' omodule 'environment' 'terminal' 'editor' 'completion' \
 source "$OMZ/init.zsh"
 
 
-# Custome settings
+# Custom settings
 # ================
 function reload! {
   source ~/.zshrc
@@ -48,22 +51,29 @@ command -v fasd >/dev/null 2>&1 &&
 # autocorrect is annoying
 unsetopt correct_all
 
-# Source rvm and activate default Ruby
-if [[ -f "/usr/local/rvm/scripts/rvm" ]] && groups | grep -q rvm ; then
-    source "/usr/local/rvm/scripts/rvm"
-    rvm use
-elif [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
-    source "$HOME/.rvm/scripts/rvm"
-    rvm use
-fi
-
 source ~/.zsh/aliases.zsh
 source ~/.zsh/bindkeys.zsh
 source ~/.zsh/exports.zsh
 source ~/.zsh/functions.zsh
 source ~/.zsh/prompt.zsh
-
 if [[ -s ~/.zsh/private.zsh ]] ; then source ~/.zsh/private.zsh ; fi
 
-# TODO: Check this stuff out:
-#http://stackoverflow.com/questions/3622943/zsh-vi-mode-status-line
+# matcher completion
+# https://github.com/burke/matcher/
+_matcher_complete() {
+  integer i=1
+  # local lines=("${(@f)$((git ls-files 2>/dev/null || find .) | /usr/local/bin/matcher --limit 20 ${words[CURRENT]})}")
+
+  (git ls-files 2>/dev/null || find .) | /usr/local/bin/matcher --limit 20 ${words[CURRENT]} | while read line; do
+    # compadd -U -- "$line"
+    compadd -U -2 -V $i -- "$line"
+    i=$((i+1))
+  done
+  compstate[insert]=menu
+}
+
+zle -C matcher-complete complete-word _generic
+zstyle ':completion:matcher-complete:*' completer _matcher_complete
+zstyle ':completion:matcher-complete:*' menu-select
+
+bindkey '^X^T' matcher-complete

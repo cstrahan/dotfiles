@@ -6,17 +6,6 @@ zmodload zsh/stat
 
 setopt prompt_subst
 
-BATTERY_METER="$HOME/.zsh/tmp/battery"
-
-function rvm_prompt_info {
-  ruby_version=$(~/.rvm/bin/rvm-prompt i v g 2> /dev/null) || return
-  echo "$ruby_version"
-}
-
-function battery_charge {
-    echo `~/.zsh/bin/battery_charge` 2>/dev/null
-}
-
 function set_term_title {
   echo -ne "\e]2;$PWD\a"
 }
@@ -24,31 +13,6 @@ function set_term_title {
 function set_term_tab {
   echo -ne "\e]1;$PWD:h:t/$PWD:t\a"
 }
-
-function age_in_seconds {
-  echo $(($EPOCHSECONDS - $(stat +mtime $1)))
-}
-
-function should_reload_battery_meter {
-  can_get_battery_meter && ([[ ! -e $BATTERY_METER ]] || [[ $(age_in_seconds $BATTERY_METER) -gt 300 ]])
-}
-
-function can_get_battery_meter {
-  [[ -x '/usr/sbin/ioreg' ]]
-}
-
-function reload_battery_meter {
-  mkdir -p "$BATTERY_METER:h"
-  echo $(battery_charge) >! ~/.zsh/tmp/battery
-  RPROMPT="$(cat $BATTERY_METER)"
-}
-
-# Prep the battery meter.
-if should_reload_battery_meter; then
-  reload_battery_meter
-else
-  RPROMPT="$(cat $BATTERY_METER)"
-fi
 
 function set_prompt {
   export PS1=$'\n%{$fg_bold[blue]%}${PWD/#$HOME/~}%{$reset_color%} %{$fg_bold[cyan]%}λ%{$reset_color%} '
@@ -60,8 +24,6 @@ function set_prompt {
   if [ -n "$PROMPT_GIT_BRANCH" ]; then
     export PS1=$'\n%{$fg_bold[blue]%}${PWD/#$HOME/~}%{$reset_color%} %{$fg[green]%}($PROMPT_GIT_AUTHOR: $PROMPT_GIT_BRANCH)%{$reset_color%} %{$fg_bold[cyan]%}λ%{$reset_color%} '
   fi
-
-  should_reload_battery_meter && reload_battery_meter
 }
 
 function git_branch_name() {

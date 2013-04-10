@@ -3,6 +3,7 @@
 alias mate="nocorrect mate"
 alias cpwd="pwd | ruby -pe'\$_.chomp!' | pbcopy" # copy path to clipboard
 alias preview='open -a Preview'
+alias dtfiles="sudo dtrace -n 'syscall::open*:entry { printf(\"%s %s\", execname, copyinstr(arg0)); }'"
 
 # Rails
 
