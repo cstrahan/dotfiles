@@ -12,6 +12,7 @@
 --regex-clojure=/\([ \t]*intern[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/v,intern/
 --regex-clojure=/\([ \t]*ns[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/n,namespace/
 --regex-clojure=/\([ \t]*deftest[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/t,test/
+
 --langdef=Scala
 --langmap=Scala:.scala
 --regex-Scala=/^[ \t]*class[ \t]*([a-zA-Z0-9_]+)/\1/c,classes/
@@ -25,6 +26,7 @@
 --regex-Scala=/^[ \t]*type[ \t]*([a-zA-Z0-9_]+)[ \t]*[\[<>=]/\1/T,types/
 --regex-Scala=/^[ \t]*import[ \t]*([a-zA-Z0-9_{}., \t=>]+$)/\1/i,includes/
 --regex-Scala=/^[ \t]*package[ \t]*([a-zA-Z0-9_.]+$)/\1/p,packages/
+
 --langdef=latex
 --langmap=latex:.tex
 --regex-latex=/^\\part[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/PART \2/s,part/
@@ -42,7 +44,9 @@
 --regex-latex=/\\label[[:space:]]*\{([^}]+)\}/\1/l,label/
 --regex-latex=/\\ref[[:space:]]*\{([^}]+)\}/\1/r,ref/
 --regex-latex=/\\pageref[[:space:]]*\{([^}]+)\}/\1/p,pageref/
+
 --regex-make=/^([^:# \t]+)[ \t]*[:]{1,2}/\1/t,targets/
+
 --langdef=rust
 --langmap=rust:.rs
 --regex-rust=/[ \t]*fn[ \t]+([a-zA-Z0-9_]+)/\1/f,function/
@@ -55,3 +59,48 @@
 --regex-rust=/[ \t]*trait[ \t]+([a-zA-Z0-9_]+)/\1/m,traits/
 --regex-rust=/[ \t]*impl[ \t]+([a-zA-Z0-9_]+)/\1/m,impls/
 --regex-rust=/[ \t]*impl[ \t]+of[ \t]([a-zA-Z0-9_]+)/\1/m,impls/
+
+--langdef=coffee
+--langmap=coffee:.coffee
+--regex-coffee=/(^|=[ \t])*class ([A-Za-z]+\.)*([A-Za-z]+)( extends [A-Za-z_.]+)?$/\3/c,class/
+--regex-coffee=/^[ \t]*(module\.)?(exports\.)?@?([A-Za-z_.]+):.*[-=]>.*$/\3/m,method/
+--regex-coffee=/^[ \t]*(module\.)?(exports\.)?([A-Za-z_.]+)[ \t]+=.*[-=]>.*$/\3/f,function/
+--regex-coffee=/^[ \t]*([A-Za-z_.]+)[ \t]+=[^->\n]*$/\1/v,variable/
+--regex-coffee=/^[ \t]*@([A-Za-z_.]+)[ \t]+=[^->\n]*$/\1/f,field/
+--regex-coffee=/^[ \t]*@([A-Za-z_.]+):[^->\n]*$/\1/f,static field/
+--regex-coffee=/^[ \t]*([A-Za-z_.]+):[^->\n]*$/\1/f,field/
+--regex-coffee=/constructor:[ \t]+\([ \t]*@([A-Za-z_.]+)/\1/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){1}/\2/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){2}/\2/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){3}/\2/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){4}/\2/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){5}/\2/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){6}/\2/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){7}/\2/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){8}/\2/f,field/
+--regex-coffee=/constructor:[ \t]+\(([ \t]*@[A-Za-z_.]+[^,)]*,[ \t]*@([A-Za-z_.]+)){9}/\2/f,field/
+
+--langdef=markdown
+--langmap=markdown:.mkd.markdown
+--regex-markdown=/^#[ \t]+(.+)$/\1/h,header/
+--regex-markdown=/^##[ \t]+(.+)$/\1/h,header/
+--regex-markdown=/^###[ \t]+(.+)$/\1/h,header/
+--regex-markdown=/^####[ \t]+(.+)$/\1/h,header/
+--regex-markdown=/^#####[ \t]+(.+)$/\1/h,header/
+--regex-markdown=/^######[ \t]+(.+)$/\1/h,header/
+
+--langdef=textile
+--langmap=textile:.textile
+--regex-textile=/^h1\.[ \t]*(.+)$/\1/h,header/
+--regex-textile=/^h2\.[ \t]*(.+)$/\1/h,header/
+--regex-textile=/^h3\.[ \t]*(.+)$/\1/h,header/
+--regex-textile=/^h4\.[ \t]*(.+)$/\1/h,header/
+--regex-textile=/^h5\.[ \t]*(.+)$/\1/h,header/
+--regex-textile=/^h6\.[ \t]*(.+)$/\1/h,header/
+
+--langdef=puppet
+--langmap=puppet:.pp
+--regex-puppet=/^class[ \t]*([:a-zA-Z0-9_\-]+)[ \t]*/\1/c,class/
+--regex-puppet=/^site[ \t]*([a-zA-Z0-9_\-]+)[ \t]*/\1/s,site/
+--regex-puppet=/^node[ \t]*([a-zA-Z0-9_\-]+)[ \t]*/\1/n,node/
+--regex-puppet=/^define[ \t]*([:a-zA-Z0-9_\-]+)[ \t]*/\1/d,definition/
