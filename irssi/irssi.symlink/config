@@ -26,6 +26,14 @@ servers = (
     autoconnect = "yes";
   },
   {
+    address = "irc.mozilla.org";
+    chatnet = "Mozilla";
+    port = "6697";
+    use_ssl = "yes";
+    ssl_verify = "yes";
+    autoconnect = "yes";
+  },
+  {
     address = "localhost";
     chatnet = "localhost";
     port = "6667";
@@ -35,14 +43,18 @@ servers = (
   }
 );
 
-chatnets = { Freenode = { type = "IRC"; }; localhost = { type = "IRC"; }; };
+chatnets = {
+  Freenode = { type = "IRC"; };
+  localhost = { type = "IRC"; };
+  Mozilla = { type = "IRC"; };
+};
 
 channels = (
   { name = "#vim"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#rubyonrails"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#ruby-lang"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#shitfire"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; }
+  { name = "#rust"; chatnet = "Mozilla"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -274,6 +286,15 @@ mainwindows = {
 keyboard = (
   { key = "meta-[M"; id = "command"; data = "mouse_xterm "; },
   { key = "meta-y"; id = "command"; data = "window last"; }
+);
+
+ignores = (
+  {
+    network = "FreeNode";
+    channels = ( "#shitfire", "#vim", "#rubyonrails", "ruby-lang" );
+    level = "PARTS QUITS";
+  },
+  { network = "localhost"; channels = ( "&bitlbee" ); level = "MODES"; }
 );
 
 logs = { };
