@@ -1,5 +1,16 @@
+# See:
+# https://github.com/aaronjensen/dotfiles/blob/master/tmux.conf
+# https://github.com/aaronjensen/vimfiles/blob/41315d26407de7c3d2bbabd2d412b049642f09b5/vimrc#L466-L497
+
 # Reload key
-bind r source-file ~/.tmux.conf
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded..."
+
+# Window numbers start at 1
+set -g base-index 1
+setw -g pane-base-index 1
+
+# Default path
+set default-path $HOME
 
 # Use $SHELL
 set-option -g default-shell $SHELL
@@ -15,11 +26,15 @@ if-shell 'command -v reattach-to-user-namespace >/dev/null 2>&1' 'set-option -g 
 #bind-key Y run-shell "tmux save-buffer - | reattach-to-user-namespace pbcopy"
 #bind-key V set-buffer "$(pbpaste)"
 
+# Use mouse
+set-window-option -g mode-mouse on
 set-option -g mouse-select-pane on
 set-option -g mouse-resize-pane on
 set-option -g mouse-select-window on
-set-window-option -g mode-mouse on
+
+# UTF8
 set-window-option -g utf8 on
+set-option -g status-utf8 on
 
 # Set the prefix to C-a
 unbind C-b
@@ -45,6 +60,10 @@ bind l select-pane -R
 # vi-style controls for copy mode
 set-window-option -g mode-keys vi
 set-option -g status-keys vi
+
+# Notification on activity
+setw -g monitor-activity on
+set -g visual-activity on
 
 # Status Bar
 set -g status-left-length 52
