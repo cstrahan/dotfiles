@@ -23,8 +23,14 @@ set-option -g default-command "command -v reattach-to-user-namespace >/dev/null 
 if-shell 'command -v reattach-to-user-namespace >/dev/null 2>&1' 'set-option -g default-command "reattach-to-user-namespace -l $SHELL"' 'set-option -g default-command "$SHELL -l"'
 
 # Clipboard
-#bind-key Y run-shell "tmux save-buffer - | reattach-to-user-namespace pbcopy"
-#bind-key V set-buffer "$(pbpaste)"
+#   This works around the fact
+#   that tmux cannot bind multiple
+#   commands to a key under a specific
+#   key table, only globally.
+bind -t vi-copy v begin-selection
+bind -t vi-copy c copy-selection
+bind y send-keys c\;\
+       run-shell "tmux save-buffer - | reattach-to-user-namespace pbcopy"
 
 # Use mouse
 set-window-option -g mode-mouse on
