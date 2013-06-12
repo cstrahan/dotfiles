@@ -8,7 +8,7 @@ module DotSettings
   extend self
 
   def is_windows?
-    @is_windows ||= !!(Config::CONFIG['host_os'] =~ /windows/i)
+    @is_windows ||= !!(RbConfig::CONFIG['host_os'] =~ /windows/i)
   end
 
   def is_linux?
@@ -118,6 +118,5 @@ end
 
 desc "Hook our dotfiles into system-standard positions."
 task :install => [:install_basic, :install_sublime]
-#task :install => :install_sublime
 
 task :default => 'install'
