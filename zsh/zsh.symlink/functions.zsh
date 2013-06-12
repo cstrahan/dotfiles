@@ -163,17 +163,23 @@ function up {
 #  2. I'm lazy.
 function rake {
   if [ -f Gemfile ]; then
-    bundle exec rake $@
+    if [ -S .zeus.sock ]; then
+      zeus rake "$@"
+    else
+      bundle exec rake "$@"
+    fi
   else
-    command rake $@
+    command rake "$@"
   fi
 }
 
+# TODO: Create funcs for rails {runner,server,generate,console} that redirect to zeus
+
 function guard {
   if [ -f Gemfile ]; then
-    bundle exec guard $@
+    bundle exec guard "$@"
   else
-    command guard $@
+    command guard "$@"
   fi
 }
 
@@ -181,10 +187,64 @@ function gcim {
   git commit -m "$*"
 }
 
+# delete's local/remote branches that are already merged.
+function grmb {
+  current_branch=$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+  if [ "$current_branch" != "master" ]; then
+    echo "WARNING: You are on branch $current_branch, NOT master."
+  fi
+  echo "Fetching merged branches..."
+  git remote prune origin
+  remote_branches=$(git branch -r --merged | grep -v '/master$' | grep -v "/$current_branch$")
+  local_branches=$(git branch --merged | grep -v 'master$' | grep -v "$current_branch$")
+  if [ -z "$remote_branches" ] && [ -z "$local_branches" ]; then
+    echo "No existing branches have been merged into $current_branch."
+  else
+    echo "This will remove the following branches:"
+    if [ -n "$remote_branches" ]; then
+      echo "$remote_branches"
+    fi
+    if [ -n "$local_branches" ]; then
+      echo "$local_branches"
+    fi
+    printf "Continue? (y/n): "
+    read -k 1 choice
+    echo
+    if [[ "$choice" == "y" ]] || [[ "$choice" == "Y" ]]; then
+      # Remove remote branches
+      git push origin `git branch -r --merged | grep -v '/master$' | grep -v "/$current_branch$" | sed 's/origin\//:/g' | tr -d '\n'`
+      # Remove local branches
+      git branch -d `git branch --merged | grep -v 'master$' | grep -v "$current_branch$" | sed 's/origin\///g' | tr -d '\n'`
+    else
+      echo "No branches removed."
+    fi
+  fi
+}
+
+# creates tracking branches for each remote branch on origin
+function gfb {
+  local orig_branch=`git rev-parse --abbrev-ref HEAD`
+  git fetch >/dev/null 2>&1
+  git ls-remote origin |\
+    awk '/refs\/heads\/'$branch'/ {print $2}' |\
+    grep -v "/refs/heads/" |\
+    while read line; do
+      local remote_branch=`echo $line | sed -n 's/^refs\/heads\///p'`
+
+      git show-ref --verify --quiet refs/heads/$remote_branch
+      if [[ ! $? -eq 0 ]] ; then
+        echo "Creating remote branch $remote_branch"
+        git checkout --track origin/$remote_branch >/dev/null 2>&1
+      fi
+    done
+  git checkout $orig_branch >/dev/null 2>&1
+}
+
 function cdgem {
   cd `gem env gemdir`/gems/; cd `ls|grep $1|sort|tail -1`
 }
 
+# prints full "Back to My Mac" url for this user and machine
 function btmm {
   echo -ne "$(whoami)"@
   echo -ne ${$(hostname | sed -n 's/\(.*\)\.local$/\1/p' )%\n}.

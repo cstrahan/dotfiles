@@ -4,6 +4,7 @@ alias mate="nocorrect mate"
 alias cpwd="pwd | ruby -pe'\$_.chomp!' | pbcopy" # copy path to clipboard
 alias preview='open -a Preview'
 alias dtfiles="sudo dtrace -n 'syscall::open*:entry { printf(\"%s %s\", execname, copyinstr(arg0)); }'"
+alias ffprof="/Applications/Firefox.app/Contents/MacOS/firefox -profilemanager"
 
 # Rails
 
@@ -34,6 +35,8 @@ alias glg='git lg'
 alias getch='git fetch'
 alias gitx='gitx --all'
 alias gfix='git fix'
+alias gplu='git pull upstream HEAD'
+alias gplo='git pull origin HEAD'
 
 alias less='command less -R'
 
@@ -53,3 +56,9 @@ alias cdsteam='cd ~/Library/Application\ Support/Steam/SteamApps/'
 
 # Python
 alias ipyqt='ipython qtconsole --pylab=inline < /dev/null &>/dev/null & disown'
+
+# chruby
+alias chruby-rehash='RUBIES=("$HOME"/.rubies/*)'
+
+# Chef
+alias chef-gem="/opt/chef/embedded/bin/gem"
