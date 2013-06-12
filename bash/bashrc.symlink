@@ -364,7 +364,7 @@ _expand() {
 
 # we always pass these to ls(1)
 if [ "$UNAME" = Linux ]; then
-    LS_COMMON="-hBG --color-auto"
+    LS_COMMON="-hBG --color=auto"
 else
     # OSX/BSD's ls is a little different...
     LS_COMMON="-hBG"
