@@ -22,13 +22,33 @@
 #  RVM
 # ----------------------------------------------------------------------
 
-if [[ -f "/usr/local/rvm/scripts/rvm" ]] && groups | grep -q rvm ; then
-    source "/usr/local/rvm/scripts/rvm"
-    if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
-elif [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
-    source "$HOME/.rvm/scripts/rvm"
-    if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
+#if [[ -f "/usr/local/rvm/scripts/rvm" ]] && groups | grep -q rvm ; then
+#    source "/usr/local/rvm/scripts/rvm"
+#    if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
+#elif [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
+#    source "$HOME/.rvm/scripts/rvm"
+#    if [[ -r $rvm_path/scripts/completion ]] ; then source $rvm_path/scripts/completion ; fi
+#fi
+#
+#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+# ----------------------------------------------------------------------
+#  chruby
+# ----------------------------------------------------------------------
+
+if [[ -s /usr/local/share/chruby/chruby.sh ]] ; then
+    source /usr/local/share/chruby/chruby.sh
 fi
+
+function chruby-rehash {
+    RUBIES=("$HOME"/.rubies/*)
+}
+
+# ----------------------------------------------------------------------
+#  ruby-build
+# ----------------------------------------------------------------------
+
+export RUBY_BUILD_CACHE_PATH=~/.ruby-build-cache
 
 # ----------------------------------------------------------------------
 #  Auto Jump
@@ -476,6 +496,14 @@ ruby_gc_tuned () {
 }
 
 
+# ----------------------------------------------------------------------
+#  Local Settings
+# ----------------------------------------------------------------------
+
+if [[ -s ~/.bash_local ]] ; then
+    source ~/.bash_local
+fi
+
 # -------------------------------------------------------------------
 # MOTD / FORTUNE
 # -------------------------------------------------------------------
@@ -484,6 +512,3 @@ test -n "$INTERACTIVE" -a -n "$LOGIN" && {
     uname -npsr
     uptime
 }
-
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
