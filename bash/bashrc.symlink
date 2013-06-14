@@ -500,8 +500,8 @@ ruby_gc_tuned () {
 #  Local Settings
 # ----------------------------------------------------------------------
 
-if [[ -s ~/.bash_local ]] ; then
-    source ~/.bash_local
+if [[ -s ~/.bash/local.sh ]] ; then
+    source ~/.bash/local.sh
 fi
 
 # -------------------------------------------------------------------
