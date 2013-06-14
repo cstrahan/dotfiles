@@ -5,7 +5,7 @@
 #  Chruby
 # ----------------------------------------------------------------------
 
-source ~/bash/vendor/chruby/chruby.sh
+source ~/.bash/vendor/chruby/chruby.sh
 #source ~/bash/vendor/chruby/auto.sh
 
 function chruby-rehash {
@@ -25,6 +25,6 @@ function avocado() {
 }
 
 function pipeline() {
-    export PATH=/opt/ruby-1.9.3/bin:$PATH
+    export PATH=/usr/bin/:$PATH
     cd /u/apps/pipeline/current
 }

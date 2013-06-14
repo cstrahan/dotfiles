@@ -331,6 +331,24 @@ alias hi='history | tail -20'
 # Make tmux use 256 colors by default
 alias tmux='command tmux -2'
 
+# Git aliases
+alias gp='git push origin HEAD'
+alias gaa='git add --all'
+alias gpom='git push origin master'
+alias gst='git status -sb'
+alias gci='git commit'
+alias gcim='git commit -m'
+alias gcia='git commit --amend'
+alias gco='git co'
+alias gdi='git diff'
+alias gdc='git diff --cached'
+alias glg='git lg'
+alias getch='git fetch'
+alias gitx='gitx --all'
+alias gfix='git fix'
+alias gplu='git pull upstream HEAD'
+alias gplo='git pull origin HEAD'
+
 # ----------------------------------------------------------------------
 # BASH COMPLETION
 # ----------------------------------------------------------------------
