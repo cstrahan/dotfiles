@@ -54,7 +54,8 @@ channels = (
   { name = "#rubyonrails"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#ruby-lang"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#shitfire"; chatnet = "Freenode"; autojoin = "yes"; },
-  { name = "#rust"; chatnet = "Mozilla"; autojoin = "yes"; }
+  { name = "#rust"; chatnet = "Mozilla"; autojoin = "yes"; },
+  { name = "#raspberrypi"; chatnet = "Freenode"; autojoin = "yes"; }
 );
 
 aliases = {
