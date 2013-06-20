@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+class Array
+  def left_of(element)
+    self[self.index(element) - 1]
+  end
+
+  def right_of(element)
+    self[(self.index(element) + 1) % self.size]
+  end
+end
+
+module Tmux
+  module_function
+
+  def current_window_index
+    `tmux display-message -p '#I'`.to_i
+  end
+
+  def window_indicies
+    `tmux list-windows -F '#I'`.chomp.split("\n").map do |idx|
+      idx.to_i
+    end
+  end
+
+  def previous_window(window_index=current_window_index)
+    window_indicies.left_of(window_index)
+  end
+
+  def next_window(window_index=current_window_index)
+    window_indicies.right_of(window_index)
+  end
+
+  def move_window_left(window=current_window_index)
+    system "tmux swap-window -s #{window} -t #{previous_window(window)}"
+  end
+
+  def move_window_right(window=current_window_index)
+    system "tmux swap-window -s #{window} -t #{next_window(window)}"
+  end
+end
+
+DIRECTION = ARGV[0]
+
+unless ARGV.size == 1 && ["left", "right"].include?(DIRECTION)
+  exit 1
+end
+
+if DIRECTION == "left"
+  Tmux.move_window_left
+else
+  Tmux.move_window_right
+end
+
+exit 0

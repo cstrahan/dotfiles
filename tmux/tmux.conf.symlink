@@ -9,8 +9,11 @@ bind r source-file ~/.tmux.conf \; display-message "Config reloaded..."
 set -g base-index 1
 setw -g pane-base-index 1
 
+# Auto renumber windows
+set -g renumber-windows on
+
 # Default path
-set default-path $HOME
+#set -g default-path $HOME
 
 # Use $SHELL
 set-option -g default-shell $SHELL
@@ -62,14 +65,21 @@ bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
+bind -r C-h select-window -t :-
+bind -r C-l select-window -t :+
+
+# Move tabs left/right
+bind -r < run-shell "~/.tmux/slide left"
+bind -r > run-shell "~/.tmux/slide right"
 
 # vi-style controls for copy mode
 set-window-option -g mode-keys vi
 set-option -g status-keys vi
 
-# Notification on activity
+# Hilight in status line on activity
 setw -g monitor-activity on
-set -g visual-activity on
+# Message on activity
+set -g visual-activity off
 
 # Status Bar
 set -g status-left-length 52
@@ -88,11 +98,7 @@ set -g status-left '#[fg=colour235,bg=colour252,bold] ❐ #S #[fg=colour252,bg=c
 set -g status-right '#[fg=colour238,bg=colour234,nobold]⮂#[fg=colour245,bg=colour238,bold] #T #[fg=colour252,bg=colour238,nobold]⮂#[fg=colour235,bg=colour252,nobold] %a %b %d, %Y %H:%M'
 
 # Keep messages open longer
-set -g display-time 3000
+set -g display-time 1500
 
 # 256 colors
 set -g default-terminal "screen-256color"
-
-# tmux changed some commands between 1.5 and 1.6
-#if-shell '[[ "$(tmux -V)" < "tmux 1.6" ]]' 'source-file ~/.tmux.1.5.conf'
-#if-shell '[[ "$(tmux -V)" > "tmux 1.5" ]]' 'source-file ~/.tmux.1.6.conf'
