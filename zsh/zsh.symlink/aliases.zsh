@@ -62,3 +62,10 @@ alias chruby-rehash='RUBIES=("$HOME"/.rubies/*)'
 
 # Chef
 alias chef-gem="/opt/chef/embedded/bin/gem"
+
+# RPi
+alias rpicom='minicom -b 115200 -o -D /dev/cu.PL2303-007212FD'
+# alias rpicom='picocom -b 115200 /dev/cu.PL2303-007212FD'
+
+# NOCORRECT
+alias figlet='nocorrect figlet'
