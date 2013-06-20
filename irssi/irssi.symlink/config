@@ -243,7 +243,7 @@ settings = {
   };
   "fe-text" = { actlist_sort = "refnum"; };
   "fe-common/core" = {
-    theme = "xchat";
+    theme = "cstrahan";
     # bell_beeps seems to cover the case where a beep is caused by a printed
     # message/format. It's unrelated to activity beeps.
     bell_beeps = "no";
@@ -258,7 +258,7 @@ settings = {
     reuse_unused_windows = "yes";
   };
   "perl/core/scripts" = {
-    awl_display_key = "$Q%K|%n$H$C$S";
+    awl_display_key = "%G[%n%C$Q%n $H$C$S%G]%n";
     inputlength_width = "3";
     inputlength_padding_char = "0";
     growl_on_regex = "cstrahan";
@@ -291,7 +291,7 @@ keyboard = (
 
 ignores = (
   {
-    network = "FreeNode";
+    network = "Freenode";
     channels = ( "#shitfire", "#vim", "#rubyonrails", "ruby-lang" );
     level = "PARTS QUITS";
   },
