@@ -2,6 +2,7 @@
 *.swp
 *.swo
 \#*#
+*.log
 zsh/zsh.symlink/tmp/*
 zsh/zsh.symlink/private.zsh
 sasl.auth

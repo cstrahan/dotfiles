@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+def gem_path_for(name)
+  if defined?(::Bundler)
+    spec = Bundler.definition.specs.detect { |spec| spec.name == name }
+    (spec.full_gem_path rescue nil) if spec
+  else
+    require 'rubygems' unless defined?(Gem)
+    return nil if Gem::VERSION < "1.8.0"
+    begin
+      ::Gem::Specification.find_by_name(name).full_gem_path
+    rescue Gem::LoadError
+    end
+  end
+end
+
+name = ARGV.shift
+if path=gem_path_for(name)
+  STDOUT.puts path
+  exit 0
+end
+
+STDERR.puts "Could not resolve gem path for #{name}"
+exit 1

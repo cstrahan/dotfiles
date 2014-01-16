@@ -1,2 +1,5 @@
 #!/bin/sh
 .git/hooks/ctags >/dev/null 2>&1 &
+if (command -v mplayer >/dev/null 2>&1) && [[ -f ~/git-commit.mp3 ]]; then
+  mplayer -af volume=-12:0 ~/git-commit.mp3 >/dev/null 2>&1 &
+fi

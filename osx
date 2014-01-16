@@ -3,6 +3,12 @@
 # https://github.com/skwp/dotfiles/blob/master/osx
 # https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 
+# Disable mute-on-typing in google hangout
+#defaults write com.google.googletalkplugind exps -string [\"-tm\"]
+
+# Show debug menu in Disk Utility (to reveal all partitions)
+defaults write com.apple.DiskUtility DUDebugMenuEnabled 1
+
 # Show all files in Finder
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
@@ -142,6 +148,13 @@ defaults write com.apple.Mail DisableSendAnimations -bool true
 
 # Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+
+# Remap capslock to control on all connected keyboards
+ioreg -n IOHIDKeyboard -r |\
+  grep -E 'VendorID"|ProductID' |\
+  awk '{ print $4 }' |\
+  paste -s -d'-\n' - |\
+  xargs -I{} /usr/bin/defaults -currentHost write -g "com.apple.keyboard.modifiermapping.{}-0" -array "<dict><key>HIDKeyboardModifierMappingDst</key><integer>2</integer><key>HIDKeyboardModifierMappingSrc</key><integer>0</integer></dict>"
 
 # Reset Launchpad
 [ -e ~/Library/Application\ Support/Dock/*.db ] && rm ~/Library/Application\ Support/Dock/*.db

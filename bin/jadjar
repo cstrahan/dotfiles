@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'FileUtils'
+require 'shellwords'
+include FileUtils
+
+jar_path = ARGV.first
+folder   = File.basename(jar_path, '.jar')
+pattern  = File.join(folder, "**", "*.class")
+should_delete_folder = !File.exist?(folder)
+
+%x{jar xf #{jar_path.shellescape}}
+%x{jad -o -r -sjava -d#{(folder + "_src").shellescape} #{pattern.shellescape}}
+
+if should_delete_folder
+  rm_r folder
+end

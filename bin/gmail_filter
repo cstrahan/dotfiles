@@ -1,0 +1,137 @@
+#!/usr/bin/env ruby
+require 'builder'
+
+# Creates Gmail filter import files from definitions in a simple text format.
+#
+# Example file:
+#
+#    # This archives and labels all order confirmations & receipts
+#    rule:
+#      (from:(do_not_reply@itunes.com) AND "Your receipt") OR
+#      from:(billingsupport@meetup.com) OR
+#      (from:(hello@leanpub.com) AND "Thanks for buying a Leanpub book!") OR
+#      from:(Amazon Payments <noreply@amazon.com>) OR
+#      subject:(Uber Ride Receipt)
+#    actions:
+#      archive label[Orders]
+
+module FilterParser
+  module_function
+
+  def parse(text)
+    @lines =
+      text.
+        each_line.
+        map { |l| l.chomp }.
+        reject { |l| l.start_with?("#") }
+
+    filters = []
+
+    until @lines.empty?
+      rule = parse_rule
+      actions = parse_actions
+      filters << rule.merge(actions)
+    end
+
+    filters
+  end
+
+  def parse_rule
+    lines = @lines.take_while do |line|
+      !line.start_with?("actions:")
+    end.map do |line|
+      line.strip
+    end
+
+    @lines.shift(lines.size)
+    text = lines.join(" ")[5..-1].strip
+
+    {"hasTheWord" => text}
+  end
+
+  def parse_actions
+    lines = @lines.take_while do |line|
+      !line.start_with?("rule:")
+    end.map do |line|
+      line.strip
+    end
+
+    @lines.shift(lines.size)
+    text = lines.join(" ")[8..-1].strip
+    actions = parse_action_parts(text)
+
+    actions.map! do |action|
+      if action == "mark_as_read"
+        ["shouldMarkAsRead", "true"]
+      elsif action == "trash"
+        ["shouldTrash", "true"]
+      elsif action == "archive"
+        ["shouldArchive", "true"]
+      elsif action.start_with?("label[")
+        ["label", action[6..-2]]
+      else
+        fail "Unexpected token: #{action}"
+      end
+    end
+
+    Hash[*actions.flatten]
+  end
+
+  def parse_action_parts(text)
+    chars = text.each_char.to_a
+    actions = []
+    action = ""
+
+    until chars.empty?
+      c = chars.shift
+
+      if c == "["
+        until c == "]"
+          action << c
+          c = chars.shift
+        end
+        action << c
+      elsif c == " "
+        actions << action unless action.empty?
+        action = ""
+      else
+        action << c
+      end
+    end
+    actions << action unless action.empty?
+
+    actions
+  end
+end
+
+module FilterFormatter
+  module_function
+
+  def format(filters)
+    builder = Builder::XmlMarkup.new(:indent=>2)
+    builder.feed("xmlns" => "http://www.w3.org/2005/Atom",
+                 "xmlns:apps" => "http://schemas.google.com/apps/2006") do |b|
+      b.title("Mail Filters")
+
+      filters.each do |filter|
+        b.entry do |b|
+          b.category("term" => "filter")
+          b.title("Mail Filter")
+          b.content
+
+          filter.each do |key, value|
+            b.apps :property, :name => key, :value => value
+          end
+        end
+      end
+    end
+
+    builder.target!
+  end
+end
+
+file    = File.readlines(ARGV[0]).join
+filters = FilterParser.parse(file)
+xml     = FilterFormatter.format(filters)
+
+puts xml

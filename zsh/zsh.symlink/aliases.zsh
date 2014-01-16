@@ -69,3 +69,6 @@ alias rpicom='minicom -b 115200 -o -D /dev/cu.PL2303-007212FD'
 
 # NOCORRECT
 alias figlet='nocorrect figlet'
+alias mplayer='nocorrect mplayer'
+alias gradle='nocorrect gradle'
+alias node='nocorrect node'

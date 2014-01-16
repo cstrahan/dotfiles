@@ -1,6 +1,7 @@
 export GIT_EDITOR="vim"
 export EDITOR="vim"
 export JAVA_HOME='/System/Library/Frameworks/JavaVM.framework/Home'
+export PYTHONSTARTUP=~/.pystartup
 
 export CLICOLOR=1
 export LSCOLORS=gxfxcxdxbxegedabagacad

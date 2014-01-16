@@ -4,6 +4,9 @@
 
 require 'shellwords' rescue nil
 
+module IRBRC
+end
+
 def IRB.reload
   load __FILE__
 end
@@ -12,17 +15,48 @@ if RUBY_VERSION < '1.9'
   require 'rubygems'
 end
 
-# Add all gems in the global gemset to the $LOAD_PATH so they can be used even
-# in places like 'rails console'.
+# https://github.com/zaius/dotfiles/blob/master/ruby/irbrc.symlink
+# https://gist.github.com/adamcrown/932231
 # https://github.com/carlhuda/bundler/issues/183#issuecomment-1149953
 # https://gist.github.com/794915
-if defined?(::Bundler) && ENV['GEM_PATH']
-  gemsets = ENV['GEM_PATH'].split(':')
-  gemsets.each do |gemset|
-    $LOAD_PATH.concat Dir.glob("#{gemset}/gems/*/lib")
-  end
-end
+# In case GEM_PATH was reset, try using a sane default
+# gem_path = ENV['GEM_PATH']
+# if (gem_path.nil? || gem_path.empty?) && RbConfig::CONFIG['bindir']=="/usr/bin"
+  # gem_path = ["~/.gem/system"].detect {|p| File.exist?(p)}
+  # gem_path = File.expand_path(gem_path)
+# end
+# if defined?(::Bundler) && gem_path
+  # gemsets = gem_path = ENV['GEM_PATH'].split(':')
+  # gemsets.each do |gemset|
+    # $LOAD_PATH.concat Dir.glob("#{gemset}/gems/*/lib")
+  # end
+# end
 
+#def without_bundler(&block)
+#  if defined?(::Bundler)
+#    # Deprecated:
+#    #Gem.source_index.refresh!
+#    #Gem.activate(*gems)
+#  end
+#  block.call
+#ensure
+#  Gem.send(:class_variable_set, :@@source_index, nil)
+#end
+
+# adapted from rails_erd in lib/rails_erd/tasks.rake
+def rails_load_models
+  puts "Loading code in search of Active Record models..."
+  begin
+    Rails.application.eager_load!
+  rescue Exception => err
+    trace = Rails.backtrace_cleaner.clean(err.backtrace)
+    error = (["Loading models failed!\nError occurred while loading application: #{err} (#{err.class})"] + trace).join("\n    ")
+    puts error
+  end
+
+  raise "Active Record was not loaded." unless defined? ActiveRecord
+  true
+end
 
 # Determines if a shell command exists by searching for it in ENV['PATH'].
 def command_exists?(command)
@@ -65,7 +99,6 @@ def ls(obj=self)
     puts pattern % meths
   end
 end
-
 
 require 'irb/completion'
 if Object.const_defined?(:RUBY_ENGINE) && RUBY_ENGINE != 'macruby'
@@ -118,25 +151,6 @@ end
 
 extend_console 'interactive_editor'
 extend_console "Win32/Console/ANSI", RUBY_PLATFORM =~ /mingw32/
-
-extend_console "wirble", false do
-  require 'wirble'
-  Wirble.init
-  Wirble.colorize
-
-  Wirble::Colorize.colors = Wirble::Colorize.colors.merge({
-    :comma        => :light_purple,
-    :refers       => :light_purple,
-    :open_hash    => :light_purple,
-    :close_hash   => :light_purple,
-    :open_array   => :light_purple,
-    :close_array  => :light_purple,
-    :open_string  => :light_red,
-    :string       => :dark_gray,
-    :close_string => :light_red,
-    :range        => :light_red,
-  })
-end
 
 # When you're using Rails 2 console, show queries in the console
 extend_console 'rails2', (ENV.include?('RAILS_ENV') && !Object.const_defined?('RAILS_DEFAULT_LOGGER')), false do
@@ -191,6 +205,11 @@ extend_console 'pm', true, false do
     data.size
   end
 end
+
+#extend_console 'rails_erd', true, true do
+#  require "rails_erd/diagram/graphviz"
+#  rails_load_models && RailsERD::Diagram::Graphviz.create
+#end
 
 def paste
   `pbpaste`
