@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # https://github.com/skwp/dotfiles/blob/master/osx
 # https://github.com/mathiasbynens/dotfiles/blob/master/.osx
@@ -157,7 +157,7 @@ ioreg -n IOHIDKeyboard -r |\
   xargs -I{} /usr/bin/defaults -currentHost write -g "com.apple.keyboard.modifiermapping.{}-0" -array "<dict><key>HIDKeyboardModifierMappingDst</key><integer>2</integer><key>HIDKeyboardModifierMappingSrc</key><integer>0</integer></dict>"
 
 # Reset Launchpad
-[ -e ~/Library/Application\ Support/Dock/*.db ] && rm ~/Library/Application\ Support/Dock/*.db
+#[ -e ~/Library/Application\ Support/Dock/*.db ] && rm ~/Library/Application\ Support/Dock/*.db
 
 # Kill affected applications
 for app in Finder Dock Mail Safari iTunes iCal Address\ Book SystemUIServer; do killall "$app" > /dev/null 2>&1; done

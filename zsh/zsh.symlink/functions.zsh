@@ -2,6 +2,35 @@ function internet\? {
   (ping -c 3 -t 3 google.com >/dev/null 2>&1 && echo 'yep') || echo 'nope'
 }
 
+# cabal-sandbox aware ghc wrapper
+function ghcs {
+  local DIR=$PWD
+  local TARGET="cabal.sandbox.config"
+  while [ ! -e $DIR/$TARGET -a $DIR != "/" ]; do
+    DIR=$(dirname $DIR)
+  done
+  if test $DIR != "/"; then
+    local DB=$(sed -ne '/^package-db: */{s///p;q;}' "$DIR/$TARGET")
+    ghc -no-user-package-db -package-db="$DB" "$@"
+  else
+    ghc "$@"
+  fi
+}
+
+function ghcis {
+  local DIR=$PWD
+  local TARGET="cabal.sandbox.config"
+  while [ ! -e $DIR/$TARGET -a $DIR != "/" ]; do
+    DIR=$(dirname $DIR)
+  done
+  if test $DIR != "/"; then
+    local DB=$(sed -ne '/^package-db: */{s///p;q;}' "$DIR/$TARGET")
+    ghci -no-user-package-db -package-db="$DB" "$@"
+  else
+    ghci "$@"
+  fi
+}
+
 # Types text from stdin into the last active window
 function sendkeys {
   # Switch to previously active app
@@ -145,17 +174,17 @@ function rcd {
 #   set -g default-terminal "screen-256color"
 #
 function up {
-    if [ "$1" != "" -a "$2" != "" ]; then
-        local DIR=$1
-        local TARGET=$2
-    elif [ "$1" ]; then
-        local DIR=$PWD
-        local TARGET=$1
-    fi
-    while [ ! -e $DIR/$TARGET -a $DIR != "/" ]; do
-        DIR=$(dirname $DIR)
-    done
-    test $DIR != "/" && echo $DIR/$TARGET
+  if [ "$1" != "" -a "$2" != "" ]; then
+    local DIR=$1
+    local TARGET=$2
+  elif [ "$1" ]; then
+    local DIR=$PWD
+    local TARGET=$1
+  fi
+  while [ ! -e $DIR/$TARGET -a $DIR != "/" ]; do
+    DIR=$(dirname $DIR)
+  done
+  test $DIR != "/" && echo $DIR/$TARGET
 }
 
 # Because:

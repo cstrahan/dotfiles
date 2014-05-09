@@ -1,6 +1,16 @@
 export GIT_EDITOR="vim"
 export EDITOR="vim"
-export JAVA_HOME='/System/Library/Frameworks/JavaVM.framework/Home'
+
+if command -v /usr/libexec/java_home >/dev/null 2>&1; then
+  export JAVA_HOME=$(/usr/libexec/java_home)
+fi
+
+if command -v /usr/local/bin/brew >/dev/null 2>&1; then
+  export MONO_GAC_PREFIX=`/usr/local/bin/brew --prefix`
+elif command -v brew >/dev/null 2>&1; then
+  export MONO_GAC_PREFIX=`brew --prefix`
+fi
+
 export PYTHONSTARTUP=~/.pystartup
 
 export CLICOLOR=1
@@ -15,24 +25,6 @@ export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
 export LESS_TERMCAP_so=$'\E[1;31m'        # begin standout-mode - info box
 export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[04;33;5;146m' # begin underline
-
-# use vim for paging
-#export MANPAGER="col -b | vim -R \
-# -c 'set ft=man ts=8 nomod nolist nonumber colorcolumn=' \
-# -c 'map <SPACE> <C-D>' \
-# -c 'map b <C-U>' \
-# -c 'nnoremap i <nop>' -"
-
-# syntax highlight code with less
-command -v src-hilite-lesspipe.sh >/dev/null 2>&1 &&
-  export LESSOPEN="| src-hilite-lesspipe.sh %s"
-
-# REE for LivingSocial
-export RUBY_HEAP_FREE_MIN=1024
-export RUBY_HEAP_MIN_SLOTS=4000000
-export RUBY_HEAP_SLOTS_INCREMENT=250000
-export RUBY_GC_MALLOC_LIMIT=500000000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 
 # Because setting default-terminal in tmux to screen-256color
 # seems to still result in $TERM == screen

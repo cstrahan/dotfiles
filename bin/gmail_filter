@@ -23,7 +23,8 @@ module FilterParser
       text.
         each_line.
         map { |l| l.chomp }.
-        reject { |l| l.start_with?("#") }
+        reject { |l| l.start_with?("#") }.
+        drop_while { |l| l.strip.empty? }
 
     filters = []
 
@@ -109,12 +110,22 @@ module FilterFormatter
 
   def format(filters)
     builder = Builder::XmlMarkup.new(:indent=>2)
+    builder.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
     builder.feed("xmlns" => "http://www.w3.org/2005/Atom",
                  "xmlns:apps" => "http://schemas.google.com/apps/2006") do |b|
       b.title("Mail Filters")
 
+      # b.id "tag:mail.google.com,2008:filters:1395765029223"
+      # b.updated "2014-03-25T16:30:52Z"
+      # b.author do |a|
+        # a.name "Charles Strahan"
+        # a.email "charles.c.strahan@gmail.com"
+      # end
+
       filters.each do |filter|
         b.entry do |b|
+          # b.id "tag:mail.google.com,2008:filters:1395765029223"
+          # b.updated "2014-03-25T16:30:52Z"
           b.category("term" => "filter")
           b.title("Mail Filter")
           b.content
@@ -122,6 +133,9 @@ module FilterFormatter
           filter.each do |key, value|
             b.apps :property, :name => key, :value => value
           end
+
+          # b.apps :property, :name => 'sizeOperator', :value => 's_sl'
+          # b.apps :property, :name => 'sizeUnit',     :value => 's_smb'
         end
       end
     end

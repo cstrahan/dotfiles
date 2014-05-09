@@ -50,6 +50,7 @@ chatnets = {
 };
 
 channels = (
+  { name = "#nixos"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#vim"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#rubyonrails"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#ruby-lang"; chatnet = "Freenode"; autojoin = "yes"; },
@@ -292,7 +293,7 @@ keyboard = (
 ignores = (
   {
     network = "Freenode";
-    channels = ( "#shitfire", "#vim", "#rubyonrails", "ruby-lang" );
+    channels = ( "#shitfire", "#vim", "#nixos", "#rubyonrails", "ruby-lang" );
     level = "PARTS QUITS";
   },
   { network = "localhost"; channels = ( "&bitlbee" ); level = "MODES"; }

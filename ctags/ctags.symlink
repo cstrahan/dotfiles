@@ -1,3 +1,5 @@
+--exclude=.git
+
 --fields=+i+a+S+n
 
 --langdef=Go
