@@ -6,6 +6,12 @@
 # Disable mute-on-typing in google hangout
 #defaults write com.google.googletalkplugind exps -string [\"-tm\"]
 
+# Disable the warning before emptying the Trash
+defaults write com.apple.finder WarnOnEmptyTrash -bool false
+
+# When performing a search, search the current folder by default
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
 # Show debug menu in Disk Utility (to reveal all partitions)
 defaults write com.apple.DiskUtility DUDebugMenuEnabled 1
 
