@@ -1,5 +1,0 @@
-#!/bin/bash
-
-DIR=$( cd -P "$( dirname "$0" )" && pwd )
-
-exec $DIR/apache-ant/bin/ant $*

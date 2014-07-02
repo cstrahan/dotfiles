@@ -1,5 +1,0 @@
-.DS_Store
-coverage/*
-.m2/
-.lein/
-.lein-repl-history

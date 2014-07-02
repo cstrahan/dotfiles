@@ -1,8 +1,0 @@
-Merge in the goodness from:
-  * https://github.com/gabebw/dotfiles
-  * https://github.com/edgecase/pairing-config/
-
-Beef-up the Rakefile:
-  * symlinks should be registered via a DSL
-  * symlinks can be selected/deselected
-  * symlinks should be queryable from the command line
