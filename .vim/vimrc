@@ -1,0 +1,39 @@
+" http://skwp.github.com/dotfiles/
+" https://github.com/aniero/vimfiles
+
+""" basic settings first:
+source $HOME/.vim/settings/basic.vim
+
+" TODO: Use Merlin for OCaml completion.
+" let s:ocamlmerlin=substitute(system('opam config var share'),'\n$','','''') ."/ocamlmerlin"
+
+" Leave out TAB/S-TAB, and use C-P/C-N instead.
+" This also prevents conflicting with UltiSnips.
+" (UltiSnips uses TAB C-J/C-K)
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_semantic_triggers =  {
+  \   'haskell' : ['.'],
+  \ }
+
+""" netrw
+let g:NERDTreeHijackNetrw = 0 " Stop NERDTree from hijacking netrw
+let g:loaded_netrw        = 1 " Disable netrw
+let g:loaded_netrwPlugin  = 1 " Disable netrw
+" au VimEnter * :NERDTreeToggle
+" au VimEnter * :wincmd p
+
+""" load plugin paths
+"let g:pathogen_disabled = [ "vimproc" , "YouCompleteMe" ]
+"if isdirectory(expand("~/.nix-profile/vim-plugins"))
+  call pathogen#infect("~/.nix-profile/vim-plugins")
+"else
+"  call pathogen#infect()
+"endif
+"call pathogen#infect()
+
+source $HOME/.vim/settings/ui.vim
+source $HOME/.vim/settings/editing.vim
+source $HOME/.vim/settings/statusline.vim
+source $HOME/.vim/settings/plugins.vim
+source $HOME/.vim/settings/autocommands.vim
