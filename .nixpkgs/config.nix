@@ -19,5 +19,7 @@ pkgs: {
 
       macvimWrapped   = wrapVim { vim = macvim; };
       vimHugeWrapped  = wrapVim { vim = vimHuge; };
+
+      vimPlugins = callPackage ./vim-plugins { };
     };
 }

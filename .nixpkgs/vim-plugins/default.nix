@@ -1,6 +1,9 @@
 { stdenv, lib, pkgs, callPackage
 , fetchzip, fetchgit
-,vim, ruby, python, perl, mono, libcxx, clang, cmake, which }:
+, cmake
+, vim, ruby, python, perl, clang
+, which
+}:
 let sources = with pkgs; import ./sources.nix {
       inherit fetchFromGitHub;
     };
@@ -123,37 +126,33 @@ let sources = with pkgs; import ./sources.nix {
             "vimproc_unix.so" \
         '';
         buildPhase = ''
+          make -f make_unix.mak
+        '';
+        installPhase = ''
           ensureDir $out/vim-plugins
           target=$out/vim-plugins/$name
-
           cp -a ./ $target
-          cd $target
-          make -f make_unix.mak
-
-          rm -r make_*.mak vest
-
           ${vimHelpTags}
           vimHelpTags $target
         '';
-        installPhase = ":";
       };
       command-t = stdenv.mkDerivation {
         name = "command-t";
         src = sources.command-t;
         buildInputs = [ perl ruby ];
         buildPhase = ''
-          ensureDir $out/vim-plugins
-          target=$out/vim-plugins/$name
-
-          cp -a ./ $target
-          cd $target/ruby/command-t
+          pushd ruby/command-t
           ruby extconf.rb
           make
-
+          popd
+        '';
+        installPhase = ''
+          ensureDir $out/vim-plugins
+          target=$out/vim-plugins/$name
+          cp -a ./ $target
           ${vimHelpTags}
           vimHelpTags $target
         '';
-        installPhase = ":";
       };
     };
 in plugins
