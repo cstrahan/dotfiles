@@ -25,8 +25,8 @@ fi
 # Editors
 #
 
-export EDITOR='nano'
-export VISUAL='nano'
+export EDITOR='vim'
+export VISUAL='vim'
 export PAGER='less'
 
 #
@@ -52,6 +52,7 @@ typeset -gU cdpath fpath mailpath path
 
 # Set the list of directories that Zsh searches for programs.
 path=(
+  $HOME/.nix-profile/bin
   /usr/texbin
   $HOME/.cabal/bin
   /usr/local/{bin,sbin}
@@ -70,7 +71,7 @@ path=($^path(-/N))
 # Set the default Less options.
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
 # Remove -X and -F (exit if the content fits on one screen) to enable it.
-export LESS='-F -g -i -M -R -S -w -X -z-4'
+export LESS='-g -i -M -R -S -w -z-4'
 
 # Set the Less input preprocessor.
 if (( $+commands[lesspipe.sh] )); then
@@ -94,43 +95,11 @@ fi
 
 if [[ -s /usr/local/share/chruby/chruby.sh ]] ; then
   source /usr/local/share/chruby/chruby.sh
-  # source /usr/local/share/chruby/auto.sh
 
   if [[ -s ~/.ruby-version ]] ; then
     chruby $(cat ~/.ruby-version) >/dev/null
   fi
 fi
-
-# TODO:
-zstyle ':prezto:module:terminal' auto-title 'yes'
-
-# Set case-sensitivity for completion, history lookup, etc.
-zstyle ':prezto:*:*' case-sensitive 'no'
-
-# Color output (auto set to 'no' on dumb terminals).
-zstyle ':prezto:*:*' color 'yes'
-
-# Set the Prezto modules to load (browse modules).
-# The order matters.
-zstyle ':prezto:load' pmodule \
-  'environment' \
-  'terminal' \
-  'editor' \
-  'history' \
-  'directory' \
-  'spectrum' \
-  'utility' \
-  'completion' \
-  'prompt' \
-  'syntax-highlighting'
-
-#
-# Editor
-#
-
-# Set the key mapping style to 'emacs' or 'vi'.
-zstyle ':prezto:module:editor' keymap 'emacs'
-
 
 #
 # Ruby-Build
