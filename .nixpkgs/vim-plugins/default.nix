@@ -58,18 +58,18 @@ let sources = with pkgs; import ./sources.nix {
           fi
           python_include+="''${python_prefix}/include/''${which_python}"
 
-          cmakeFlags=(
+          cmakeFlagsArray=(
             "-DUSE_CLANG_COMPLETER=ON"
             "''${python_library}"
             "''${python_include}"
           )
         '' + (if stdenv.isDarwin then ''
-          cmakeFlags+=(
+          cmakeFlagsArray+=(
             "-DPATH_TO_LLVM_ROOT=${clangDarwin}"
             "-DEXTERNAL_LIBCLANG_PATH=${clangDarwin}/lib/libclang.dylib"
           )
         '' else ''
-          cmakeFlags+=(
+          cmakeFlagsArray+=(
             "-DUSE_SYSTEM_LIBCLANG=ON"
           )
         '');
@@ -82,11 +82,11 @@ let sources = with pkgs; import ./sources.nix {
           pushd build
 
           echo "Running cmake with flags:"
-          for flag in "''${cmakeFlags[@]}"; do
+          for flag in "''${cmakeFlagsArray[@]}"; do
             echo "    $flag"
           done
 
-          cmake -G "Unix Makefiles" . $cmakeDir ''${cmakeFlags[@]}
+          cmake -G "Unix Makefiles" . $cmakeDir ''${cmakeFlagsArray[@]}
           make -j ''${NIX_BUILD_CORES} ycm_support_libs
 
           popd
