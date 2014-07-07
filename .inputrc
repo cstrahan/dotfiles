@@ -1,0 +1,3 @@
+set show-all-if-ambiguous On
+set completion-ignore-case On
+set expand-tilde Off
