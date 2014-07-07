@@ -8,6 +8,11 @@ require 'tmpdir'
 require 'io/console'
 
 $plugins = []
+print "GitHub User: "
+user = STDIN.gets.chomp
+print "Password: "
+pass = STDIN.noecho(&:gets).chomp
+$basic_auth = [user, pass]
 
 def plugin(name, url)
   owner = url[/https?:\/\/github.com\/([^\/]+)\/.*/, 1]
@@ -56,12 +61,6 @@ def get_key(plugin)
 end
 
 def process!
-  print "GitHub User: "
-  user = STDIN.gets.chomp
-  print "Password: "
-  pass = STDIN.noecho(&:gets).chomp
-  $basic_auth = [user, pass]
-
   # create sha256 cache/lookup
   sha_lookup = {}
   old_plugins = JSON.parse(s, :symbolize_names => true) rescue []
@@ -73,6 +72,8 @@ def process!
   $plugins.each do |plugin|
     plugin[:sha256] = sha_lookup[get_key(plugin)] || calculate_sha256(plugin)
   end
+
+  $plugins = $plugins.sort_by {|p| p[:name]}
 
   # write nix
   File.open("sources.nix", "w") do |f|
@@ -88,6 +89,8 @@ def process!
 end
 
 plugin "pathogen", "https://github.com/tpope/vim-pathogen.git"
+
+plugin "vinarise", "https://github.com/Shougo/vinarise.vim.git"
 
 plugin "ctrlp", "https://github.com/kien/ctrlp.vim.git"
 plugin "command-t", "https://github.com/wincent/Command-T.git"
@@ -122,13 +125,13 @@ plugin "syntastic", "https://github.com/scrooloose/syntastic.git"
 plugin "tabmerge", "https://github.com/vim-scripts/tabmerge.git"
 plugin "tabular", "https://github.com/godlygeek/tabular.git"
 plugin "align", "https://github.com/tsaleh/vim-align.git"
-#plugin "ultisnips", "https://github.com/SirVer/ultisnips"
+plugin "ultisnips", "https://github.com/SirVer/ultisnips.git"
 #plugin "vim-snipmate", "https://github.com/garbas/vim-snipmate.git"
 #plugin "vim-snippets", "https://github.com/honza/vim-snippets.git"
 plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
 plugin "addon-mw-utils", "https://github.com/MarcWeber/vim-addon-mw-utils.git"
 #plugin "neocomplcache", "https://github.com/Shougo/neocomplcache.vim.git"
-plugin "youcompleteme", "https://github.com/Valloric/YouCompleteMe.git"
+#plugin "youcompleteme", "https://github.com/Valloric/YouCompleteMe.git"
 plugin "vimproc", "https://github.com/Shougo/vimproc.vim.git"
 
 plugin "vim-ruby", "https://github.com/vim-ruby/vim-ruby.git"
@@ -147,7 +150,6 @@ plugin "slim", "https://github.com/slim-template/vim-slim.git"
 plugin "scss", "https://github.com/cakebaker/scss-syntax.vim.git"
 plugin "less", "https://github.com/groenewege/vim-less.git"
 plugin "html5", "http://github.com/othree/html5.vim.git"
-plugin "html5-syntax", "http://github.com/othree/html5-syntax.vim.git"
 plugin "nodejs", "https://github.com/mmalecki/vim-node.js.git"
 plugin "javascript", "https://github.com/pangloss/vim-javascript.git"
 plugin "jasmine", "https://github.com/claco/jasmine.vim.git"
