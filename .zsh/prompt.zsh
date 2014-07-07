@@ -2,24 +2,16 @@
 
 # http://stackoverflow.com/questions/689765/
 autoload -U colors && colors
+autoload -Uz add-zsh-hook
+autoload -Uz promptinit && promptinit
 setopt prompt_subst
 
 function set_term_title {
-  local set_title="\e]2;$PWD\a"
-  echo -ne "$set_title"
-
-  #if [ -n "$TMUX" ]; then
-  #  echo -ne "\ePtmux;\e$set_title\e\\"
-  #fi
+  printf "\e]2;%s\a" "$PWD"
 }
 
 function set_term_tab {
-  local set_tab="\e]1;$PWD:h:t/$PWD:t\a"
-  echo -ne "$set_tab"
-
-  #if [ -n "$TMUX" ]; then
-  #  echo -ne "\ePtmux;\e$set_tab\e\\"
-  #fi
+  printf "\ek%s\e\\" "$PWD:h:t/$PWD:t"
 }
 
 function set_prompt {
