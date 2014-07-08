@@ -64,6 +64,16 @@ path=(
 )
 path=($^path(-/N))
 
+
+#
+# Man
+#
+
+if [[ -d $HOME/.nix-profile ]]; then
+  export MANPATH="$HOME/.nix-profile/share/man${MANPATH:+:$MANPATH}"
+fi
+
+
 #
 # Less
 #
