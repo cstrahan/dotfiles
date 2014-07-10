@@ -92,6 +92,9 @@ plugin "pathogen", "https://github.com/tpope/vim-pathogen.git"
 
 plugin "vinarise", "https://github.com/Shougo/vinarise.vim.git"
 
+#plugin "vim-lion", "https://github.com/tommcdo/vim-lion.git"
+plugin "vim-exchange", "https://github.com/tommcdo/vim-exchange.git"
+
 plugin "ctrlp", "https://github.com/kien/ctrlp.vim.git"
 plugin "command-t", "https://github.com/wincent/Command-T.git"
 plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"
