@@ -1,3 +1,16 @@
-set show-all-if-ambiguous On
-set completion-ignore-case On
-set expand-tilde Off
+set visible-stats on
+
+set bell-style visible
+
+set page-completions on
+set completion-ignore-case on
+set completion-query-items 200
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+
+set expand-tilde off
+
+set bind-tty-special-chars off
+$if mode=emacs
+  "\C-w": backward-kill-word 
+$endif
