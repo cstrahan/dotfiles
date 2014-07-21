@@ -1,0 +1,2 @@
+settings set use-color true
+settings set prompt "${ansi.bold}${ansi.fg.green}(lldb)${ansi.normal} "
