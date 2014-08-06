@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       "--enable-tclinterp=yes"
       "--with-luajit"
       "--with-lua-prefix=${luajit}"
-      "--with-python-config-dir=${python}/lib" ];
+      "--with-python-config-dir=${python}/lib"
       "--with-ruby-command=${ruby}/bin/ruby"
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"

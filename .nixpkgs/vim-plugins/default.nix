@@ -47,24 +47,13 @@ let sources = with pkgs; import ./sources.nix {
             "'ycm_path_to_python_interpreter', '${python}/bin/python'"
         '';
         configurePhase = ''
-          # Inspired by install.sh from ycmd
-          python_library="-DPYTHON_LIBRARY="
-          python_include="-DPYTHON_INCLUDE_DIR="
-          python_prefix=$(python-config --prefix | sed 's/^[ \t]*//')
-          which_python=$(python -c 'import sys;print(sys.version)' | sed 's/^[ \t]*//')
-          which_python="python''${which_python:0:3}"
-          lib_python="''${python_prefix}/lib/lib''${which_python}"
-          if [ -f "''${lib_python}.so" ]; then
-            python_library+="''${lib_python}.so"
-          else
-            python_library+="''${lib_python}.dylib"
-          fi
-          python_include+="''${python_prefix}/include/''${which_python}"
+          pythonLib=$(find ${python}/lib -name lib${python.libPrefix}.so -o -name lib${python.libPrefix}.dylib)
+          pythonInclude=${python}/include/${python.libPrefix}
 
           cmakeFlagsArray=(
             "-DUSE_CLANG_COMPLETER=ON"
-            "''${python_library}"
-            "''${python_include}"
+            "-DPYTHON_LIBRARY=$pythonLib"
+            "-DPYTHON_INCLUDE_DIR=$pythonInclude"
           )
         '' + (if stdenv.isDarwin then ''
           cmakeFlagsArray+=(

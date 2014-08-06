@@ -204,12 +204,6 @@
     rev    = "3ec30731cd2bcd48e842e1f151d6cf2fd7690a9b";
     sha256 = "06b7xczdq633qsbx7nxj8j30bpdrxr1mgqw3zdq22mnl1xvr50j4";
   };
-  jshint = fetchFromGitHub {
-    owner  = "wookiehangover";
-    repo   = "jshint.vim";
-    rev    = "d01d252eaae5ef37dae81f5c1d3e71cd47f05660";
-    sha256 = "106wnfa2lrgjjg5m1zgrk6f9p7k18cpzhzqqhwyrin24a5cvkqsv";
-  };
   latex-box = fetchFromGitHub {
     owner  = "LaTeX-Box-Team";
     repo   = "LaTeX-Box";
