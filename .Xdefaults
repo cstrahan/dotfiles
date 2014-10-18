@@ -70,3 +70,38 @@ URxvt.color14 : #34E2E2
 ! white
 URxvt.color7  : #D3D7CF
 URxvt.color15 : #EEEEEC
+
+! -------------------------
+! XTERM
+! -------------------------
+
+! xterm*font: -*-fixed-medium-r-*-*-14-*-*-*-*-*-*-*
+XTerm*faceName: PragmataPro
+XTerm*faceSize: 10
+
+xterm*background: #000000
+xterm*foreground: #FFFFFF
+! black
+xterm*color0  : #000000
+xterm*color8  : #555753
+! red
+xterm*color1  : #CC0000
+xterm*color9  : #EF2929
+! green
+xterm*color2  : #4E9A06
+xterm*color10 : #8AE234
+! yellow
+xterm*color3  : #C4A000
+xterm*color11 : #FCE94F
+! blue
+xterm*color4  : #3465A4
+xterm*color12 : #729FCF
+! magenta
+xterm*color5  : #75507B
+xterm*color13 : #AD7FA8
+! cyan
+xterm*color6  : #06989A
+xterm*color14 : #34E2E2
+! white
+xterm*color7  : #D3D7CF
+xterm*color15 : #EEEEEC
