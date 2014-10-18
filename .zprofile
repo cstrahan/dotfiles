@@ -14,6 +14,14 @@ if [[ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
 fi
 
 #
+# XQuartz
+#
+
+if [ "$(uname)" = "Darwin" -a -n "$NIX_LINK" -a -f $NIX_LINK/etc/X11/fonts.conf ]; then
+  export FONTCONFIG_FILE=$NIX_LINK/etc/X11/fonts.conf
+fi
+
+#
 # Browser
 #
 
@@ -69,6 +77,7 @@ path=($^path(-/N))
 # Man
 #
 
+MANPATH=/usr/share/man:/usr/local/share/man
 if [[ -d $HOME/.nix-profile ]]; then
   export MANPATH="$HOME/.nix-profile/share/man${MANPATH:+:$MANPATH}"
 fi
