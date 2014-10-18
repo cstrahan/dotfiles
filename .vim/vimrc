@@ -23,8 +23,10 @@ let g:loaded_netrwPlugin  = 1 " Disable netrw
 " au VimEnter * :NERDTreeToggle
 " au VimEnter * :wincmd p
 
+" let g:go_gocode_bin=expand("~/go/bin/gocode")
+
 """ load plugin paths
-"let g:pathogen_disabled = [ "vimproc" , "YouCompleteMe" ]
+let g:pathogen_disabled = [ "vim-go", "youcompleteme" ]
 "if isdirectory(expand("~/.nix-profile/vim-plugins"))
   call pathogen#infect("~/.nix-profile/vim-plugins")
 "else

@@ -103,10 +103,6 @@ function s:CdIfDirectory(directory)
 endfunction
 
 
-""" Powerline
-let g:Powerline_symbols = 'fancy'
-
-
 """ AutoTag
 " Make AutoTag play nicely with Fugitive
 let g:autotagTagsFile = ".git/tags"
@@ -120,14 +116,14 @@ let g:NERDSpaceDelims = 1
 let g:NERDRemoveExtraSpaces = 1
 
 
-""" Ack
-vnoremap <C-a> "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>a :Ack<space>
-vmap <leader>a "hy:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>ta :tabnew<CR>:Ack<space>
-vmap <leader>ta "hy:tabnew<CR>:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>va :vnew<CR>:Ack<space>
-vmap <leader>va "hy:vnew<CR>:Ack "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
+""" Ag
+vnoremap <C-a> "hy:Ag "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
+map <leader>a :Ag<space>
+vmap <leader>a "hy:Ag "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
+map <leader>ta :tabnew<CR>:Ag<space>
+vmap <leader>ta "hy:tabnew<CR>:Ag "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
+map <leader>va :vnew<CR>:Ag<space>
+vmap <leader>va "hy:vnew<CR>:Ag "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 
 
 """ surround
@@ -151,15 +147,6 @@ let vimclojure#SplitPos="bottom"
 let vimclojure#SplitSize=10
 
 
-""" Command-T
-" put commandT window at the top of the screen
-"let g:CommandTMatchWindowAtTop=1
-"let g:CommandTTagIncludeFilenames=1
-"let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
-"let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
-"let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
-
-
 """ Fugitive
 "nmap <leader>gb :Gblame<CR>
 "nmap <leader>gs :Gstatus<CR>
@@ -168,6 +155,23 @@ let vimclojure#SplitSize=10
 "nmap <leader>gc :Gcommit<CR>
 "nmap <leader>gp :Git push<CR>
 
+
+""" Command-T
+" put commandT window at the top of the screen
+"let g:CommandTMatchWindowAtTop=1
+let g:CommandTMaxFiles = 20000
+let g:CommandTMaxDepth = 15
+let g:CommandTMaxCachedDirectories = 1
+let g:CommandTMaxHeight = 100
+let g:CommandTInputDebounce = 120
+let g:CommandTFileScanner = "watchman"
+let g:CommandTTagIncludeFilenames = 1
+let g:CommandTMatchWindowReverse = 1
+let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
+let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
+let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
+"map <leader>gt :CommandTTag<cr>
+"map <leader>gb :CtrlPBufTag<cr>
 
 """ CtrlP
 let g:ctrlp_map = '<c-p>'
@@ -184,14 +188,6 @@ let g:ctrlp_buftag_types = {
       \ }
 map <leader>gt :CtrlPTag<cr>
 map <leader>gb :CtrlPBufTag<cr>
-"map <leader>gv :CtrlP app/views<cr>
-"map <leader>gc :CtrlP app/controllers<cr>
-"map <leader>gm :CtrlP app/models<cr>
-"map <leader>gh :CtrlP app/helpers<cr>
-"map <leader>gl :CtrlP lib<cr>
-"map <leader>gp :CtrlP public<cr>
-"map <leader>gs :CtrlP public/stylesheets/sass<cr>
-"map <leader>gf :CtrlP features<cr>
 
 
 """ tagbar

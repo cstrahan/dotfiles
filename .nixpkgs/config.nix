@@ -27,9 +27,9 @@
 
       vimPlugins = callPackage ./vim-plugins { };
 
-      haskellPackages_ghcjs = self.haskellPackages_ghcjs.override {
-        extension = haskExt;
-      };
+      #haskellPackages_ghcjs = self.haskellPackages_ghcjs.override {
+      #  extension = haskExt;
+      #};
 
       haskellPackages_ghc783 = self.haskellPackages.override {
         extension = haskExt;
