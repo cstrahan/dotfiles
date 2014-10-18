@@ -6,6 +6,9 @@
 # Disable mute-on-typing in google hangout
 #defaults write com.google.googletalkplugind exps -string [\"-tm\"]
 
+# Enable performance mode (increase maxproc et al limits; requires OS X Server)
+sudo serverinfo --setperfmode YES
+
 # Disable the warning before emptying the Trash
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
