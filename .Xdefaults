@@ -10,6 +10,16 @@ Xft.rgba:       rgb
 Xft.dpi:        96
 
 ! -------------------------
+! dmenu
+! -------------------------
+
+dmenu.font:          xft:PragmataPro:pixelsize=18
+!dmenu.foreground:    #808080
+!dmenu.background:    #151515
+!dmenu.selforeground: #151515
+!dmenu.selbackground: #ff8939
+
+! -------------------------
 ! URXVT
 ! -------------------------
 
@@ -28,7 +38,7 @@ URxvt.inheritPixmap: false
 URxvt.meta8: true
 URxvt.iso14755: false
 URxvt.iso14755_52: off
-#URxvt.perl-ext-common: default,clipboard
+!URxvt.perl-ext-common: default,clipboard
 URxvt.clipboard.copycmd:  xsel --input  --clipboard
 URxvt.clipboard.pastecmd: xsel --output --clipboard
 URxvt.keysym.Control-Shift-c: perl:clipboard:copy
