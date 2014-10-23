@@ -1,46 +1,53 @@
 ! vim: ft=xdefaults
 
-Xft.autohint: 0
+Xft.autohint:   0
 Xft.lcdfilter:  lcddefault
 Xft.antialias:  true
 Xft.hinting:    true
 Xft.hintstyle:  hintslight
-Xft.dpi: 96
-Xft.rgba: rgb
+Xft.rgba:       rgb
+! rMBP=220
+Xft.dpi:        96
 
 ! -------------------------
 ! URXVT
 ! -------------------------
 
 ! Look & feel
+URxvt*loginShell: true
 URxvt.transparent: false
 URxvt.depth: 32
 URxvt.scrollBar: true
 URxvt.scrollBar_right: true
 URxvt.scrollstyle: plain
-URxvt.termName:  rxvt-256color
-URxvt.cursorBlink:true
+URxvt.termName: rxvt-256color
+URxvt.cursorBlink:false
 URxvt.fading: 60
 
+URxvt.inheritPixmap: false
+URxvt.meta8: true
+URxvt.iso14755: false
+URxvt.iso14755_52: off
+#URxvt.perl-ext-common: default,clipboard
+URxvt.clipboard.copycmd:  xsel --input  --clipboard
+URxvt.clipboard.pastecmd: xsel --output --clipboard
+URxvt.keysym.Control-Shift-c: perl:clipboard:copy
+URxvt.keysym.Control-Shift-v: perl:clipboard:paste
+
 ! Fonts
+!URxvt.letterSpace: -1
 URxvt.font:\
-    xft:PragmataPro:pixelsize=12,\
-    xft:Monospace
+    xft:PragmataPro:pixelsize=18,\
+    xft:Monospace:pixelsize=18
 URxvt.boldFont:\
-    xft:PragmataPro:pixelsize=12:style=Bold,\
-    xft:Monospace
+    xft:PragmataPro:pixelsize=18:style=Bold,\
+    xft:Monospace:pixelsize=18
 URxvt.italicFont:\
-    xft:PragmataPro:pixelsize=12:style=Italic,\
-    xft:Monospace
+    xft:PragmataPro:pixelsize=18:style=Italic,\
+    xft:Monospace:pixelsize=18
 URxvt.boldItalicFont:\
-    xft:PragmataPro:pixelsize=12:style=Bold Italic,\
-    xft:Monospace
-
-! Fix font width
-URxvt.letterSpace: -1
-
-! Perl extensions (default,matcher,tabbedex,clipboard)
-! urxvt.perl-ext-common: default,matcher
+    xft:PragmataPro:pixelsize=18:style=Bold Italic,\
+    xft:Monospace:pixelsize=18
 
 ! Match gnome-terminal "Tango" scheme
 ! foreground/background
