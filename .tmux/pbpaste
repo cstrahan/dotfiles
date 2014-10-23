@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [[ $(uname) == "Darwin" ]]; then
+  reattach-to-user-namespace pbpaste
+
+elif command -v xsel >/dev/null 2>&1; then
+  xsel -o -b
+
+elif command -v xclip >/dev/null 2>&1; then
+  xclip -o -selection clipboard
+fi
