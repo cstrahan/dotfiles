@@ -34,6 +34,11 @@ URxvt.clipboard.pastecmd: xsel --output --clipboard
 URxvt.keysym.Control-Shift-c: perl:clipboard:copy
 URxvt.keysym.Control-Shift-v: perl:clipboard:paste
 
+!URxvt.keysym.C-Up:     perl:font-size:increase
+!URxvt.keysym.C-Down:   perl:font-size:decrease
+!URxvt.keysym.C-S-Up:   perl:font-size:incglobal
+!URxvt.keysym.C-S-Down: perl:font-size:decglobal
+
 ! Fonts
 !URxvt.letterSpace: -1
 URxvt.font:\
