@@ -1,1 +1,1 @@
-/Users/charlesstrahan/.vim/vimrc
+.vim/vimrc
