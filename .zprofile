@@ -77,9 +77,12 @@ path=($^path(-/N))
 # Man
 #
 
+export MANPATH
 MANPATH=/usr/share/man:/usr/local/share/man
-if [[ -d $HOME/.nix-profile ]]; then
-  export MANPATH="$HOME/.nix-profile/share/man${MANPATH:+:$MANPATH}"
+if [[ -d /var/run/current-system/sw/share/man ]]; then
+  MANPATH="/var/run/current-system/sw/share/man${MANPATH:+:$MANPATH}"
+elif [[ -d $HOME/.nix-profile ]]; then
+  MANPATH="$HOME/.nix-profile/share/man${MANPATH:+:$MANPATH}"
 fi
 
 
