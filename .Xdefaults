@@ -27,22 +27,22 @@ dmenu.font:          xft:PragmataPro:pixelsize=18
 URxvt*loginShell: true
 URxvt.transparent: false
 URxvt.depth: 32
-URxvt.scrollBar: true
+URxvt.scrollBar: false
 URxvt.scrollBar_right: true
 URxvt.scrollstyle: plain
 URxvt.termName: rxvt-256color
-URxvt.cursorBlink:false
+URxvt.cursorBlink: false
 URxvt.fading: 60
 
 URxvt.inheritPixmap: false
 URxvt.meta8: true
 URxvt.iso14755: false
 URxvt.iso14755_52: off
-!URxvt.perl-ext-common: default,clipboard
+URxvt.perl-ext-common: default,clipboard
 URxvt.clipboard.copycmd:  xsel --input  --clipboard
 URxvt.clipboard.pastecmd: xsel --output --clipboard
-URxvt.keysym.Control-Shift-c: perl:clipboard:copy
-URxvt.keysym.Control-Shift-v: perl:clipboard:paste
+URxvt.keysym.Control-Shift-C: perl:clipboard:copy
+URxvt.keysym.Control-Shift-V: perl:clipboard:paste
 
 !URxvt.keysym.C-Up:     perl:font-size:increase
 !URxvt.keysym.C-Down:   perl:font-size:decrease
