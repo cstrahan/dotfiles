@@ -2,10 +2,11 @@ import System.IO
 import System.Exit
 import XMonad
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
-import XMonad.Layout.Fullscreen
+import XMonad.Layout.Fullscreen hiding (fullscreenEventHook)
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
@@ -49,6 +50,7 @@ myManageHook = composeAll $
     ++ [ manageDocks <+> manageHook defaultConfig ]
     ++ [ (isFullscreen)  --> doFullFloat ]
     ++ [ (isDialog) --> doCenterFloat ]
+    ++ [ (className =? "Xmessage" <&&> appName =? "xmessage") --> doCenterFloat ]
     ++ [ (className =? "Chromium" <&&> stringProperty "WM_WINDOW_ROLE" =? "pop-up") --> doCenterFloat ]
   where
     floaters = [ "xcalc", "wpa_gui" ]
@@ -64,6 +66,7 @@ main = do
         , focusFollowsMouse = True
         , normalBorderColor  = myNormalBorderColor
         , focusedBorderColor = myFocusedBorderColor
+        , handleEventHook    = fullscreenEventHook
         , layoutHook = smartBorders myLayout
         , manageHook = myManageHook
         , logHook = dynamicLogWithPP $ xmobarPP
