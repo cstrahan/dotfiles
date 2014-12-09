@@ -33,7 +33,7 @@ end
 
 def calculate_sha256(plugin)
   owner, repo, rev = plugin[:owner], plugin[:repo], plugin[:rev]
-  `nix-prefetch-zip --name #{repo}-#{rev}-src http://github.com/#{owner}/#{repo}/archive/#{rev}.tar.gz`.chomp
+  `nix-prefetch-zip http://github.com/#{owner}/#{repo}/archive/#{rev}.tar.gz`.chomp
 end
 
 def to_nix(plugins)

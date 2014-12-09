@@ -1,13 +1,13 @@
 { stdenv, lib, pkgs, callPackage
 , fetchzip, fetchgit
 , cmake
-, vim, ruby, python, perl, clang
+, vim, ruby, python, perl, llvmPackages
 , which
 }:
 let sources = with pkgs; import ./sources.nix {
       inherit fetchFromGitHub;
     };
-    vimHelpTags = ''
+    vimHelpTagsDef = ''
       vimHelpTags(){
         if [ -d "$1/doc" ]; then
           ${vim}/bin/vim -n -u NONE -i NONE -n -e -s -c "helptags $1/doc" +quit!
@@ -17,13 +17,15 @@ let sources = with pkgs; import ./sources.nix {
     mkVimPlugin = name: src: stdenv.mkDerivation {
       inherit name src;
       preConfigure = ''
-        rm Makefile || true
+        if [[ -f Makefile ]]; then
+          rm Makefile
+        fi
       '';
       installPhase = ''
         ensureDir $out/vim-plugins
         target=$out/vim-plugins/$name
         cp -r . $target
-        ${vimHelpTags}
+        ${vimHelpTagsDef}
         vimHelpTags $target
       '';
     };
@@ -40,7 +42,7 @@ let sources = with pkgs; import ./sources.nix {
           rev = "9cff4e854819f8d46b9752318e529eafd9cb3858";
           sha256 = "0gibppv986b3m91gcha70iakkh8hk24z5j66xm8rd4rywy1kakv0";
         };
-        buildInputs = [ python cmake ] ++ lib.optional stdenv.isLinux clang.clang;
+        buildInputs = [ python cmake ] ++ lib.optional stdenv.isLinux llvmPackages.clang;
         patchPhase = ''
           substituteInPlace plugin/youcompleteme.vim --replace \
             "'ycm_path_to_python_interpreter', '''" \
@@ -88,7 +90,7 @@ let sources = with pkgs; import ./sources.nix {
           ensureDir $out/vim-plugins
           target=$out/vim-plugins/$name
           cp -a ./ $target
-          ${vimHelpTags}
+          ${vimHelpTagsDef}
           vimHelpTags $target
         '';
         meta = with lib; {
@@ -121,7 +123,7 @@ let sources = with pkgs; import ./sources.nix {
           ensureDir $out/vim-plugins
           target=$out/vim-plugins/$name
           cp -a ./ $target
-          ${vimHelpTags}
+          ${vimHelpTagsDef}
           vimHelpTags $target
         '';
       };
@@ -139,7 +141,7 @@ let sources = with pkgs; import ./sources.nix {
           ensureDir $out/vim-plugins
           target=$out/vim-plugins/$name
           cp -a ./ $target
-          ${vimHelpTags}
+          ${vimHelpTagsDef}
           vimHelpTags $target
         '';
       };
