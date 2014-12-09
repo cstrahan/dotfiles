@@ -128,9 +128,9 @@ plugin "syntastic", "https://github.com/scrooloose/syntastic.git"
 plugin "tabmerge", "https://github.com/vim-scripts/tabmerge.git"
 plugin "tabular", "https://github.com/godlygeek/tabular.git"
 plugin "align", "https://github.com/tsaleh/vim-align.git"
-plugin "ultisnips", "https://github.com/SirVer/ultisnips.git"
-#plugin "vim-snipmate", "https://github.com/garbas/vim-snipmate.git"
-#plugin "vim-snippets", "https://github.com/honza/vim-snippets.git"
+plugin "ultisnips", "https://github.com/SirVer/ultisnips.git" # requires separate snippets
+plugin "vim-snippets", "https://github.com/honza/vim-snippets.git" # the actual snippets to be used with a snippet engine like UltiSnips
+#plugin "vim-snipmate", "https://github.com/garbas/vim-snipmate.git" # competitor to UltiSnips
 plugin "tlib", "https://github.com/tomtom/tlib_vim.git"
 plugin "addon-mw-utils", "https://github.com/MarcWeber/vim-addon-mw-utils.git"
 #plugin "neocomplcache", "https://github.com/Shougo/neocomplcache.vim.git"
@@ -218,7 +218,8 @@ plugin "vim-rsi", "https://github.com/tpope/vim-rsi.git"
 plugin "fugitive", "https://github.com/tpope/vim-fugitive.git"
 plugin "vim-git", "https://github.com/tpope/vim-git.git"
 
-plugin "copy-as-rtf", "https://github.com/zerowidth/vim-copy-as-rtf.git"
+# Doesn't work on Linux
+#plugin "copy-as-rtf", "https://github.com/zerowidth/vim-copy-as-rtf.git"
 
 plugin "vim-indexed-search", "https://github.com/henrik/vim-indexed-search.git"
 
