@@ -76,3 +76,13 @@ main = do
              , ppSep     = "   "
              }
         }
+
+-- NOTES
+--
+--   WM_NAME:
+--     title =? "Hangouts"
+--   WM_CLASS:
+--     appName =? "crx_nckgahadagoaajjgafhacjanaoiihapd"
+--     className =? "Chromium"
+--   WM_WINDOW_ROLE:
+--     stringProperty "WM_WINDOW_ROLE" =? "pop-up"
