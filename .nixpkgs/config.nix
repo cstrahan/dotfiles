@@ -1,17 +1,18 @@
 { pkgs }: {
   allowUnfree = true;
-  packageOverrides = self:
+  zathura.useMupdf = true; # disable to use poppler for rendering
+  packageOverrides = super: let self = super.pkgs; in
     let inherit (self) stdenv callPackage fetchFromGitHub;
         inherit (stdenv) lib;
         inherit (lib) overrideDerivation;
         wrapVim = callPackage ./vim/wrapper.nix;
         haskExt = self: super: {
-          systemFileio = self.disableTest  super.systemFileio;
-          shake        = self.disableTest  super.shake;
-          unlambda     = self.disableLinks super.unlambda;
+          #systemFileio = self.disableTest  super.systemFileio;
+          #shake        = self.disableTest  super.shake;
+          #unlambda     = self.disableLinks super.unlambda;
         };
     in rec {
-      macvim  = overrideDerivation self.macvim (oldAttrs: {
+      macvim  = overrideDerivation super.macvim (oldAttrs: {
         name = "macvim-7.4.355";
         src = fetchFromGitHub {
           owner = "genoma";
@@ -27,12 +28,8 @@
 
       vimPlugins = callPackage ./vim-plugins { };
 
-      #haskellPackages_ghcjs = self.haskellPackages_ghcjs.override {
+      #haskellPackages_ghc783 = self.haskellPackages.override {
       #  extension = haskExt;
       #};
-
-      haskellPackages_ghc783 = self.haskellPackages.override {
-        extension = haskExt;
-      };
     };
 }
