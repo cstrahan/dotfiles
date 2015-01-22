@@ -15,12 +15,17 @@ function set_term_tab {
 }
 
 function set_prompt {
+  local nix_shell
+  if [ -n "$IN_NIX_SHELL" ]; then
+    nix_shell="%{$fg[yellow]%}(nix-shell)%{$reset_color%} "
+  fi
+
   local branch_name="$(git_branch_name)"
   if [ -n "$branch_name" ]; then
     branch_name="%{$fg[green]%}($branch_name)%{$reset_color%} "
   fi
 
-  export PS1=$'\n%{$fg_bold[blue]%}${PWD/#$HOME/~}%{$reset_color%} '"$branch_name"'%{$fg_bold[cyan]%}λ%{$reset_color%} '
+  export PS1=$'\n%{$fg_bold[blue]%}${PWD/#$HOME/~}%{$reset_color%} '"$nix_shell"''"$branch_name"'%{$fg_bold[cyan]%}λ%{$reset_color%} '
   export PS2='%{$fg_bold[cyan]%}>%{$reset_color%} '
 }
 
