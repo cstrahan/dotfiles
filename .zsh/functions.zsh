@@ -37,6 +37,7 @@ function smartextract {
     case $1 in
       *.tar.bz2)  tar -jxvf $1                        ;;
       *.tar.gz)   tar -zxvf $1                        ;;
+      *.tar.xz)   xz -d < $1 | tar xf    -            ;;
       *.bz2)      bunzip2 $1                          ;;
       *.dmg)      hdiutil mount $1                    ;;
       *.gz)       gunzip $1                           ;;
