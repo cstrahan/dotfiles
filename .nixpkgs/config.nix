@@ -4,13 +4,8 @@
   packageOverrides = super: let self = super.pkgs; in
     let inherit (self) stdenv callPackage fetchFromGitHub;
         inherit (stdenv) lib;
-        inherit (lib) overrideDerivation;
+        inherit (lib) overrideDerivation concatMapStringsSep;
         wrapVim = callPackage ./vim/wrapper.nix;
-        haskExt = self: super: {
-          #systemFileio = self.disableTest  super.systemFileio;
-          #shake        = self.disableTest  super.shake;
-          #unlambda     = self.disableLinks super.unlambda;
-        };
     in rec {
       macvim  = overrideDerivation super.macvim (oldAttrs: {
         name = "macvim-7.4.355";
@@ -28,8 +23,11 @@
 
       vimPlugins = callPackage ./vim-plugins { };
 
-      #haskellPackages_ghc783 = self.haskellPackages.override {
-      #  extension = haskExt;
-      #};
+      # expose packages in a `ghcWithPackages` set.
+      # https://github.com/NixOS/nixpkgs/pull/5605
+      exposePkgs = names: ghcPackages: ghcPackages.overrideDerivation (drv: { postBuild = ''
+        ${drv.postBuild}
+        ${concatMapStringsSep "\n" (name: "$out/bin/ghc-pkg expose ${name}") names}
+      ''; });
     };
 }
