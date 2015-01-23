@@ -7,6 +7,12 @@ require 'json'
 require 'tmpdir'
 require 'io/console'
 
+# nix-shell leaks a 'name' env-var.
+# nix-prefetch-zip picks up `name` from the environment,
+# and then gets confused.
+# thus, this fixes this script in a nix-shell.
+ENV['name'] = nil
+
 $plugins = []
 print "GitHub User: "
 user = STDIN.gets.chomp
@@ -33,6 +39,11 @@ end
 
 def calculate_sha256(plugin)
   owner, repo, rev = plugin[:owner], plugin[:repo], plugin[:rev]
+  cmd = "nix-prefetch-zip http://github.com/#{owner}/#{repo}/archive/#{rev}.tar.gz"
+
+  puts ""
+  puts cmd
+
   `nix-prefetch-zip http://github.com/#{owner}/#{repo}/archive/#{rev}.tar.gz`.chomp
 end
 
@@ -202,7 +213,7 @@ plugin "html-template-syntax", "https://github.com/pbrisbin/vim-syntax-shakespea
 plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"
 plugin "vim-hdevtools", "https://github.com/bitc/vim-hdevtools.git" # supposedly faster than ghcmod
 plugin "neco-ghc", "https://github.com/eagletmt/neco-ghc.git"
-plugin "hasksyn", "https://github.com/travitch/hasksyn"
+plugin "hasksyn", "https://github.com/travitch/hasksyn.git"
 # TODO: consider https://github.com/raichoo/haskell-vim
 
 plugin "latex-box", "https://github.com/LaTeX-Box-Team/LaTeX-Box.git"
