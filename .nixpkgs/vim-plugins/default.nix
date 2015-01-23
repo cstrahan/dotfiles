@@ -39,8 +39,8 @@ let sources = with pkgs; import ./sources.nix {
         name = "youcompleteme";
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
-          rev = "9cff4e854819f8d46b9752318e529eafd9cb3858";
-          sha256 = "0gibppv986b3m91gcha70iakkh8hk24z5j66xm8rd4rywy1kakv0";
+          rev = "ba6e1408fd2f6929a8e3f4dc527ed1096945fef8";
+          sha256 = "0xs3lwpdm1dkaihama88y71cwf9rk6v193xvqm5kp0kcryssgh3w";
         };
         buildInputs = [ python cmake ] ++ lib.optional stdenv.isLinux llvmPackages.clang;
         patchPhase = ''
