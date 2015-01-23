@@ -199,10 +199,11 @@ plugin "vim-sexp-mappings-for-regular-people", "https://github.com/tpope/vim-sex
 
 #plugin "haskell-indent", "https://github.com/vim-scripts/indenthaskell.vim.git"
 plugin "html-template-syntax", "https://github.com/pbrisbin/vim-syntax-shakespeare.git"
-plugin "hasksyn", "https://github.com/zkf/hasksyn.git"
 plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"
 plugin "vim-hdevtools", "https://github.com/bitc/vim-hdevtools.git" # supposedly faster than ghcmod
 plugin "neco-ghc", "https://github.com/eagletmt/neco-ghc.git"
+plugin "hasksyn", "https://github.com/travitch/hasksyn"
+# TODO: consider https://github.com/raichoo/haskell-vim
 
 plugin "latex-box", "https://github.com/LaTeX-Box-Team/LaTeX-Box.git"
 
