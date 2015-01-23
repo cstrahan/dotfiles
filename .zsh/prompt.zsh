@@ -25,7 +25,7 @@ function set_prompt {
     branch_name="%{$fg[green]%}($branch_name)%{$reset_color%} "
   fi
 
-  export PS1=$'\n%{$fg_bold[blue]%}${PWD/#$HOME/~}%{$reset_color%} '"$nix_shell"''"$branch_name"'%{$fg_bold[cyan]%}λ%{$reset_color%} '
+  export PS1=$'\n'"%{$fg_bold[blue]%}${PWD/#$HOME/~}%{$reset_color%} $nix_shell$branch_name%{$fg_bold[cyan]%}λ%{$reset_color%} "
   export PS2='%{$fg_bold[cyan]%}>%{$reset_color%} '
 }
 
