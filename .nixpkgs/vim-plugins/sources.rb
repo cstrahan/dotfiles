@@ -213,8 +213,8 @@ plugin "html-template-syntax", "https://github.com/pbrisbin/vim-syntax-shakespea
 plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"
 plugin "vim-hdevtools", "https://github.com/bitc/vim-hdevtools.git" # supposedly faster than ghcmod
 plugin "neco-ghc", "https://github.com/eagletmt/neco-ghc.git"
-plugin "hasksyn", "https://github.com/travitch/hasksyn.git"
-# TODO: consider https://github.com/raichoo/haskell-vim
+#plugin "hasksyn", "https://github.com/travitch/hasksyn.git"
+plugin "haskell-vim", "https://github.com/raichoo/haskell-vim.git" # TODO: try this out
 
 plugin "latex-box", "https://github.com/LaTeX-Box-Team/LaTeX-Box.git"
 

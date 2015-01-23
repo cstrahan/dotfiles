@@ -144,11 +144,11 @@
     rev    = "1eeeff8ade7b5008e7a213cc7eb9c7e1bed52bef";
     sha256 = "085l3vhb4pzdw24dykr1glykrgyyhsxyb56w323iv21zmk4y46np";
   };
-  hasksyn = fetchFromGitHub {
-    owner  = "travitch";
-    repo   = "hasksyn";
-    rev    = "c434040bf13a17ca20a551223021b3ace7e453b9";
-    sha256 = "09998lnfcshqis5m062wlag6y476imq9jday9gp4ayjjl1cp3cwx";
+  haskell-vim = fetchFromGitHub {
+    owner  = "raichoo";
+    repo   = "haskell-vim";
+    rev    = "f9a498b898935ea9d55a4506d0e9074e502fb474";
+    sha256 = "1adhm8r2barxril5i80bcxh807vv4jaxwfq2mm01sxy7bzc9nymg";
   };
   headerguard = fetchFromGitHub {
     owner  = "vim-scripts";
