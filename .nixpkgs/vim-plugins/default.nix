@@ -10,7 +10,8 @@ let sources = with pkgs; import ./sources.nix {
     vimHelpTagsDef = ''
       vimHelpTags(){
         if [ -d "$1/doc" ]; then
-          ${vim}/bin/vim -n -u NONE -i NONE -n -e -s -c "helptags $1/doc" +quit!
+          ${vim}/bin/vim -n -u NONE -i NONE -n -e -s -c "helptags $1/doc" +quit! ||
+            echo "WARNING: could not generate helpdocs for $name"
         fi
       }
     '';
@@ -22,7 +23,7 @@ let sources = with pkgs; import ./sources.nix {
         fi
       '';
       installPhase = ''
-        ensureDir $out/vim-plugins
+        mkdir -p $out/vim-plugins
         target=$out/vim-plugins/$name
         cp -r . $target
         ${vimHelpTagsDef}
@@ -39,10 +40,14 @@ let sources = with pkgs; import ./sources.nix {
         name = "youcompleteme";
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
-          rev = "ba6e1408fd2f6929a8e3f4dc527ed1096945fef8";
-          sha256 = "0xs3lwpdm1dkaihama88y71cwf9rk6v193xvqm5kp0kcryssgh3w";
+          rev = "ede37d02313d905c2415cb2f3e0fd71c91fa0741";
+          sha256 = "047xzqvchr0y62qf5mfqv6ixffl6m0qzfhl91azpjb6ifz5gh4a3";
         };
-        buildInputs = [ python cmake ] ++ lib.optional stdenv.isLinux llvmPackages.clang;
+        #buildInputs = [ python cmake ] ++ lib.optional stdenv.isLinux llvmPackages.clang;
+        buildInputs = [ python cmake ] ++ lib.optionals stdenv.isLinux [
+          llvmPackages.clang-unwrapped
+          llvmPackages.llvm
+        ];
         patchPhase = ''
           substituteInPlace plugin/youcompleteme.vim --replace \
             "'ycm_path_to_python_interpreter', '''" \
@@ -87,7 +92,7 @@ let sources = with pkgs; import ./sources.nix {
           rm -rf build
         '';
         installPhase = ''
-          ensureDir $out/vim-plugins
+          mkdir -p $out/vim-plugins
           target=$out/vim-plugins/$name
           cp -a ./ $target
           ${vimHelpTagsDef}

@@ -215,6 +215,7 @@ plugin "vim-hdevtools", "https://github.com/bitc/vim-hdevtools.git" # supposedly
 plugin "neco-ghc", "https://github.com/eagletmt/neco-ghc.git"
 #plugin "hasksyn", "https://github.com/travitch/hasksyn.git"
 plugin "haskell-vim", "https://github.com/raichoo/haskell-vim.git" # TODO: try this out
+plugin "idris-vim", "https://github.com/idris-hackers/idris-vim.git"
 
 plugin "latex-box", "https://github.com/LaTeX-Box-Team/LaTeX-Box.git"
 
