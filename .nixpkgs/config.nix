@@ -21,8 +21,33 @@
         ${concatMapStringsSep "\n" (name: "$out/bin/ghc-pkg expose ${name}") names}
       ''; });
 
+      haskell-lib = import <nixpkgs/pkgs/development/haskell-modules/lib.nix> { pkgs = self; };
+
+      haskellngPackages_7101 = with haskell-lib; self.haskell-ng.packages.ghc7101.override {
+        overrides = self: super: {
+          hdevtools = overrideCabal super.hdevtools (drv: {
+            src = pkgs.fetchFromGitHub {
+              owner = "schell";
+              repo = "hdevtools";
+              rev = "5a946486bb716a34e923cdd47338488c54cb1ba5";
+              sha256 = "0vba29dqbr2gjsgv7q11ygw48k1fadv9qrrvpa9rcrm67mgxra1a";
+            };
+          });
+
+          ghc-mod = overrideCabal super.ghc-mod (drv: {
+            src = pkgs.fetchFromGitHub {
+              owner = "DanielG";
+              repo = "ghc-mod";
+              rev = "247e4e0e7616fe1fecc68fdcf80d6249ac4cee4f";
+              sha256 = "02i6z0navp5a73nk9k46rh01hl5r10s6gzq1c6fmcrdrzjq6nwv4";
+            };
+            buildDepends = drv.buildDepends ++ [ self.cabal-helper self.cereal ];
+          });
+        };
+      };
+
       withHoogle = haskellEnv:
-        pkgs.haskellngPackages.callPackage <nixpkgs/pkgs/development/libraries/haskell/hoogle/local.nix> {
+        self.haskellngPackages.callPackage <nixpkgs/pkgs/development/libraries/haskell/hoogle/local.nix> {
           packages = haskellEnv.paths;
         };
     };
