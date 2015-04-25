@@ -2,7 +2,8 @@ import System.IO
 import System.Exit
 import XMonad
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
+import XMonad.Hooks.EwmhDesktops (fullscreenEventHook, ewmhDesktopsStartup,
+                                 ewmhDesktopsEventHook, ewmhDesktopsLogHook)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
@@ -63,18 +64,19 @@ main = do
         { modMask     = mod4Mask
         , terminal    = "urxvt"
         , borderWidth = 2
-        , focusFollowsMouse = True
+        , startupHook = startupHook defaultConfig <+> ewmhDesktopsStartup
+        , focusFollowsMouse  = True
         , normalBorderColor  = myNormalBorderColor
         , focusedBorderColor = myFocusedBorderColor
-        , handleEventHook    = fullscreenEventHook
+        , handleEventHook    = handleEventHook defaultConfig <+> fullscreenEventHook
         , layoutHook = smartBorders myLayout
         , manageHook = myManageHook
-        , logHook = dynamicLogWithPP $ xmobarPP
+        , logHook = (dynamicLogWithPP $ xmobarPP
              { ppOutput  = hPutStrLn xmproc
              , ppTitle   = xmobarColor xmobarTitleColor "" . shorten 100
              , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
              , ppSep     = "   "
-             }
+             }) <+> ewmhDesktopsLogHook
         }
 
 -- NOTES
