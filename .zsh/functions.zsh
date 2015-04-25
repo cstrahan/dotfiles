@@ -1,30 +1,17 @@
-# cabal-sandbox aware ghc wrapper
-function ghcs {
-  local DIR=$PWD
+# cabal-sandbox aware wrapper
+sandy () {
+  local DIR="$PWD"
   local TARGET="cabal.sandbox.config"
-  while [ ! -e $DIR/$TARGET -a $DIR != "/" ]; do
-    DIR=$(dirname $DIR)
+  local PROG="$1"
+  shift
+  while [ ! -e "$DIR/$TARGET" -a "$DIR" != "/" ]; do
+    DIR="$(dirname $DIR)"
   done
-  if test $DIR != "/"; then
-    local DB=$(sed -ne '/^package-db: */{s///p;q;}' "$DIR/$TARGET")
-    ghc -no-user-package-db -package-db="$DB" "$@"
+  if test "$DIR" != "/"; then
+    local DB="$(sed -ne '/^package-db: */{s///p;q;}' "$DIR/$TARGET")"
+    "$PROG" -no-user-package-db -package-db="$DB" "$@"
   else
-    ghc "$@"
-  fi
-}
-
-# cabal-sandbox aware ghci wrapper
-function ghcis {
-  local DIR=$PWD
-  local TARGET="cabal.sandbox.config"
-  while [ ! -e $DIR/$TARGET -a $DIR != "/" ]; do
-    DIR=$(dirname $DIR)
-  done
-  if test $DIR != "/"; then
-    local DB=$(sed -ne '/^package-db: */{s///p;q;}' "$DIR/$TARGET")
-    ghci -no-user-package-db -package-db="$DB" "$@"
-  else
-    ghci "$@"
+    "$PROG" "$@"
   fi
 }
 
