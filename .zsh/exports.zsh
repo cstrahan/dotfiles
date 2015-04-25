@@ -28,3 +28,6 @@ export LESS_TERMCAP_us=$'\E[04;33;146m'   # begin underline
 
 # Cleaner Rails log entries
 export LOGRAGE_ENABLED=true
+
+# Don't let Nix page output
+export NIX_PAGER=cat
