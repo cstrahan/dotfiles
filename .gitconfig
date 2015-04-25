@@ -50,7 +50,7 @@
   fix = commit --amend -C HEAD
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(blue)<%an>%Creset' --abbrev-commit --date=relative
 
-  wip = !"git add -A; git ls-files --deleted -z | xargs -0 git rm; git commit -m \"wip\""
+  wip = !"git add -A; git commit -m \"wip\""
   unwip = !"git log -n 1 | grep -q -c wip && git reset HEAD~1"
   rb = !"git wip;git rebase -i origin/master;git unwip"
   pr = !"git fetch;git wip;git rebase --stat origin;git unwip;git heads"
