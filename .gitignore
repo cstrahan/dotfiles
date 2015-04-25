@@ -8,6 +8,7 @@
 !/.gdb/**/*
 !/.gdbinit
 !/.gemrc
+!/.ghci
 !/.git_template
 !/.git_template/**/*
 !/.gitexcludes
@@ -19,8 +20,8 @@
 !/.nixpkgs
 !/.nixpkgs/**/*
 !/.pystartup
-!/.tmux.conf
 !/.tmux
+!/.tmux.conf
 !/.tmux/**/*
 !/.vim
 !/.vim/**/*
