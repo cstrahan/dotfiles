@@ -3,9 +3,9 @@ booktime () {
   if [[ -z "$dir" ]]; then
     dir="."
   fi
-  local book="$(find "$dir" -name "*.pdf" | peco)"
+  local book="$(cd "$dir"; find . -type f -name "*.pdf" -printf '%P\n' | peco)"
   if [[ -n "$book" ]]; then
-    zathura "$book" 2>/dev/null &!
+    zathura "$dir/$book" 2>/dev/null &!
   fi
 }
 
