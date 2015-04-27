@@ -170,6 +170,8 @@ let g:CommandTMatchWindowReverse = 1
 let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
 let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
 let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
+silent! nnoremap <unique> <silent> <Leader>p :CommandT<CR>
+
 "map <leader>gt :CommandTTag<cr>
 "map <leader>gb :CtrlPBufTag<cr>
 
