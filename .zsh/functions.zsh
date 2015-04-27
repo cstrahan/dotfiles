@@ -1,3 +1,14 @@
+booktime () {
+  local dir="$1"
+  if [[ -z "$dir" ]]; then
+    dir="."
+  fi
+  local book="$(find "$dir" -name "*.pdf" | peco)"
+  if [[ -n "$book" ]]; then
+    zathura "$book" 2>/dev/null &!
+  fi
+}
+
 # cabal-sandbox aware wrapper
 sandy () {
   local DIR="$PWD"
