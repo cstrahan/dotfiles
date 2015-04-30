@@ -1,10 +1,11 @@
-# Misc.
+# grep
+alias grep="grep --color=auto"
 
+# misc.
 alias dtfiles="sudo dtrace -n 'syscall::open*:entry { printf(\"%s %s\", execname, copyinstr(arg0)); }'"
 alias ffprof="/Applications/Firefox.app/Contents/MacOS/firefox -profilemanager"
 
-# Git
-
+# git
 alias rebase='git fetch; git rebase origin/master'
 alias gp='git push origin HEAD'
 alias gaa='git add --all'
