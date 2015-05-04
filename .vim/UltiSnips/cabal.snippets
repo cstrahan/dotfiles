@@ -17,7 +17,7 @@
 #   Text
 #   Web
 
-snippet init "intialize"
+snippet init "intialize" b
 name:               ${1:name}
 version:            0.1.0.0
 cabal-version:      >= 1.10
@@ -40,7 +40,7 @@ source-repository head
 	location: git://github.com/cstrahan/$3.git
 endsnippet
 
-snippet lib "library section"
+snippet lib "library section" b
 library
 	default-language:   Haskell2010
 	build-depends:
@@ -70,7 +70,7 @@ library
 		UndecidableInstances
 endsnippet
 
-snippet exe "executable section"
+snippet exe "executable section" b
 executable ${1:exe-name}
 	default-language: Haskell98
 	build-depends:
@@ -85,13 +85,13 @@ executable ${1:exe-name}
 	ghc-options: -O2
 endsnippet
 
-snippet flag "flag"
+snippet flag "flag" b
 flag ${1:name}
 	description:  ${2:Enable $1 support}
 	default:      ${3:False}
 endsnippet
 
-snippet test
+snippet test "test-suite section" b
 test-suite spec
 	type:             exitcode-stdio-1.0
 	default-language: Haskell2010
