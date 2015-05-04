@@ -1,4 +1,5 @@
 { pkgs }: {
+  allowBroken = true;
   allowUnfree = true;
   zathura.useMupdf = true; # disable to use poppler for rendering
   packageOverrides = super: let self = super.pkgs; in
@@ -21,11 +22,10 @@
         ${concatMapStringsSep "\n" (name: "$out/bin/ghc-pkg expose ${name}") names}
       ''; });
 
-      haskell-lib = import <nixpkgs/pkgs/development/haskell-modules/lib.nix> { pkgs = self; };
-
-      haskellngPackages_7101 = with haskell-lib; self.haskell-ng.packages.ghc7101.override {
+      haskellngPackages_7101 = with self.haskell-ng.lib; self.haskell-ng.packages.ghc7101.override {
         overrides = self: super: {
           hdevtools = overrideCabal super.hdevtools (drv: {
+            broken = false;
             src = pkgs.fetchFromGitHub {
               owner = "schell";
               repo = "hdevtools";
@@ -35,6 +35,7 @@
           });
 
           ghc-mod = overrideCabal super.ghc-mod (drv: {
+            broken = false;
             src = pkgs.fetchFromGitHub {
               owner = "DanielG";
               repo = "ghc-mod";
