@@ -1,10 +1,13 @@
-import qualified IPPrint
+:set -package pretty-show
+:set -package hscolour
+
+import qualified Text.Show.Pretty
 import qualified Language.Haskell.HsColour           as HsColour
 import qualified Language.Haskell.HsColour.Colourise as HsColour
 import qualified Language.Haskell.HsColour.Output    as HsColour
 
 :{
-let myColourPrefs = HsColour.defaultColourPrefs {
+let colourPrefs = HsColour.defaultColourPrefs {
   HsColour.conid    = [ HsColour.Foreground HsColour.Yellow, HsColour.Bold ],
   HsColour.conop    = [ HsColour.Foreground HsColour.Yellow ],
   HsColour.string   = [ HsColour.Foreground HsColour.Green ],
@@ -15,14 +18,14 @@ let myColourPrefs = HsColour.defaultColourPrefs {
 }
 :}
 
-let myPrint = putStrLn . HsColour.hscolour (HsColour.TTYg HsColour.XTerm256Compatible) myColourPrefs False False "" False . IPPrint.pshow
+let pprintColour = putStrLn . HsColour.hscolour (HsColour.TTYg HsColour.XTerm256Compatible) colourPrefs False False "" False . Text.Show.Pretty.ppShow
+:set -interactive-print=pprintColour
+:def pprint \x -> return $ "putStrLn $ Text.Show.Pretty.ppShow $ " ++ x
+:def pprintc \x -> return $ "pprintColour $ " ++ x
 
 let ghciEscapeShellArg arg = "'" ++ concatMap (\c -> if c == '\'' then "'\"'\"'" else [c]) arg ++ "'"
-
 :def! h return . (":! hoogle --color --count=20 " ++) . ghciEscapeShellArg
 :def! doc return . (":! hoogle --info " ++) . ghciEscapeShellArg
-
-:set -interactive-print=myPrint
 
 :set prompt  "\ESC[34;1mλ> \ESC[m"
 :set prompt2 "\ESC[34;1m | \ESC[m"
