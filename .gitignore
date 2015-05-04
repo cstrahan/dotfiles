@@ -3,6 +3,9 @@
 !/.Xdefaults
 !/.ackrc
 !/.bash_profile
+!/.config
+!/.config/dunst
+!/.config/dunst/dunstrc
 !/.ctags
 !/.gdb
 !/.gdb/**/*
