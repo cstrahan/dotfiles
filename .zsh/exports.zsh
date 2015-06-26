@@ -1,6 +1,10 @@
 export GIT_EDITOR="vim"
 export EDITOR="vim"
 
+if [[ "$(uname)" == "Darwin" ]] & [[ -e $HOME/.nix-profile/etc/ca-bundle.crt ]]; then
+  export GIT_SSL_CAINFO=$HOME/.nix-profile/etc/ca-bundle.crt
+fi
+
 if command -v /usr/libexec/java_home >/dev/null 2>&1; then
   export JAVA_HOME=$(/usr/libexec/java_home)
 fi
