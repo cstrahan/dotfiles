@@ -30,11 +30,6 @@ let sources = with pkgs; import ./sources.nix {
         vimHelpTags $target
       '';
     };
-    # until Darwin gets support for 3.4
-    clangDarwin = fetchzip {
-      url = http://llvm.org/releases/3.4/clang+llvm-3.4-x86_64-apple-darwin10.9.tar.gz;
-      sha256 = "08xbg3q1nkd06vdzb79vmsr3zlv0fhphd9qycyy32gvidzwcgzxq";
-    };
     plugins = lib.mapAttrs mkVimPlugin sources // {
       youcompleteme = stdenv.mkDerivation {
         name = "youcompleteme";
@@ -43,7 +38,6 @@ let sources = with pkgs; import ./sources.nix {
           rev = "ede37d02313d905c2415cb2f3e0fd71c91fa0741";
           sha256 = "047xzqvchr0y62qf5mfqv6ixffl6m0qzfhl91azpjb6ifz5gh4a3";
         };
-        #buildInputs = [ python cmake ] ++ lib.optional stdenv.isLinux llvmPackages.clang;
         buildInputs = [ python cmake ] ++ lib.optionals stdenv.isLinux [
           llvmPackages.clang-unwrapped
           llvmPackages.llvm
@@ -58,24 +52,13 @@ let sources = with pkgs; import ./sources.nix {
           pythonInclude=${python}/include/${python.libPrefix}
 
           cmakeFlagsArray=(
+            "-DUSE_SYSTEM_LIBCLANG=ON"
             "-DUSE_CLANG_COMPLETER=ON"
             "-DPYTHON_LIBRARY=$pythonLib"
             "-DPYTHON_INCLUDE_DIR=$pythonInclude"
           )
-        '' + (if stdenv.isDarwin then ''
-          cmakeFlagsArray+=(
-            "-DPATH_TO_LLVM_ROOT=${clangDarwin}"
-            "-DEXTERNAL_LIBCLANG_PATH=${clangDarwin}/lib/libclang.dylib"
-          )
-        '' else ''
-          cmakeFlagsArray+=(
-            "-DUSE_SYSTEM_LIBCLANG=ON"
-          )
-        '');
+        '';
         buildPhase = ''
-          export CC=gcc
-          export CXX=g++
-
           cmakeDir=$PWD/third_party/ycmd/cpp
           mkdir build
           pushd build
