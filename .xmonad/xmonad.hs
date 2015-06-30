@@ -17,12 +17,6 @@ import XMonad.Util.EZConfig(additionalKeys)
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
--- Color of current window title in xmobar.
-xmobarTitleColor = "#FFB6B0"
-
--- Color of current workspace in xmobar.
-xmobarCurrentWorkspaceColor = "#CEFFAC"
-
 tabConfig = defaultTheme
     { fontName = "xft:PragmataPro:pixelsize=16"
     , activeBorderColor = "#7C7C7C"
@@ -58,8 +52,6 @@ myManageHook = composeAll $
     ignore   = [ "stalonetray" ]
 
 main = do
-    spawn "stalonetray"
-    xmproc <- spawnPipe "xmobar"
     xmonad defaultConfig
         { modMask     = mod4Mask
         , terminal    = "urxvt"
@@ -71,12 +63,7 @@ main = do
         , handleEventHook    = handleEventHook defaultConfig <+> fullscreenEventHook
         , layoutHook = smartBorders myLayout
         , manageHook = myManageHook
-        , logHook = (dynamicLogWithPP $ xmobarPP
-             { ppOutput  = hPutStrLn xmproc
-             , ppTitle   = xmobarColor xmobarTitleColor "" . shorten 100
-             , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
-             , ppSep     = "   "
-             }) <+> ewmhDesktopsLogHook
+        , logHook = ewmhDesktopsLogHook
         }
 
 -- NOTES

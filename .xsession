@@ -7,6 +7,8 @@ fi
 
 xset r rate 220 50
 
+taffybar &
+
 if command -v xmonad >/dev/null; then
   xmonad
 elif command -v urxvt >/dev/null; then
