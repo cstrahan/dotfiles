@@ -32,6 +32,7 @@
 !/.vim
 !/.vim/**/*
 !/.vimrc
+!/.xsession
 !/.zlogin
 !/.zprofile
 !/.zsh
