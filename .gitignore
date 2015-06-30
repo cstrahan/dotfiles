@@ -6,6 +6,9 @@
 !/.config
 !/.config/dunst
 !/.config/dunst/dunstrc
+!/.config/taffybar
+!/.config/taffybar/taffybar.hs
+!/.config/taffybar/taffybar.rc
 !/.ctags
 !/.gdb
 !/.gdb/**/*
