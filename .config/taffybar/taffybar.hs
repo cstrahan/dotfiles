@@ -44,5 +44,5 @@ main = do
       batt = batteryBarNew defaultBatteryConfig 1
 
   defaultTaffybar defaultTaffybarConfig { startWidgets = [ pager, note ]
-                                        , endWidgets = [ wea, clock, mem, cpu, mpris2, tray ]
+                                        , endWidgets = [ wea, clock, batt, mem, cpu, mpris2, tray ]
                                         }
