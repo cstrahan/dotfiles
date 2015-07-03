@@ -32,7 +32,7 @@ URxvt.scrollBar_right: true
 URxvt.scrollstyle: plain
 URxvt.termName: rxvt-256color
 URxvt.cursorBlink: false
-URxvt.fading: 60
+URxvt.fading: 20
 
 URxvt.inheritPixmap: false
 URxvt.meta8: false
