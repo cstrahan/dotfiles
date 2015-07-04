@@ -26,6 +26,14 @@ sandy () {
   fi
 }
 
+psls () {
+  ps ax -o pid,time,command | tail -n +2 | peco | awk '{print $1}'
+}
+
+daemonize () {
+  "$@" >/dev/null 2>&1 &!
+}
+
 # credit: http://nparikh.org/notes/zshrc.txt
 # Usage: smartextract <file>
 # Description: extracts archived files / mounts disk images
