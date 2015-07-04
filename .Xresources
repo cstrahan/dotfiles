@@ -33,21 +33,27 @@ URxvt.scrollstyle: plain
 URxvt.termName: rxvt-256color
 URxvt.cursorBlink: false
 URxvt.fading: 20
-
 URxvt.inheritPixmap: false
 URxvt.meta8: false
 URxvt.iso14755: false
 URxvt.iso14755_52: off
-URxvt.perl-ext-common: default,clipboard
-URxvt.clipboard.copycmd:  xsel --input  --clipboard
-URxvt.clipboard.pastecmd: xsel --output --clipboard
+URxvt*scrollTtyOutput:   false
+URxvt*scrollTtyKeypress: true
+URxvt*saveLines:         10000
+
+! Extensions
+URxvt.perl-ext-common: default,clipboard,keyboard-select,font-size
+URxvt.clipboard.autocopy: true
+URxvt.clipboard.copycmd:  xclip -i -selection clipboard
+URxvt.clipboard.pastecmd: xclip -o -selection clipboard
 URxvt.keysym.Control-Shift-C: perl:clipboard:copy
 URxvt.keysym.Control-Shift-V: perl:clipboard:paste
-
-!URxvt.keysym.C-Up:     perl:font-size:increase
-!URxvt.keysym.C-Down:   perl:font-size:decrease
-!URxvt.keysym.C-S-Up:   perl:font-size:incglobal
-!URxvt.keysym.C-S-Down: perl:font-size:decglobal
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+!URxvt.keysym.M-s:      perl:keyboard-select:search
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+URxvt.keysym.C-S-Up:   perl:font-size:incglobal
+URxvt.keysym.C-S-Down: perl:font-size:decglobal
 
 ! Fonts
 !URxvt.letterSpace: -1
