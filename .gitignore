@@ -33,6 +33,8 @@
 !/.vim
 !/.vim/**/*
 !/.vimrc
+!/.xmonad
+!/.xmonad/xmonad.hs
 !/.xsession
 !/.zlogin
 !/.zprofile
