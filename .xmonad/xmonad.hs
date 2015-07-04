@@ -2,7 +2,7 @@ import System.IO
 import System.Exit
 import XMonad
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.EwmhDesktops (fullscreenEventHook, ewmhDesktopsStartup,
+import XMonad.Hooks.EwmhDesktops (ewmh, fullscreenEventHook, ewmhDesktopsStartup,
                                  ewmhDesktopsEventHook, ewmhDesktopsLogHook)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -12,10 +12,12 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
-import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.EZConfig (additionalKeys)
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+
+import System.Taffybar.Hooks.PagerHints (pagerHints)
 
 tabConfig = defaultTheme
     { fontName = "xft:PragmataPro:pixelsize=16"
@@ -51,19 +53,16 @@ myManageHook = composeAll $
     floaters = [ "xcalc", "wpa_gui" ]
     ignore   = [ "stalonetray" ]
 
-main = do
-    xmonad defaultConfig
+main = xmonad $ ewmh $ pagerHints $ defaultConfig
         { modMask     = mod4Mask
         , terminal    = "urxvt"
         , borderWidth = 2
-        , startupHook = startupHook defaultConfig <+> ewmhDesktopsStartup
         , focusFollowsMouse  = True
         , normalBorderColor  = myNormalBorderColor
         , focusedBorderColor = myFocusedBorderColor
         , handleEventHook    = handleEventHook defaultConfig <+> fullscreenEventHook
         , layoutHook = smartBorders myLayout
         , manageHook = myManageHook
-        , logHook = ewmhDesktopsLogHook
         }
 
 -- NOTES
