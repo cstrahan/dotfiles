@@ -27,11 +27,15 @@ sandy () {
 }
 
 psls () {
-  ps ax -o pid,time,command | tail -n +2 | peco | awk '{print $1}'
+  ps ax -o pid,time,command | tail -n +2 | peco --layout=bottom-up | awk '{print $1}'
+}
+
+gstls () {
+  gst | tail -n +2 | peco --layout=bottom-up | awk '{print $2}'
 }
 
 daemonize () {
-  "$@" >/dev/null 2>&1 &!
+  "$@" >/dev/null 0>&1 2>&1 &!
 }
 
 # credit: http://nparikh.org/notes/zshrc.txt
