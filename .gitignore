@@ -20,6 +20,9 @@
 !/.git_template/**/*
 !/.gitexcludes
 !/.gitignore
+!/.gnupg
+!/.gnupg/dirmngr.conf
+!/.gnupg/gpg.conf
 !/.inputrc
 !/.irbrc
 !/.irssi
