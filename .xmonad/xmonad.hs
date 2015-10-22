@@ -6,7 +6,7 @@ import XMonad.Hooks.EwmhDesktops (ewmh, fullscreenEventHook, ewmhDesktopsStartup
                                  ewmhDesktopsEventHook, ewmhDesktopsLogHook)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.SetWMName
+import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Fullscreen hiding (fullscreenEventHook)
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spiral
@@ -33,8 +33,7 @@ myLayout = avoidStruts (
     Tall 1 (3/100) (1/2)          |||
     Mirror (Tall 1 (3/100) (1/2)) |||
     tabbed shrinkText tabConfig   |||
-    Full                          |||
-    spiral (6/7)
+    Full
     ) ||| noBorders (fullscreenFull Full)
 
 myNormalBorderColor  = "#7c7c7c"
@@ -53,7 +52,10 @@ myManageHook = composeAll $
     floaters = [ "xcalc", "wpa_gui" ]
     ignore   = [ "stalonetray" ]
 
-main = xmonad $ ewmh $ pagerHints $ defaultConfig
+ -- Fix Java/AWT GUI apps
+fixAWT conf = conf { startupHook = startupHook conf <+> setWMName "LG3D" }
+
+main = xmonad $ fixAWT $ ewmh $ pagerHints $ defaultConfig
         { modMask     = mod4Mask
         , terminal    = "urxvt"
         , borderWidth = 2
@@ -61,8 +63,8 @@ main = xmonad $ ewmh $ pagerHints $ defaultConfig
         , normalBorderColor  = myNormalBorderColor
         , focusedBorderColor = myFocusedBorderColor
         , handleEventHook    = handleEventHook defaultConfig <+> fullscreenEventHook
-        , layoutHook = smartBorders myLayout
-        , manageHook = myManageHook
+        , layoutHook  = smartBorders myLayout
+        , manageHook  = myManageHook
         }
 
 -- NOTES
