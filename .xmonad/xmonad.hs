@@ -1,4 +1,5 @@
 import System.IO
+import System.Environment (setEnv)
 import System.Exit
 import XMonad
 import XMonad.Hooks.DynamicLog
@@ -52,10 +53,12 @@ myManageHook = composeAll $
     floaters = [ "xcalc", "wpa_gui" ]
     ignore   = [ "stalonetray" ]
 
- -- Fix Java/AWT GUI apps
+-- Fix Java/AWT GUI apps. Otherwise: export _JAVA_AWT_WM_NONREPARENTING=1
 fixAWT conf = conf { startupHook = startupHook conf <+> setWMName "LG3D" }
 
-main = xmonad $ fixAWT $ ewmh $ pagerHints $ defaultConfig
+main = do
+    setEnv "_JAVA_AWT_WM_NONREPARENTING" "1"
+    xmonad $ fixAWT $ ewmh $ pagerHints $ defaultConfig
         { modMask     = mod4Mask
         , terminal    = "urxvt"
         , borderWidth = 2
