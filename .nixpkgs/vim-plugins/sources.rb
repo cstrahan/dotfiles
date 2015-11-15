@@ -214,8 +214,9 @@ plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"
 plugin "vim-hdevtools", "https://github.com/bitc/vim-hdevtools.git" # supposedly faster than ghcmod
 plugin "neco-ghc", "https://github.com/eagletmt/neco-ghc.git"
 #plugin "hasksyn", "https://github.com/travitch/hasksyn.git"
-plugin "haskell-vim", "https://github.com/raichoo/haskell-vim.git" # TODO: try this out
+plugin "haskell-vim", "https://github.com/neovimhaskell/haskell-vim.git" # TODO: try this out
 plugin "idris-vim", "https://github.com/idris-hackers/idris-vim.git"
+plugin "purescript-vim", "https://github.com/raichoo/purescript-vim.git"
 
 plugin "latex-box", "https://github.com/LaTeX-Box-Team/LaTeX-Box.git"
 
@@ -235,5 +236,8 @@ plugin "vim-git", "https://github.com/tpope/vim-git.git"
 #plugin "copy-as-rtf", "https://github.com/zerowidth/vim-copy-as-rtf.git"
 
 plugin "vim-indexed-search", "https://github.com/henrik/vim-indexed-search.git"
+
+# Automatically create any non-existent directories before writing the buffer.
+plugin "vim-mkdir", "https://github.com/pbrisbin/vim-mkdir.git"
 
 process!
