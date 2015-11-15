@@ -3,6 +3,7 @@
 , cmake
 , vim, ruby, python, perl, llvmPackages
 , which
+, darwin
 }:
 let sources = with pkgs; import ./sources.nix {
       inherit fetchFromGitHub;
@@ -85,7 +86,7 @@ let sources = with pkgs; import ./sources.nix {
           description = "Fastest non utf-8 aware word and C completion engine for Vim";
           homepage    = http://github.com/Valloric/YouCompleteMe;
           license     = licenses.gpl3;
-          platforms   = with platforms; linux ++ darwin;
+          platforms   = platforms.unix;
         };
       };
       vimproc = stdenv.mkDerivation {
@@ -99,10 +100,15 @@ let sources = with pkgs; import ./sources.nix {
         };
         src = sources.vimproc;
         buildInputs = [ which ];
+        # XXX: I'm not sure If I really should be removing '-lutil' on OSX...
         patchPhase = ''
           substituteInPlace autoload/vimproc.vim --replace \
             "vimproc_mac.so" \
             "vimproc_unix.so" \
+        '' + lib.optionalString (stdenv.isDarwin) ''
+          ls -la
+          substituteInPlace make_unix.mak \
+            --replace "-lutil" ""
         '';
         buildPhase = ''
           make -f make_unix.mak
@@ -118,7 +124,7 @@ let sources = with pkgs; import ./sources.nix {
       command-t = stdenv.mkDerivation {
         name = "command-t";
         src = sources.command-t;
-        buildInputs = [ perl ruby ];
+        buildInputs = [ perl ruby darwin.libobjc ];
         buildPhase = ''
           pushd ruby/command-t
           ruby extconf.rb
