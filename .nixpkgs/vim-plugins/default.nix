@@ -100,18 +100,10 @@ let sources = with pkgs; import ./sources.nix {
         };
         src = sources.vimproc;
         buildInputs = [ which ];
-        # XXX: I'm not sure If I really should be removing '-lutil' on OSX...
-        patchPhase = ''
-          substituteInPlace autoload/vimproc.vim --replace \
-            "vimproc_mac.so" \
-            "vimproc_unix.so" \
-        '' + lib.optionalString (stdenv.isDarwin) ''
-          ls -la
-          substituteInPlace make_unix.mak \
-            --replace "-lutil" ""
-        '';
-        buildPhase = ''
+        buildPhase = if stdenv.isLinux then ''
           make -f make_unix.mak
+        '' else ''
+          make -f make_mac.mak
         '';
         installPhase = ''
           ensureDir $out/vim-plugins
