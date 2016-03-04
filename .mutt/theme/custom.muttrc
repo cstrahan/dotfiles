@@ -108,7 +108,6 @@ color normal        color250        color234
 
 ## pgp
 
-
 color body          color243        color234        "^(gpg:|Primary key fingerprint: ).*"
 color body          color160        color234        "(BAD signature)"
 color body          color37         color234        "(Good signature)"

@@ -4,6 +4,11 @@
 # Notes:
 # -----
 #
+# http://www.mutt.org/doc/manual.txt
+# http://www.mutt.org/doc/manual/manual.html
+#
+# http://blog.sanctum.geek.nz/linux-crypto-email/
+#
 # http://cedricduval.free.fr/mutt/patches/#trash
 # https://bbs.archlinux.org/viewtopic.php?id=127572
 #
@@ -12,7 +17,6 @@
 # http://therandymon.com/woodnotes/mutt/node1.html
 # http://sheet.shiar.nl/mutt
 # http://blog.adamspiers.org/2014/10/05/managing-your-github-notifications-inbox-with-mutt/
-# http://www.mutt.org/doc/manual/manual.html
 # http://notmuchmail.org/mutttips/
 # https://raw.githubusercontent.com/karelzak/mutt-kz/master/README.notmuch
 # http://www.lunar-linux.org/mutt-sidebar/
@@ -23,15 +27,15 @@
 #   source "some-command args |"
 
 source ~/.mutt/theme/custom.muttrc
-source ~/.mutt/accounts/decipher.muttrc
-source ~/.mutt/gpg.rc
+set crypt_use_gpgme = yes
+#source ~/.mutt/gpg.rc
 
-  set editor               = `echo \$EDITOR`
   set askcc
 unset confirmappend
   set delete
   set edit_headers
   set editor               = "vim +:silent+?^$"
+  #set editor               = `echo \$EDITOR`
   set fast_reply
   set folder               = ~/mail
   set forward_format       = "Fwd: %s"
@@ -81,15 +85,38 @@ unignore from: to: cc: date: subject:
 unhdr_order *
 hdr_order from: to: cc: date: subject:
 
+auto_view text/html
+alternative_order text/plain text/enriched text/html
+
 macro index \\\\ "<vfolder-from-query>"
 bind index <left> sidebar-prev
 bind index <right> sidebar-next
 bind index <space> sidebar-open
 
-mailboxes \
-  "+decipher/INBOX" \
-  "+decipher/archive" \
-  "+decipher/drafts" \
-  "+decipher/sent" \
-  "+decipher/spam" \
-  "+decipher/trash"
+folder-hook personal/* source ~/.mutt/accounts/personal
+folder-hook decipher/* source ~/.mutt/accounts/decipher
+source ~/.mutt/accounts/decipher
+
+#macro index ,s "\
+#  <enter-command>\
+#    set my_old_wait_key=\$wait_key \
+#    nowait_key \
+#  <enter>\
+#  <shell-escape>notmuch-mutt --prompt search<enter>\
+#  <change-folder-readonly>~/.cache/notmuch/mutt/results<enter>\
+#  <enter-command>\
+#    set wait_key=\$my_old_wait_key \
+#  <enter>" \
+#  "search"
+#
+#macro index ,u "\
+#  <enter-command>set \
+#    my_old_pipe_decode=\$pipe_decode \
+#    nopipe_decode \
+#  <enter>\
+#  <pipe-message>ghu<enter>\
+#  <delete-thread>\
+#  <enter-command>set \
+#    pipe_decode=\$my_old_pipe_decode \
+#  <enter>" \
+#  "Unsubscribe from any email with a List-Unsubscribe header"
