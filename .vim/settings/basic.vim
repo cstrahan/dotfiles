@@ -3,6 +3,8 @@
 " :options for more information
 """
 
+" consider tpope/vim-sensible, langnoremap
+
 """ important
 
 set nocompatible " vim, not vi

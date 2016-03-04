@@ -81,6 +81,12 @@ executable ${1:exe-name}
 	if os(osx)
 		ghc-options: -optl-headerpad_max_install_names
 
+	ghc-options:
+		-threaded
+		-rtsopts
+		-with-rtsopts=-N
+		-O2
+
 	main-is:     Main.hs
 	ghc-options: -O2
 endsnippet
