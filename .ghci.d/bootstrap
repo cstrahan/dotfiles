@@ -33,21 +33,30 @@ fi
 
 if [[ -n "$haveHsColour" ]]; then
   cat <<"EOF"
-import qualified Language.Haskell.HsColour           as HsColour
-import qualified Language.Haskell.HsColour.Colourise as HsColour
-import qualified Language.Haskell.HsColour.Output    as HsColour
+import Language.Haskell.HsColour
+import Language.Haskell.HsColour.Colourise
+import Language.Haskell.HsColour.Output
 
 :{
-let colourPrefs = HsColour.defaultColourPrefs {
-  HsColour.conid    = [ HsColour.Foreground HsColour.Yellow, HsColour.Bold ],
-  HsColour.conop    = [ HsColour.Foreground HsColour.Yellow ],
-  HsColour.string   = [ HsColour.Foreground HsColour.Green ],
-  HsColour.char     = [ HsColour.Foreground HsColour.Cyan ],
-  HsColour.number   = [ HsColour.Foreground HsColour.Red, HsColour.Bold ],
-  HsColour.layout   = [ HsColour.Foreground HsColour.White ],
-  HsColour.keyglyph = [ HsColour.Foreground HsColour.White ]
-}
+let colourPrefs = defaultColourPrefs
+      { keyglyph = [Foreground Blue, Bold] -- e.g. [ ], =
+      , layout   = [Foreground Cyan, Bold] -- e.g. { }
+      , conid    = [Foreground Yellow, Bold]
+      , conop    = [Foreground Yellow, Bold]
+      , string   = [Foreground Green, Bold]
+      , char     = [Foreground Magenta, Bold]
+      , number   = [Foreground Red, Bold]
+      }
 :}
+
+:m - Language.Haskell.HsColour
+:m - Language.Haskell.HsColour.Colourise
+:m - Language.Haskell.HsColour.Output
+
+import qualified Language.Haskell.HsColour as HsColour
+import qualified Language.Haskell.HsColour.Colourise as HsColour
+import qualified Language.Haskell.HsColour.Output as HsColour
+
 EOF
 fi
 
