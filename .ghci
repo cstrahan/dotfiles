@@ -1,32 +1,27 @@
-:set -package pretty-show
-:set -package hscolour
-
-import qualified Text.Show.Pretty
-import qualified Language.Haskell.HsColour           as HsColour
-import qualified Language.Haskell.HsColour.Colourise as HsColour
-import qualified Language.Haskell.HsColour.Output    as HsColour
-
-:{
-let colourPrefs = HsColour.defaultColourPrefs {
-  HsColour.conid    = [ HsColour.Foreground HsColour.Yellow, HsColour.Bold ],
-  HsColour.conop    = [ HsColour.Foreground HsColour.Yellow ],
-  HsColour.string   = [ HsColour.Foreground HsColour.Green ],
-  HsColour.char     = [ HsColour.Foreground HsColour.Cyan ],
-  HsColour.number   = [ HsColour.Foreground HsColour.Red, HsColour.Bold ],
-  HsColour.layout   = [ HsColour.Foreground HsColour.White ],
-  HsColour.keyglyph = [ HsColour.Foreground HsColour.White ]
-}
-:}
-
-let pprintColour = putStrLn . HsColour.hscolour (HsColour.TTYg HsColour.XTerm256Compatible) colourPrefs False False "" False . Text.Show.Pretty.ppShow
-:set -interactive-print=pprintColour
-:def pprint \x -> return $ "putStrLn $ Text.Show.Pretty.ppShow $ " ++ x
-:def pprintc \x -> return $ "pprintColour $ " ++ x
+--------------------------------------------------------------------------------
+-- Hoogle
 
 let ghciEscapeShellArg arg = "'" ++ concatMap (\c -> if c == '\'' then "'\"'\"'" else [c]) arg ++ "'"
 :def! h return . (":! hoogle --color --count=20 " ++) . ghciEscapeShellArg
 :def! doc return . (":! hoogle --info " ++) . ghciEscapeShellArg
 
-:set prompt  "\ESC[34;1mλ> \ESC[m"
-:set prompt2 "\ESC[34;1m | \ESC[m"
+
+--------------------------------------------------------------------------------
+-- Bootstrap
+
+-- This allows us to use a script to e.g. conditionally set up stuff.
+import qualified System.Process
+import qualified System.Environment
+:def! bootstrap \x -> do { home <- System.Environment.lookupEnv "HOME"; case home of { Just home -> System.Process.readProcess (home ++ "/.ghci.d/bootstrap") [] ""; Nothing -> return "" } }
+:bootstrap
+
+
+--------------------------------------------------------------------------------
+-- PROMPT
+
+:set prompt  "\nλ> "
+:set prompt2 "\n | "
+-- :set prompt  "\n\ESC[34;1mλ> \ESC[m"
+-- :set prompt2 "\n\ESC[34;1m | \ESC[m"
+
 :set +m
