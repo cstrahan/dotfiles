@@ -12,8 +12,8 @@ let ghciEscapeShellArg arg = "'" ++ concatMap (\c -> if c == '\'' then "'\"'\"'"
 -- This allows us to use a script to e.g. conditionally set up stuff.
 import qualified System.Process
 import qualified System.Environment
-:def! bootstrap \x -> do { home <- System.Environment.lookupEnv "HOME"; case home of { Just home -> System.Process.readProcess (home ++ "/.ghci.d/bootstrap") [] ""; Nothing -> return "" } }
-:bootstrap
+:def! exec \script -> do { home <- System.Environment.lookupEnv "HOME"; case home of { Just home -> System.Process.readProcess (home ++ "/.ghci.d/" ++ script) [] ""; Nothing -> return "" } }
+:exec bootstrap
 
 
 --------------------------------------------------------------------------------
