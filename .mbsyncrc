@@ -5,8 +5,8 @@ SyncState *
 
 IMAPAccount decipher
 Host imap.gmail.com
-User charles.strahan@deciphertechstudios.com
-PassCmd "gpg2 -dq ~/.offlineimappass.gpg"
+User charles.strahan@deciphernow.com
+PassCmd "pass show Email/charles.strahan@deciphertechstudios.com"
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
@@ -54,3 +54,38 @@ Channel decipher-drafts
 Channel decipher-sent
 Channel decipher-spam
 Channel decipher-rest
+
+
+IMAPAccount personal
+Host mail.messagingengine.com
+User cstrahan@fastmail.com
+PassCmd "pass show Email/charles@cstrahan.com"
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore personal-remote
+Account personal
+
+MaildirStore personal-local
+Path ~/mail/personal/
+Inbox ~/mail/personal/INBOX
+Flatten .
+
+Channel personal
+Master :personal-remote:
+Slave :personal-local:
+Patterns *
+
+#Channel personal-inbox
+#Master :personal-remote:INBOX
+#Slave :personal-local:INBOX
+#
+#Channel personal-rest
+#Master :personal-remote:INBOX/
+#Slave :personal-local:
+##Patterns *
+#Patterns * !INBOX
+
+#Group personal
+#Channel personal-rest
+#Channel personal-inbox
