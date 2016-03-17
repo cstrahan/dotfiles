@@ -1,3 +1,14 @@
+showcerts () {
+  echo | openssl s_client -showcerts -connect $1 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'
+}
+
+pronounce () {
+  xidel "http://www.m-w.com/dictionary/$*" \
+    -f "replace(css('.au')[1]/@onclick,\".*'([^']+)', *'([^']+)'.*\", '/audio.php?file=\$1&word=\$2')" \
+    -f 'css("embed")[1]/@src' \
+    --download - | aplay -q
+}
+
 booktime () {
   local dir="$1"
   if [[ -z "$dir" ]]; then

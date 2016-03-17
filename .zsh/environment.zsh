@@ -53,3 +53,11 @@ export LESS_TERMCAP_us=$'\E[04;33;5;146m' # Begins underline.
 if [[ $TERM =~ screen ]]; then
   export TERM=screen-256color
 fi
+
+#
+# Ranger
+#
+
+#if whence -p w3mimgdisplay >/dev/null; then
+#  export W3MIMGDISPLAY_PATH="$(whence -p w3mimgdisplay)"
+#fi
