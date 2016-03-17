@@ -1,13 +1,25 @@
 ! vim: ft=xdefaults
 
-Xft.autohint:   0
-Xft.lcdfilter:  lcddefault
-Xft.antialias:  true
-Xft.hinting:    true
-Xft.hintstyle:  hintslight
-Xft.rgba:       rgb
+!Xft.autohint:   0
+!Xft.lcdfilter:  lcddefault
+!Xft.antialias:  true
+!Xft.hinting:    true
+
+!Xft.hintstyle:  hintslight
+!Xft.hintstyle:  hintfull
+!Xft.rgba:       rgb
 ! rMBP=220
-Xft.dpi:        96
+!Xft.dpi:        96
+
+Xcursor.theme: Vanilla-DMZ-AA
+Xcursor.size:  32
+
+
+! -------------------------
+! Emacs
+! -------------------------
+
+Emacs.font: PragmataPro-14
 
 ! -------------------------
 ! dmenu
@@ -26,7 +38,7 @@ dmenu.font:          xft:PragmataPro:pixelsize=18
 ! Look & feel
 URxvt*loginShell: true
 URxvt.transparent: false
-URxvt.depth: 32
+!URxvt.depth: 32
 URxvt.scrollBar: false
 URxvt.scrollBar_right: true
 URxvt.scrollstyle: plain
@@ -103,9 +115,19 @@ URxvt.color15 : #EEEEEC
 ! XTERM
 ! -------------------------
 
-! xterm*font: -*-fixed-medium-r-*-*-14-*-*-*-*-*-*-*
-XTerm*faceName: PragmataPro
-XTerm*faceSize: 10
+xterm*.allowBoldFonts : true
+xterm*.bellIsUrgent   : true
+xterm*.cutNewline     : true
+xterm*.faceName       : PragmataPro
+xterm*.faceSize       : 14
+xterm*.fullscreen     : never
+xterm*.internalBorder : 0
+xterm*.renderFont     : true
+xterm*.termName       : xterm-256color
+xterm*.utf8           : always
+xterm*.utf8Fonts      : always
+xterm*.visualBell     : false
+xterm*.visualBellLine : false
 
 xterm*background: #000000
 xterm*foreground: #FFFFFF
