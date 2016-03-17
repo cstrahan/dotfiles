@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# TODO: look at https://github.com/derat/xsettingsd
-
-export XCURSOR_PATH=~/.icons:~/.nix-profile/share/icons:/var/run/current-system/sw/share/icons:/usr/share/icons:/usr/share/pixmaps
-
 # Initialize DBus
 if [[ -z "$DBUS_SESSION_BUS_ADDRESS" ]] && command -v dbus-launch >/dev/null; then
   eval "$(dbus-launch --sh-syntax --exit-with-session)"
@@ -19,6 +15,8 @@ compton --config /dev/null --backend glx --paint-on-overlay --glx-no-stencil --v
 # Set default mouse cursor.
 xsetroot -cursor_name left_ptr
 
+sxhkd &
+nm-applet &
 taffybar &
 dropbox &
 #xautolock -time 1 -locker slimlock &
