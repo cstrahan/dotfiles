@@ -36,8 +36,8 @@ let sources = with pkgs; import ./sources.nix {
         name = "youcompleteme";
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
-          rev = "ede37d02313d905c2415cb2f3e0fd71c91fa0741";
-          sha256 = "047xzqvchr0y62qf5mfqv6ixffl6m0qzfhl91azpjb6ifz5gh4a3";
+          rev = "f44435b88ec98156d17869aa67ad15f38cfecbf3";
+          sha256 = "1y50ilyfwj6rvpvg50iq418maxvsfs54i202v7x0lfs5hmvcb4hi";
         };
         buildInputs = [ python cmake ] ++ lib.optionals stdenv.isLinux [
           llvmPackages.clang-unwrapped
@@ -70,7 +70,7 @@ let sources = with pkgs; import ./sources.nix {
           done
 
           cmake -G "Unix Makefiles" . $cmakeDir ''${cmakeFlagsArray[@]}
-          make -j ''${NIX_BUILD_CORES} ycm_support_libs
+          make -j ''${NIX_BUILD_CORES} ycm_core
 
           popd
           rm -rf build

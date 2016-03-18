@@ -14,6 +14,7 @@ let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 let g:ycm_semantic_triggers =  {
   \   'haskell' : ['.'],
+  \   'go' : ['.'],
   \ }
 
 """ netrw
@@ -23,16 +24,14 @@ let g:loaded_netrwPlugin  = 1 " Disable netrw
 " au VimEnter * :NERDTreeToggle
 " au VimEnter * :wincmd p
 
-" let g:go_gocode_bin=expand("~/go/bin/gocode")
+let g:go_fmt_fail_silently = 0 " Prevent vim-go from popping-up quickfix window
+let g:syntastic_mode_map = {
+    \ "mode": "active",
+    \ "active_filetypes": [],
+    \ "passive_filetypes": [] }
 
 """ load plugin paths
-let g:pathogen_disabled = [ "vim-go" ]
-"if isdirectory(expand("~/.nix-profile/vim-plugins"))
-  call pathogen#infect("~/.nix-profile/vim-plugins/{}")
-"else
-"  call pathogen#infect()
-"endif
-"call pathogen#infect()
+call pathogen#infect("~/.nix-profile/vim-plugins/{}")
 
 source $HOME/.vim/settings/ui.vim
 source $HOME/.vim/settings/editing.vim
