@@ -78,6 +78,12 @@
     rev    = "bcb119cf9a6e131d5c9cbb7af3296eb6f2c23151";
     sha256 = "1hljngnk6qpblcwgvhrfpmgc7as6gq7x89l5q62rky4rr53zb2gz";
   };
+  delimitMate = fetchFromGitHub {
+    owner  = "Raimondi";
+    repo   = "delimitMate";
+    rev    = "8bc47fd1c40cdad9ea1f36c0cf13592c70ea65e9";
+    sha256 = "1d0a5pb1il9w54zs88bxyjhlqx0sciz4lx00qyvic1w4blhgw2jz";
+  };
   dispatch = fetchFromGitHub {
     owner  = "tpope";
     repo   = "vim-dispatch";
@@ -287,6 +293,12 @@
     repo   = "vim-pathogen";
     rev    = "8c91196cfd9c8fe619f35fac6f2ac81be10677f8";
     sha256 = "17d1903spczg2rk0qzg94vvq41dwhmnxwajqgzcx4lmf606cfspi";
+  };
+  psc-ide-vim = fetchFromGitHub {
+    owner  = "FrigoEU";
+    repo   = "psc-ide-vim";
+    rev    = "ff6d0127517ad16012b27787fb1027f8ae8e99f0";
+    sha256 = "0rw6dzzgnqh1i7j5jfpzcn0z7cfmb67pi0z6zr6jazv41swhpidm";
   };
   puppet = fetchFromGitHub {
     owner  = "ajf";

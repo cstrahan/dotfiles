@@ -99,6 +99,7 @@ def process!
   end
 end
 
+
 plugin "pathogen", "https://github.com/tpope/vim-pathogen.git"
 
 plugin "vinarise", "https://github.com/Shougo/vinarise.vim.git"
@@ -128,6 +129,7 @@ plugin "xoria256", "https://github.com/vim-scripts/xoria256.vim.git"
 
 plugin "nerdcommenter", "https://github.com/scrooloose/nerdcommenter.git"
 plugin "surround", "https://github.com/tpope/vim-surround.git"
+plugin "delimitMate", "https://github.com/Raimondi/delimitMate.git"
 plugin "endwise", "https://github.com/tpope/vim-endwise.git"
 plugin "matchit", "https://github.com/edsono/vim-matchit.git"
 plugin "matchtag", "https://github.com/gregsexton/MatchTag.git"
@@ -217,6 +219,7 @@ plugin "neco-ghc", "https://github.com/eagletmt/neco-ghc.git"
 plugin "haskell-vim", "https://github.com/neovimhaskell/haskell-vim.git" # TODO: try this out
 plugin "idris-vim", "https://github.com/idris-hackers/idris-vim.git"
 plugin "purescript-vim", "https://github.com/raichoo/purescript-vim.git"
+plugin "psc-ide-vim", "https://github.com/FrigoEU/psc-ide-vim.git"
 
 plugin "latex-box", "https://github.com/LaTeX-Box-Team/LaTeX-Box.git"
 
