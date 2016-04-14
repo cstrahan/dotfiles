@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# Start GPG agent
+gpg-connect-agent /bye
+export GPG_TTY="$(tty)"
+
+unset SSH_AGENT_PID
+export SSH_AUTH_SOCK="$HOME/.gnupg/S.gpg-agent.ssh"
+
 # Initialize DBus
 if [[ -z "$DBUS_SESSION_BUS_ADDRESS" ]] && command -v dbus-launch >/dev/null; then
   eval "$(dbus-launch --sh-syntax --exit-with-session)"
@@ -19,7 +26,7 @@ sxhkd &
 nm-applet &
 taffybar &
 dropbox &
-#xautolock -time 1 -locker slimlock &
+xss-lock slimlock &
 
 if command -v xmonad >/dev/null; then
   xmonad
