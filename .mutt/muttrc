@@ -70,7 +70,7 @@ unset ignore_list_reply_to
   set tilde
   set timeout              = 3
   set tmpdir               = ~/.mutt/temp
-  set sidebar_delim        = '│'
+  set sidebar_divider_char = '│'
   set sidebar_width        = 20
   set sidebar_visible
   set nm_default_uri       = "notmuch://`echo $HOME`/mail"

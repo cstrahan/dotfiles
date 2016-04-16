@@ -2,28 +2,28 @@
 
 # Hybrid color reference -----------------------------------------------
 #
-#  background = "234"
-#  window     = "236"
-#  darkcolumn = "234"
-#  addbg      = "65"
-#  addfg      = "193"
-#  changebg   = "60"
-#  changefg   = "189"
-#  darkblue   = "17"
-#  darkcyan   = "24"
-#  darkred    = "52"
-#  darkpurple = "53"
-#  foreground = "250"
-#  selection  = "237"
-#  line       = "235"
-#  comment    = "243"
-#  red        = "167"
-#  orange     = "173"
-#  yellow     = "221"
-#  green      = "143"
-#  aqua       = "109"
-#  blue       = "110"
-#  purple     = "139"
+#  background = color234
+#  window     = color236
+#  darkcolumn = color234
+#  addbg      = color65
+#  addfg      = color193
+#  changebg   = color60
+#  changefg   = color189
+#  darkblue   = color17
+#  darkcyan   = color24
+#  darkred    = color52
+#  darkpurple = color53
+#  foreground = color250
+#  selection  = color237
+#  line       = color235
+#  comment    = color243
+#  red        = color167
+#  orange     = color173
+#  yellow     = color221
+#  green      = color143
+#  aqua       = color109
+#  blue       = color110
+#  purple     = color139
 
 # basic colors ---------------------------------------------------------
 color normal        color250        color234
@@ -36,8 +36,12 @@ color search        color197        color234
 color status        black           color246
 color indicator     color234        color136
 color tree          color136        color234
-color sidebar       color246        color246
-color sidebar_new   color221        color234
+
+color sidebar_divider   color243 color234
+color sidebar_highlight color234 color250
+color sidebar_new       color221 color234
+color sidebar_flagged   color167 color234
+
 
 # basic monocolor screen
 mono  bold          bold
