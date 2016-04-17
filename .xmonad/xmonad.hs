@@ -48,7 +48,8 @@ myManageHook = composeAll $
     ++ [ (isFullscreen)  --> doFullFloat ]
     ++ [ (isDialog) --> doCenterFloat ]
     ++ [ (className =? "Xmessage" <&&> appName =? "xmessage") --> doCenterFloat ]
-    ++ [ (className =? "Chromium" <&&> stringProperty "WM_WINDOW_ROLE" =? "pop-up") --> doCenterFloat ]
+    ++ [ (className =? "Blueman-manager") --> doCenterFloat ]
+    ++ [ stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doCenterFloat ]
   where
     floaters = [ "xcalc", "wpa_gui" ]
     ignore   = [ "stalonetray" ]
@@ -60,7 +61,7 @@ main = do
     setEnv "_JAVA_AWT_WM_NONREPARENTING" "1"
     xmonad $ fixAWT $ ewmh $ pagerHints $ defaultConfig
         { modMask     = mod4Mask
-        , terminal    = "urxvt"
+        , terminal    = "termite"
         , borderWidth = 2
         , focusFollowsMouse  = True
         , normalBorderColor  = myNormalBorderColor
