@@ -20,6 +20,8 @@ import qualified Data.Map        as M
 
 import System.Taffybar.Hooks.PagerHints (pagerHints)
 
+-- TODO: `loginctl lock-session` vs `xset s activate`?
+
 tabConfig = defaultTheme
     { fontName = "xft:PragmataPro:pixelsize=16"
     , activeBorderColor = "#7C7C7C"
