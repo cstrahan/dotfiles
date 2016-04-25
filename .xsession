@@ -22,6 +22,7 @@ compton --config /dev/null --backend glx --paint-on-overlay --glx-no-stencil --v
 # Set default mouse cursor.
 xsetroot -cursor_name left_ptr
 
+# upower-notify &
 sxhkd &
 nm-applet &
 taffybar &
