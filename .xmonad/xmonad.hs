@@ -51,7 +51,7 @@ myManageHook = composeAll $
     ++ [ (isDialog) --> doCenterFloat ]
     ++ [ (className =? "Xmessage" <&&> appName =? "xmessage") --> doCenterFloat ]
     ++ [ (className =? "Blueman-manager") --> doCenterFloat ]
-    ++ [ stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doCenterFloat ]
+    {- ++ [ stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doCenterFloat ] -}
   where
     floaters = [ "xcalc", "wpa_gui" ]
     ignore   = [ "stalonetray" ]
@@ -71,7 +71,9 @@ main = do
         , handleEventHook    = handleEventHook defaultConfig <+> fullscreenEventHook
         , layoutHook  = smartBorders myLayout
         , manageHook  = myManageHook
-        }
+        } `additionalKeys`
+        [ ((mod4Mask, xK_z), spawn "xset s activate")
+        ]
 
 -- NOTES
 --
