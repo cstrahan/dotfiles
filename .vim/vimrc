@@ -14,6 +14,7 @@ let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 let g:ycm_semantic_triggers =  {
   \   'haskell' : ['.'],
+  \   'purescript' : ['.'],
   \   'go' : ['.'],
   \ }
 
@@ -24,7 +25,8 @@ let g:loaded_netrwPlugin  = 1 " Disable netrw
 " au VimEnter * :NERDTreeToggle
 " au VimEnter * :wincmd p
 
-let g:go_fmt_fail_silently = 0 " Prevent vim-go from popping-up quickfix window
+let g:go_fmt_fail_silently = 0 " When 1, prevents vim-go from popping-up quickfix window
+let g:go_fmt_command = "goimports"
 let g:syntastic_mode_map = {
     \ "mode": "active",
     \ "active_filetypes": [],

@@ -59,6 +59,12 @@ let g:neocomplcache_enable_at_startup = 1
 nnoremap z/ :if autohighlight#Toggle()<Bar>set hls<Bar>endif<CR>
 
 
+""" delimitMate
+let g:delimitMate_expand_cr = 1
+let g:delimitMate_excluded_ft = "ruby"
+"silent! imap <buffer> <CR> <Plug>delimitMateCR
+
+
 """ NERDTree
 
 " auto-change CWD when changing tree root
