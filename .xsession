@@ -5,7 +5,7 @@ gpg-connect-agent /bye
 export GPG_TTY="$(tty)"
 
 unset SSH_AGENT_PID
-export SSH_AUTH_SOCK="$HOME/.gnupg/S.gpg-agent.ssh"
+export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
 
 # Initialize DBus
 if [[ -z "$DBUS_SESSION_BUS_ADDRESS" ]] && command -v dbus-launch >/dev/null; then
