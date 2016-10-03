@@ -19,6 +19,9 @@
 
 # Choose file with Ranger
 
+# Make ctrl+u behave like bash. (normally bound to kill-whole-line)
+bindkey \^U backward-kill-line
+
 relpath () {
   # http://stackoverflow.com/a/14914070/48483
   [[ $# -ge 1 ]] && [[ $# -le 2 ]] || return 1
@@ -55,8 +58,8 @@ function _shortest-path() {
 
 function _browse-with-ranger() {
   local str tmp_file1 tmp_file2 file dir
-  tmp_file1=`mktemp "$TMPDIR"/ranger-chosen-dir.XXXX`
-  tmp_file2=`mktemp "$TMPDIR"/ranger-chosen-file.XXXX`
+  tmp_file1=`mktemp "${TMPDIR:-/var/tmp}"/ranger-chosen-dir.XXXX`
+  tmp_file2=`mktemp "${TMPDIR:-/var/tmp}"/ranger-chosen-file.XXXX`
 
   exec </dev/tty
 
