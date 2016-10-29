@@ -216,7 +216,10 @@ plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"
 plugin "vim-hdevtools", "https://github.com/bitc/vim-hdevtools.git" # supposedly faster than ghcmod
 plugin "neco-ghc", "https://github.com/eagletmt/neco-ghc.git"
 #plugin "hasksyn", "https://github.com/travitch/hasksyn.git"
-plugin "haskell-vim", "https://github.com/neovimhaskell/haskell-vim.git" # TODO: try this out
+# haskell-vim indents poorly: https://github.com/neovimhaskell/haskell-vim/issues/82
+#plugin "haskell-vim", "https://github.com/neovimhaskell/haskell-vim.git"
+plugin "haskell-vim", "https://github.com/itchyny/vim-haskell-indent.git"
+
 plugin "idris-vim", "https://github.com/idris-hackers/idris-vim.git"
 plugin "purescript-vim", "https://github.com/raichoo/purescript-vim.git"
 plugin "psc-ide-vim", "https://github.com/FrigoEU/psc-ide-vim.git"
