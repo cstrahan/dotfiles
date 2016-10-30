@@ -229,10 +229,10 @@
     sha256 = "111ml6wqg1p5d6b95jk2jyqyhgvgcjbrm7ghdvvlg38zj4wx4mjd";
   };
   matchit = fetchFromGitHub {
-    owner  = "edsono";
-    repo   = "vim-matchit";
-    rev    = "ceaf496a3763f3c20bc7f50c2135df4f1775ae05";
-    sha256 = "0r5bfl86x0il9558n2svq7mr8pl2xqbvy8plvgbb1b8q8v9cdz42";
+    owner  = "tmhedberg";
+    repo   = "matchit";
+    rev    = "060d9d8aa381d6a650b649d38c992b59db3ed1a3";
+    sha256 = "0ky5qbimdwprdmy9n93shyrs2a41vfgm9yj7v2q2db3zfsvpynld";
   };
   matchtag = fetchFromGitHub {
     owner  = "gregsexton";

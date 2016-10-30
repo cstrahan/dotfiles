@@ -37,7 +37,7 @@ let sources = with pkgs; import ./sources.nix {
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
           rev = "f44435b88ec98156d17869aa67ad15f38cfecbf3";
-          sha256 = "1y50ilyfwj6rvpvg50iq418maxvsfs54i202v7x0lfs5hmvcb4hi";
+          sha256 = "1k46xn1yx36ghj97mhvms5dp6q57jqv6iwyj4xdf8aq3w7pdcs5l";
         };
         buildInputs = [ python cmake ] ++ lib.optionals stdenv.isLinux [
           llvmPackages.clang-unwrapped
