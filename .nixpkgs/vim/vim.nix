@@ -1,30 +1,33 @@
-{ stdenv, lib, fetchhg
+{ stdenv, lib, fetchhg, fetchFromGitHub
 , pkgconfig, gettext, glib
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu, libICE
-, gtk, ncurses
-, python, ruby, luajit, perl, tcl
+, gtk2, ncurses
+, python2Full, ruby, luajit, perl, tcl
 , cscope
 }:
 
 stdenv.mkDerivation rec {
   name = "vim-${version}";
 
-  version = "7.4.316";
+  version = "8.0.0005";
 
   dontStrip = 1;
 
-  src = fetchhg {
-    url = "https://vim.googlecode.com/hg/";
-    rev = "v7-4-316";
-    sha256 = "0scxx33p1ky0wihk04xqpd6rygp1crm0hx446zbjwbsjj6xxn7sx";
+  hardeningDisable = [ "fortify" ];
+
+  src = fetchFromGitHub {
+    owner = "vim";
+    repo = "vim";
+    rev = "v${version}";
+    sha256 = "0ys3l3dr43vjad1f096ch1sl3x2ajsqkd03rdn6n812m7j4wipx0";
   };
 
   buildInputs = [
     pkgconfig gettext glib
     libX11 libXext libSM libXpm libXt libXaw libXau libXmu libICE
-    gtk ncurses
+    gtk2 ncurses
     cscope
-    python ruby luajit perl tcl
+    python2Full ruby luajit perl tcl
   ];
 
   configureFlags = [
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
       "--enable-tclinterp=yes"
       "--with-luajit"
       "--with-lua-prefix=${luajit}"
-      "--with-python-config-dir=${python}/lib"
+      "--with-python-config-dir=${python2Full}/lib"
       "--with-ruby-command=${ruby}/bin/ruby"
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
