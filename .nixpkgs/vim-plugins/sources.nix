@@ -504,6 +504,12 @@
     rev    = "549dcb4b6802c213fd7c4f0b4d76022c9875b786";
     sha256 = "0blh09ccrsc1sfav2rl987kbyaj7qjxry5nw1skibhidrb77sxmh";
   };
+  vim-nix = fetchFromGitHub {
+    owner  = "LnL7";
+    repo   = "vim-nix";
+    rev    = "b06cccd8ff61149b13d3fc8b7e0d06caa55c9888";
+    sha256 = "0d1wxxijyyl449f81asl9d31kg0wvs3m0fypin172ahgpf3lyar4";
+  };
   vim-ragtag = fetchFromGitHub {
     owner  = "tpope";
     repo   = "vim-ragtag";

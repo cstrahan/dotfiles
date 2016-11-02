@@ -99,6 +99,7 @@ def process!
   end
 end
 
+plugin "vim-nix", "https://github.com/LnL7/vim-nix.git"
 
 plugin "pathogen", "https://github.com/tpope/vim-pathogen.git"
 
