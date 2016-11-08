@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 if [[ "$(uname)" == "Darwin" ]]; then
-  reattach-to-user-namespace pbcopy
+  exec reattach-to-user-namespace pbcopy
 
 elif command -v xsel >/dev/null 2>&1; then
-  xsel -i -b
+  exec xsel -i -b
 
 elif command -v xclip >/dev/null 2>&1; then
-  xclip -i -selection clipboard
+  exec xclip -i -selection clipboard
 
 fi
