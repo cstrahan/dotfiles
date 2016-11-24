@@ -17,6 +17,8 @@ let g:EclimCompletionMethod = 'omnifunc'
 
 " disable syntastic support for Java
 let g:syntastic_java_checkers=[]
+" options: go gofmt golint govet errcheck
+let g:syntastic_go_checkers = ['go']
 
 " imports whatever is needed for current line
 nnoremap <silent> <LocalLeader>i :JavaImport<cr>
