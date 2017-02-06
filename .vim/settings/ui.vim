@@ -2,6 +2,17 @@ let g:solarized_termcolors=256
 let g:indentLine_color_term = 239
 let g:indentLine_color_gui  = '#A4E57E'
 
+" true-color support
+if has("termguicolors")
+  set termguicolors
+
+  " need to provide the right escapes for tmux
+  if has("termguicolors") && (&term =~ "screen" || &term =~ "screen-256color")
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  endif
+endif
+
 " scheme
 colorscheme hybrid
  
