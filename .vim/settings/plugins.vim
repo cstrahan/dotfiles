@@ -34,6 +34,25 @@ nnoremap <silent> <LocalLeader>jc :JavaCorrect<cr>
 let g:EclimBrowser='open'
 
 
+""" Verbose (https://github.com/tpope/vim-scriptease/blob/master/plugin/scriptease.vim)
+command! -range=999998 -nargs=1 -complete=command Verbose
+      \ :exe s:Verbose(<count> == 999998 ? '' : <count>, <q-args>)
+
+function! s:Verbose(level, excmd)
+  let temp = tempname()
+  let verbosefile = &verbosefile
+  call writefile([':'.a:level.'Verbose '.a:excmd], temp, 'b')
+  return
+        \ 'try|' .
+        \ 'let &verbosefile = '.string(temp).'|' .
+        \ 'silent '.a:level.'verbose exe '.string(a:excmd).'|' .
+        \ 'finally|' .
+        \ 'let &verbosefile = '.string(verbosefile).'|' .
+        \ 'endtry|' .
+        \ 'pedit '.temp.'|wincmd P|nnoremap <buffer> q :bd<CR>'
+endfunction
+
+
 """ Headerguard
 
 nnoremap <leader>hg :HeaderguardAdd<CR>
@@ -125,13 +144,13 @@ let g:NERDRemoveExtraSpaces = 1
 
 
 """ Ag
-vnoremap <C-a> "hy:Ag "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>a :Ag<space>
-vmap <leader>a "hy:Ag "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>ta :tabnew<CR>:Ag<space>
-vmap <leader>ta "hy:tabnew<CR>:Ag "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
-map <leader>va :vnew<CR>:Ag<space>
-vmap <leader>va "hy:vnew<CR>:Ag "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
+vnoremap <C-a> "hy:Grepper -tool ag -query "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
+map <leader>a :Grepper -tool ag<cr>
+vmap <leader>a "hy:Grepper -tool ag -query "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
+map <leader>ta :tabnew<CR>:Grepper -tool ag<cr>
+vmap <leader>ta "hy:tabnew<CR>:Grepper -tool ag -query "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
+map <leader>va :vnew<CR>:Grepper -tool ag<cr>
+vmap <leader>va "hy:vnew<CR>:Grepper -tool ag -query "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 
 
 """ surround

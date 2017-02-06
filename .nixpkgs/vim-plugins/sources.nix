@@ -474,6 +474,12 @@
     rev    = "7461762f787fa9a8c67820a2e3acfa03c5ec4e9b";
     sha256 = "0darh2s6phsmybdaskmj8vfdpslnicd14hnc62vsw9mbdf6ll752";
   };
+  vim-grepper = fetchFromGitHub {
+    owner  = "mhinz";
+    repo   = "vim-grepper";
+    rev    = "ace8df1bf945377c17f8a6892aa4a3fc738fd712";
+    sha256 = "1j95ylk3i398xanfyc2s0mdih2z3gl92ibw8ikgx0k5pbvcfsm05";
+  };
   vim-hdevtools = fetchFromGitHub {
     owner  = "bitc";
     repo   = "vim-hdevtools";

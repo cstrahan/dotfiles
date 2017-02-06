@@ -111,8 +111,9 @@ plugin "vim-exchange", "https://github.com/tommcdo/vim-exchange.git"
 plugin "ctrlp", "https://github.com/kien/ctrlp.vim.git"
 plugin "command-t", "https://github.com/wincent/Command-T.git"
 plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"
-plugin "ack", "https://github.com/mileszs/ack.vim.git"
-plugin "ag", "https://github.com/rking/ag.vim.git"
+plugin "ack", "https://github.com/mileszs/ack.vim.git" # TODO: nix in favor of vim-grepper
+plugin "ag", "https://github.com/rking/ag.vim.git"     # TODO: nix in favor of vim-grepper
+plugin "vim-grepper", "https://github.com/mhinz/vim-grepper.git"
 plugin "autotag", "https://github.com/vim-scripts/AutoTag.git"
 plugin "eunuch", "https://github.com/tpope/vim-eunuch.git"
 plugin "dispatch", "https://github.com/tpope/vim-dispatch.git"
@@ -120,13 +121,16 @@ plugin "scratch", "https://github.com/vim-scripts/scratch.vim.git"
 plugin "vimwiki", "https://github.com/vimwiki/vimwiki.git"
 plugin "voom", "https://github.com/vim-scripts/VOoM.git"
 
-plugin "solarized", "https://github.com/altercation/vim-colors-solarized.git"
+plugin "vim-sayonara", "https://github.com/mhinz/vim-sayonara.git"
+
+plugin "vim-solarized8", "https://github.com/lifepillar/vim-solarized8.git"
 plugin "tomorrow-night", "https://github.com/chriskempson/vim-tomorrow-theme.git"
 plugin "base16", "https://github.com/chriskempson/base16-vim.git"
 plugin "jellybeans", "https://github.com/nanotech/jellybeans.vim.git"
 plugin "jellyx", "https://github.com/guns/jellyx.vim.git"
 plugin "hybrid", "https://github.com/w0ng/vim-hybrid.git"
 plugin "xoria256", "https://github.com/vim-scripts/xoria256.vim.git"
+plugin "vim-one", "https://github.com/rakr/vim-one.git" # TODO: check this out
 
 plugin "nerdcommenter", "https://github.com/scrooloose/nerdcommenter.git"
 plugin "surround", "https://github.com/tpope/vim-surround.git"
@@ -138,10 +142,11 @@ plugin "vim-css-color", "https://github.com/ap/vim-css-color.git"
 plugin "vim-repeat", "https://github.com/tpope/vim-repeat.git"
 plugin "vim-indent-object", "https://github.com/michaeljsmith/vim-indent-object.git"
 plugin "unimpaired", "https://github.com/tpope/vim-unimpaired.git"
-plugin "syntastic", "https://github.com/scrooloose/syntastic.git"
+plugin "syntastic", "https://github.com/scrooloose/syntastic.git" # TODO: replace with https://github.com/w0rp/ale
+plugin "ale", "https://github.com/w0rp/ale.git" # TODO: replace with https://github.com/w0rp/ale
 plugin "tabmerge", "https://github.com/vim-scripts/tabmerge.git"
 plugin "tabular", "https://github.com/godlygeek/tabular.git"
-plugin "align", "https://github.com/tsaleh/vim-align.git"
+#plugin "vim-easy-align", "https://github.com/junegunn/vim-easy-align.git" # TODO: check this out
 plugin "ultisnips", "https://github.com/SirVer/ultisnips.git" # requires separate snippets
 plugin "vim-snippets", "https://github.com/honza/vim-snippets.git" # the actual snippets to be used with a snippet engine like UltiSnips
 #plugin "vim-snipmate", "https://github.com/garbas/vim-snipmate.git" # competitor to UltiSnips
@@ -172,8 +177,7 @@ plugin "nodejs", "https://github.com/mmalecki/vim-node.js.git"
 #plugin "JavaScript-Indent", "https://github.com/vim-scripts/JavaScript-Indent.git"
 #plugin "vim-javascript-syntax", "https://github.com/jelera/vim-javascript-syntax"
 plugin "jasmine", "https://github.com/claco/jasmine.vim.git"
-# seems to cause problems (garbage characters):
-#plugin "jshint", "https://github.com/wookiehangover/jshint.vim.git"
+#plugin "jshint", "https://github.com/wookiehangover/jshint.vim.git" # seems to cause problems (garbage characters)
 plugin "liquid", "https://github.com/tpope/vim-liquid.git"
 plugin "markdown", "https://github.com/tpope/vim-markdown.git"
 plugin "textile", "https://github.com/timcharper/textile.vim.git"
@@ -199,7 +203,6 @@ plugin "eclim", "https://github.com/cstrahan/vim-eclim.git"
 plugin "capnp", "https://github.com/cstrahan/vim-capnp.git"
 plugin "dockerfile", "https://github.com/ekalinin/Dockerfile.vim.git"
 plugin "vim-go", "https://github.com/fatih/vim-go.git"
-#plugin "vim-gocode", "https://github.com/Blackrush/vim-gocode.git"
 
 #plugin "sparkup", "https://github.com/rstacruz/sparkup.git"
 #plugin "emmet", "https://github.com/mattn/emmet-vim.git"
