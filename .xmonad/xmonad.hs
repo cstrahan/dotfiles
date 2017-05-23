@@ -61,7 +61,7 @@ fixAWT conf = conf { startupHook = startupHook conf <+> setWMName "LG3D" }
 
 main = do
     setEnv "_JAVA_AWT_WM_NONREPARENTING" "1"
-    xmonad $ fixAWT $ ewmh $ pagerHints $ defaultConfig
+    xmonad $ fixAWT $ docks $ ewmh $ pagerHints $ defaultConfig
         { modMask     = mod4Mask
         , terminal    = "termite"
         , borderWidth = 2
