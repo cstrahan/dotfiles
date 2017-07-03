@@ -1,3 +1,5 @@
+import Control.Monad
+import Data.Maybe
 import System.IO
 import System.Environment (setEnv)
 import System.Exit
@@ -59,6 +61,26 @@ myManageHook = composeAll $
 -- Fix Java/AWT GUI apps. Otherwise: export _JAVA_AWT_WM_NONREPARENTING=1
 fixAWT conf = conf { startupHook = startupHook conf <+> setWMName "LG3D" }
 
+-- the sxiv app (and maybe others) believes that fullscreen is not supported,
+-- so this fixes that.
+-- see: https://mail.haskell.org/pipermail/xmonad/2017-March/015224.html
+-- and: https://github.com/xmonad/xmonad-contrib/pull/109
+addNETSupported :: Atom -> X ()
+addNETSupported x   = withDisplay $ \dpy -> do
+    r               <- asks theRoot
+    a_NET_SUPPORTED <- getAtom "_NET_SUPPORTED"
+    a               <- getAtom "ATOM"
+    liftIO $ do
+        sup <- (join . maybeToList) <$> getWindowProperty32 dpy a_NET_SUPPORTED r
+        when (fromIntegral x `notElem` sup) $
+          changeProperty32 dpy r a_NET_SUPPORTED a propModeAppend [fromIntegral x]
+
+addEWMHFullscreen :: X ()
+addEWMHFullscreen   = do
+    wms <- getAtom "_NET_WM_STATE"
+    wfs <- getAtom "_NET_WM_STATE_FULLSCREEN"
+    mapM_ addNETSupported [wms, wfs]
+
 main = do
     setEnv "_JAVA_AWT_WM_NONREPARENTING" "1"
     xmonad $ fixAWT $ docks $ ewmh $ pagerHints $ defaultConfig
@@ -71,6 +93,7 @@ main = do
         , handleEventHook    = handleEventHook defaultConfig <+> fullscreenEventHook
         , layoutHook  = smartBorders myLayout
         , manageHook  = myManageHook
+        , startupHook = startupHook defaultConfig >> addEWMHFullscreen
         } `additionalKeys`
         [ ((mod4Mask, xK_z), spawn "xset s activate")
         ]
