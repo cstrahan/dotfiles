@@ -41,3 +41,6 @@ alias ghci="ghci -v0"
 # ls / dir
 alias ls="ls --color=auto"
 alias dir="dir --color=auto"
+
+# mc
+alias mc="COLORTERM=1 mc"

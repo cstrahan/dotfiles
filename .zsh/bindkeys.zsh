@@ -17,8 +17,6 @@
 # http://unix.stackexchange.com/questions/3283/zsh-to-auto-complete-directories-in-command-line-arguments
 #bindkey '^X/' _bash_complete-word
 
-# Choose file with Ranger
-
 # Make ctrl+u behave like bash. (normally bound to kill-whole-line)
 bindkey \^U backward-kill-line
 
@@ -63,7 +61,7 @@ function _browse-with-ranger() {
 
   exec </dev/tty
 
-  ranger --choosedir="$tmp_file1" --choosefile="$tmp_file2"
+  ranger --choosedir="$tmp_file1" --choosefile="$tmp_file2" --cmd 'map <enter> open_with 0'
 
   dir=`cat "$tmp_file1"`
   file=`cat "$tmp_file2"`
@@ -89,4 +87,5 @@ function _browse-with-ranger() {
 
 zle -N _browse-with-ranger
 
+# Choose file with Ranger
 bindkey '^o' _browse-with-ranger 
