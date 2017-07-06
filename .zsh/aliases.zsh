@@ -43,4 +43,9 @@ alias ls="ls --color=auto"
 alias dir="dir --color=auto"
 
 # mc
-alias mc="COLORTERM=1 mc"
+if [[ "$TERM" == "screen-256color" ]]; then
+  # mc complains about terminal color support
+  # when using $TERM == termite, so let's only
+  # alias when running under tmux.
+  alias mc="COLORTERM=truecolor mc -S seasons-winter16M"
+fi
