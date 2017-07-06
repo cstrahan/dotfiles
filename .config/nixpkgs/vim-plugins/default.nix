@@ -4,6 +4,7 @@
 , vim, ruby, python, perl, llvmPackages
 , which
 , darwin
+, ycmd
 }:
 let sources = with pkgs; import ./sources.nix {
       inherit fetchFromGitHub;
@@ -36,44 +37,26 @@ let sources = with pkgs; import ./sources.nix {
         name = "youcompleteme";
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
-          rev = "f44435b88ec98156d17869aa67ad15f38cfecbf3";
-          sha256 = "1k46xn1yx36ghj97mhvms5dp6q57jqv6iwyj4xdf8aq3w7pdcs5l";
+          #OLD
+          #sha256 = "1k46xn1yx36ghj97mhvms5dp6q57jqv6iwyj4xdf8aq3w7pdcs5l";
+          #rev = "f44435b88ec98156d17869aa67ad15f38cfecbf3";
+          #NEW
+          sha256 = "0b8r8jrsipp2cf1j5i55czzhgvyhvvd2cwr08ya2rwhix0nblczw";
+          rev = "c881441385ea95d6ac8051593406c1c78d373329";
         };
-        buildInputs = [ python cmake ] ++ lib.optionals stdenv.isLinux [
-          llvmPackages.clang-unwrapped
-          llvmPackages.llvm
-        ];
+        #buildInputs = [ python cmake ] ++ lib.optionals stdenv.isLinux [
+        #  llvmPackages.clang-unwrapped
+        #  llvmPackages.llvm
+        #];
         patchPhase = ''
           substituteInPlace plugin/youcompleteme.vim --replace \
             "'ycm_path_to_python_interpreter', '''" \
             "'ycm_path_to_python_interpreter', '${python}/bin/python'"
         '';
-        configurePhase = ''
-          pythonLib=$(find ${python}/lib -name lib${python.libPrefix}.so -o -name lib${python.libPrefix}.dylib)
-          pythonInclude=${python}/include/${python.libPrefix}
-
-          cmakeFlagsArray=(
-            "-DUSE_SYSTEM_LIBCLANG=ON"
-            "-DUSE_CLANG_COMPLETER=ON"
-            "-DPYTHON_LIBRARY=$pythonLib"
-            "-DPYTHON_INCLUDE_DIR=$pythonInclude"
-          )
-        '';
+        configurePhase = "true";
         buildPhase = ''
-          cmakeDir=$PWD/third_party/ycmd/cpp
-          mkdir build
-          pushd build
-
-          echo "Running cmake with flags:"
-          for flag in "''${cmakeFlagsArray[@]}"; do
-            echo "    $flag"
-          done
-
-          cmake -G "Unix Makefiles" . $cmakeDir ''${cmakeFlagsArray[@]}
-          make -j ''${NIX_BUILD_CORES} ycm_core
-
-          popd
-          rm -rf build
+          rm -r third_party/ycmd
+          ln -s ${ycmd}/lib/ycmd third_party
         '';
         installPhase = ''
           mkdir -p $out/vim-plugins

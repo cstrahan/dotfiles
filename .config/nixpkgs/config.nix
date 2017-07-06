@@ -2,6 +2,19 @@
   allowBroken = true;
   allowUnfree = true;
   zathura.useMupdf = true; # disable to use poppler for rendering
+
+  firefox = {
+   enableGoogleTalkPlugin = true;
+   enableAdobeFlash = true;
+   enableAdobeFlashDRM = true;
+   jre = false;
+   icedtea = true;
+  };
+  chromium = {
+   enablePepperFlash = true;
+   enableWideVine = true;
+  };
+
   packageOverrides = super: let self = super.pkgs; in
     let inherit (self) stdenv callPackage fetchFromGitHub;
         inherit (stdenv) lib;

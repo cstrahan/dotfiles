@@ -73,7 +73,7 @@ endif
 inoremap <silent> <C-l> <C-k>l*
 
 " like gm, but go to center of text, not screen line
-map gM :exe 'normal '.(virtcol('$')/2).'\|'<CR>
+map <silent> gM :exe 'normal '.(virtcol('$')/2).'\|'<CR>
 
 " create the directory of the current buffer via `mkdir -p`
 map <leader>md :!mkdir -p %:p:h<CR>
@@ -146,30 +146,10 @@ imap kk <Esc>
 "map  <C-9> 9gt
 "imap <C-9> <Esc>9gt
 
-" tab movement setup, via ara howard
-
-function TabMove(n)
-    let nr = tabpagenr()
-    let size = tabpagenr('$')
-    " do we want to go left?
-    if (a:n != 0)
-        let nr = nr - 2
-    endif
-    " crossed left border?
-    if (nr < 0)
-        let nr = size-1
-        " crossed right border?
-    elseif (nr == size)
-        let nr = 0
-    endif
-    " fire move command
-    exec 'tabm'.nr
-endfunction
+" tab movement
 
 map <Leader>m gT
 map <Leader>. gt
-map <C-Left> :call TabMove(1)<CR>
-map <C-Right> :call TabMove(0)<CR>
 
 " from http://coderwall.com/p/zfqmiw
 " Fake '|' as text object

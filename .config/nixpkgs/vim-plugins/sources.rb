@@ -2,6 +2,15 @@
 
 # This is an incredibly hacky POC.
 
+# Plugin managers:
+# native package: https://github.com/vim/vim/blob/f84b122a99da75741ae686fabb6f81b8b4755998/runtime/doc/repeat.txt#L471
+# https://github.com/k-takata/minpac
+# https://github.com/Shougo/dein.vim
+# https://github.com/junegunn/vim-plug
+# https://github.com/Shougo/neobundle.vim
+# https://github.com/VundleVim/Vundle.vim
+# https://github.com/tpope/vim-pathogen
+
 require 'open-uri'
 require 'json'
 require 'tmpdir'
@@ -98,6 +107,9 @@ def process!
     f.write(json)
   end
 end
+
+# TODO?
+#plugin "targets", "https://github.com/wellle/targets.vim.gi"
 
 plugin "vim-nix", "https://github.com/LnL7/vim-nix.git"
 
@@ -207,6 +219,8 @@ plugin "vim-go", "https://github.com/fatih/vim-go.git"
 #plugin "sparkup", "https://github.com/rstacruz/sparkup.git"
 #plugin "emmet", "https://github.com/mattn/emmet-vim.git"
 
+# Java/Clojure
+# ------------
 plugin "vim-classpath", "https://github.com/tpope/vim-classpath.git"
 plugin "vim-clojure-static", "https://github.com/guns/vim-clojure-static.git"
 plugin "vim-fireplace", "https://github.com/tpope/vim-fireplace.git"
@@ -214,6 +228,8 @@ plugin "vim-redl", "https://github.com/dgrnbrg/vim-redl.git"
 plugin "vim-sexp", "https://github.com/guns/vim-sexp.git"
 plugin "vim-sexp-mappings-for-regular-people", "https://github.com/tpope/vim-sexp-mappings-for-regular-people.git"
 
+# Haskell
+# -------
 #plugin "haskell-indent", "https://github.com/vim-scripts/indenthaskell.vim.git"
 plugin "html-template-syntax", "https://github.com/pbrisbin/vim-syntax-shakespeare.git"
 plugin "ghcmod", "https://github.com/eagletmt/ghcmod-vim.git"

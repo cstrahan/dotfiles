@@ -20,6 +20,7 @@ set smartcase  " unless they contain a capital letter
 set scrolloff=3     " show at least 3 lines above/below cursor
 set sidescrolloff=5 " and at least 5 columns next to cursor
 set sidescroll=1    " and one to the left or right
+set display+=lastline
 
 set nowrap " don't wrap lines
 
@@ -42,6 +43,10 @@ set hlsearch " highlight matches
 
 set colorcolumn=+0,120 " show line at textwidth and 120 chars
 set formatoptions-=t   " No auto-wrapping by default
+set formatoptions+=j " Delete comment character when joining commented lines
+
+" search upward for tags
+setglobal tags-=./tags tags-=./tags; tags^=./tags;
 
 """ multiple windows
 
@@ -88,6 +93,10 @@ endtry
 set tabstop=2    " two-space tabs
 set shiftwidth=2 " autoindent is two spaces
 set expandtab    " use spaces, not tabs
+set smarttab
+
+" disabling octal allows for incrementing numbers with leading 0s
+set nrformats-=octal
 
 """ reading and writing files
 
@@ -116,6 +125,7 @@ set noswapfile " livin' on the edge
 """ command line editing
 
 set history=1000 " store lots of :cmdline history, defaults to 20
+set tabpagemax=50
 
 " what files to ignore when doing filename completion, etc.
 set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.class,.svn,*.gem
