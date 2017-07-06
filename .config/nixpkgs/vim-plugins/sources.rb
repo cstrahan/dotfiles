@@ -109,7 +109,16 @@ def process!
 end
 
 # TODO?
-#plugin "targets", "https://github.com/wellle/targets.vim.gi"
+# https://github.com/wellle/targets.vim
+# https://github.com/haya14busa/incsearch.vim
+# https://github.com/osyo-manga/vim-over
+# https://github.com/pelodelfuego/vim-swoop
+# https://github.com/hkupty/nvimux
+# https://github.com/lambdalisue/gina.vim
+# https://github.com/mhartington/dotfiles/blob/master/config/nvim/init.vim
+# https://github.com/danielfgray/dotfiles/blob/master/vimrc
+# https://github.com/brooth/far.vim
+# https://github.com/rafi/vim-config
 
 plugin "vim-nix", "https://github.com/LnL7/vim-nix.git"
 
