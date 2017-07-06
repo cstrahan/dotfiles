@@ -61,3 +61,11 @@ fi
 #if whence -p w3mimgdisplay >/dev/null; then
 #  export W3MIMGDISPLAY_PATH="$(whence -p w3mimgdisplay)"
 #fi
+
+#
+# Wine
+#
+
+# Prevent Wine from changing filetype associations.
+# https://wiki.winehq.org/FAQ#How_can_I_prevent_Wine_from_changing_the_filetype_associations_on_my_system_or_adding_unwanted_menu_entries.2Fdesktop_links.3F
+export WINEDLLOVERRIDES=winemenubuilder.exe=d
