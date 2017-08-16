@@ -6,6 +6,7 @@ let maplocalleader = ','
 if executable('ag')
   " include ignored and hidden files
   let g:unite_source_rec_async_command= 'ag --nocolor --nogroup --hidden -g ""'
+  let g:ackprg = 'ag --vimgrep'
 endif
 let g:unite_enable_start_insert = 1
 let g:unite_winheight = 10

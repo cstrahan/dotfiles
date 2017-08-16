@@ -144,6 +144,8 @@ let g:NERDRemoveExtraSpaces = 1
 
 
 """ Ag
+cnoreabbrev Ag GrepperAg
+"cnoreabbrev Ag Ack!
 vnoremap <C-a> "hy:Grepper -tool ag -query "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 map <leader>a :Grepper -tool ag<cr>
 vmap <leader>a "hy:Grepper -tool ag -query "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
@@ -152,6 +154,10 @@ vmap <leader>ta "hy:tabnew<CR>:Grepper -tool ag -query "<C-r>=escape(@h,'./"*()[
 map <leader>va :vnew<CR>:Grepper -tool ag<cr>
 vmap <leader>va "hy:vnew<CR>:Grepper -tool ag -query "<C-r>=escape(@h,'./"*()[]?')<CR>"<CR>
 
+
+" vim-grepper: use default quick-fix height
+let g:grepper = { 'open': 0 }
+autocmd User Grepper botright copen
 
 """ surround
 " Use v or # to get a variable interpolation (inside of a string)}
