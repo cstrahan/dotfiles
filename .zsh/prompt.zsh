@@ -1,6 +1,7 @@
 # TODO: use vcprompt
 
 # http://stackoverflow.com/questions/689765/
+# https://github.com/robbyrussell/oh-my-zsh/blob/master/lib/git.zsh
 autoload -U colors && colors
 autoload -Uz add-zsh-hook
 autoload -Uz promptinit && promptinit
@@ -25,10 +26,12 @@ function set_prompt {
     branch_name="%{$fg[green]%}($branch_name)%{$reset_color%} "
   fi
 
+  local prompt_jobs="%(1j.%{$fg_bold[red]%}(%jj)%{$reset_color%} .)"
+
   if [[ -n $IN_ASCIINEMA ]]; then
     export PS1=$'\n'"$nix_shell%{$fg_bold[cyan]%}$%{$reset_color%} "
   else
-    export PS1=$'\n'"%{$fg_bold[blue]%}${PWD/#$HOME/~}%{$reset_color%} $nix_shell$branch_name%{$fg_bold[cyan]%}λ%{$reset_color%} "
+    export PS1=$'\n'"%{$fg_bold[blue]%}${PWD/#$HOME/~}%{$reset_color%} $nix_shell$branch_name$prompt_jobs%{$fg_bold[cyan]%}λ%{$reset_color%} "
   fi
   export PS2='%{$fg_bold[cyan]%}>%{$reset_color%} '
 }
