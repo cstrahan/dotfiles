@@ -71,7 +71,7 @@
 [http]
 #  sslCAInfo = ~/certs/-.363-283.io
 [gpg]
-	program = gpg2
+	program = gpg
 #[interactive]
 #  diffFilter = /run/current-system/sw/share/git/contrib/diff-highlight/diff-highlight
 #[pager]
