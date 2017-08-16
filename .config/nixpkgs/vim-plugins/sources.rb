@@ -109,6 +109,11 @@ def process!
 end
 
 # TODO?
+# https://github.com/yssl/QFEnter
+# https://github.com/mhinz/vim-galore
+# https://github.com/mhinz/dotfiles/blob/master/.vim/vimrc
+# https://github.com/linkux-it/vimgalaxy
+# https://github.com/troydm/zoomwintab.vim
 # https://github.com/wellle/targets.vim
 # https://github.com/haya14busa/incsearch.vim
 # https://github.com/osyo-manga/vim-over
@@ -119,6 +124,15 @@ end
 # https://github.com/danielfgray/dotfiles/blob/master/vimrc
 # https://github.com/brooth/far.vim
 # https://github.com/rafi/vim-config
+# https://github.com/arakashic/chromatica.nvim
+# https://github.com/jeaye/color_coded
+# https://github.com/octol/vim-cpp-enhanced-highlight
+# https://github.com/dbgx/lldb.nvim
+# https://github.com/bsdelf/bufferhint
+# https://github.com/justinmk/vim-dirvish
+# https://github.com/hecal3/vim-leader-guide
+# https://github.com/joshdick/onedark.vim
+# https://github.com/MaxSt/FlatColor
 
 plugin "vim-nix", "https://github.com/LnL7/vim-nix.git"
 
