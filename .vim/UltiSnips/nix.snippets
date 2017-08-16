@@ -1,23 +1,26 @@
 snippet mk "stdenv.mkDerivation { ... }" b
-{ stdenv, lib, ${1:fetchFromGitHub}, ${2:pkgconfig} }:
+{ stdenv, lib, ${1:fetchFromGitHub}, pkgconfig }:
 
 stdenv.mkDerivation rec {
-	name = "${3:name}-${version}";
-	version = "${4:1.0.0}";
+	name = "${2:name}-${version}";
+	version = "${3:1.0.0}";
 	src = $1 {
-		owner = "${5:owner}";
-		repo = "${6:repo}";
-		rev = ${7:version};
+		owner = "${4:owner}";
+		repo = "${5:repo}";
+		rev = ${6:version};
 		sha256 = "${0}0000000000000000000000000000000000000000000000000000";
 	};
+	nativeBuildInputs = [
+	  pkgconfig
+	];
 	buildInputs = [
-		`!p snip.rv = " ".join([x.strip() for x in t[2].split(",")])`
+
 	];
 	meta = with lib; {
-		description = "${8:...}";
-		homepage = "${9:...}";
-		license = licenses.${10:mit};
-		platforms = platforms.${11:linux};
+		description = "${7:...}";
+		homepage = "${8:...}";
+		license = licenses.${9:mit};
+		platforms = platforms.${10:linux};
 		maintainers = with maintainers; [ cstrahan ];
 	};
 }
@@ -56,6 +59,7 @@ snippet shell "generates a basic shell.nix" b
 with import <nixpkgs> { };
 
 runCommand "dummy" {
+	hardeningDisable = "all";
 	buildInputs = [
 		$0
 	];
