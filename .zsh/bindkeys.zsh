@@ -20,40 +20,6 @@
 # Make ctrl+u behave like bash. (normally bound to kill-whole-line)
 bindkey \^U backward-kill-line
 
-relpath () {
-  # http://stackoverflow.com/a/14914070/48483
-  [[ $# -ge 1 ]] && [[ $# -le 2 ]] || return 1
-  local target=${${2:-$1}:a} # replace `:a' by `:A` to resolve symlinks
-  local current=${${${2:+$1}:-$PWD}:a} # replace `:a' by `:A` to resolve symlinks
-  local appendix=${target#/}
-  local relative=''
-  while appendix=${target#$current/}
-    [[ $current != '/' ]] && [[ $appendix = $target ]]; do
-    if [[ $current = $appendix ]]; then
-      relative=${relative:-.}
-      print ${relative#/}
-      return 0
-    fi
-    current=${current%/*}
-    relative="$relative${relative:+/}.."
-  done
-  relative+=${relative:+${appendix:+/}}${appendix#/}
-  print $relative
-}
-
-function _shortest-path() {
-  local abs rel abs_len rel_len
-  abs="$1"
-  rel=`relpath "$abs"`
-  abs_len=`echo "$abs" | wc -c`
-  rel_len=`echo "$rel" | wc -c`
-  if [[ $abs_len -gt $rel_len ]]; then
-    echo $rel
-  else
-    echo $abs
-  fi
-}
-
 function _browse-with-ranger() {
   local space=""
   local file
@@ -63,14 +29,20 @@ function _browse-with-ranger() {
 
   ranger --choosefiles="${outfile}" --cmd 'map <enter> open_with 0'
 
-  if [[ -e "$outfile" ]]; then
+  if [[ -e "${outfile}" ]]; then
     while IFS='' read -r file || [[ -n "${line}" ]]; do
       # use either a relative path or fullpath, whichever is shorter.
-      file=$(_shortest-path "${file}")
+      local abs="${file}"
+      local rel=$(realpath --relative-to="${PWD}" "${abs}")
+      if [[ "${#abs}" -gt "${#rel}" ]]; then
+        file="${rel}"
+      else
+        file="${abs}"
+      fi
 
       LBUFFER="${LBUFFER}${space}${(q)file}"
       space=" "
-    done < "$outfile"
+    done < "${outfile}"
   fi
 
   zle reset-prompt
