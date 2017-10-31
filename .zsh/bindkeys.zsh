@@ -25,15 +25,13 @@ function _browse-with-ranger() {
   local file
   local outfile=$(mktemp "${TMPDIR:-/var/tmp}"/ranger-chosen-file.XXXX)
 
-  exec </dev/tty
-
-  ranger --choosefiles="${outfile}" --cmd 'map <enter> open_with 0'
+  ranger --choosefiles="${outfile}" --cmd 'map <enter> open_with 0' </dev/tty
 
   if [[ -e "${outfile}" ]]; then
     while IFS='' read -r file || [[ -n "${line}" ]]; do
       # use either a relative path or fullpath, whichever is shorter.
       local abs="${file}"
-      local rel=$(realpath --relative-to="${PWD}" "${abs}")
+      local rel=$(realpath --no-symlinks --relative-to="${PWD}" "${abs}")
       if [[ "${#abs}" -gt "${#rel}" ]]; then
         file="${rel}"
       else
