@@ -45,6 +45,7 @@ function _browse-with-ranger() {
     done < "${outfile}"
   fi
 
+  rm -f ${outfile}
   zle reset-prompt
 }
 
