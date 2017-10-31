@@ -55,31 +55,22 @@ function _shortest-path() {
 }
 
 function _browse-with-ranger() {
-  local str tmp_file1 tmp_file2 file dir
-  tmp_file1=`mktemp "${TMPDIR:-/var/tmp}"/ranger-chosen-dir.XXXX`
-  tmp_file2=`mktemp "${TMPDIR:-/var/tmp}"/ranger-chosen-file.XXXX`
+  local space=""
+  local file
+  local outfile=$(mktemp "${TMPDIR:-/var/tmp}"/ranger-chosen-file.XXXX)
 
   exec </dev/tty
 
-  ranger --choosedir="$tmp_file1" --choosefile="$tmp_file2" --cmd 'map <enter> open_with 0'
+  ranger --choosefiles="${outfile}" --cmd 'map <enter> open_with 0'
 
-  dir=`cat "$tmp_file1"`
-  file=`cat "$tmp_file2"`
+  if [[ -e "$outfile" ]]; then
+    while IFS='' read -r file || [[ -n "${line}" ]]; do
+      # use either a relative path or fullpath, whichever is shorter.
+      file=$(_shortest-path "${file}")
 
-  rm "$tmp_file1"
-  rm "$tmp_file2"
-
-  if [[ "$file" != "" ]]; then
-    str=`_shortest-path "$file"`
-  elif [[ "$dir" != "" && "$dir" != `pwd` ]]; then
-    str=`_shortest-path "$dir"`
-  else
-    zle reset-prompt
-    return
-  fi
-
-  if [[ $str != "" ]]; then
-    LBUFFER="$LBUFFER${(q)str}"
+      LBUFFER="${LBUFFER}${space}${(q)file}"
+      space=" "
+    done < "$outfile"
   fi
 
   zle reset-prompt
