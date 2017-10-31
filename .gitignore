@@ -8,6 +8,7 @@
 /.config/*
 !/.config/dunst
 !/.config/nixpkgs
+!/.config/ranger
 !/.config/sxhkd
 !/.config/taffybar
 !/.config/taffybar/taffybar.hs
