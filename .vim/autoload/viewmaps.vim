@@ -35,25 +35,27 @@ function! s:MarkBuffer()
 endfunction
 
 function! viewmaps#Show()
+  call s:OpenBuffer()
+  call s:MarkBuffer()
+  normal ggdG
   redir @"
   silent map 
   silent map!
   redir END
-  call s:OpenBuffer()
   put
-  call s:MarkBuffer()
   g/^$/d
   normal gg
 endfunction
 
 function! viewmaps#ShowVerbose()
+  call s:OpenBuffer()
+  call s:MarkBuffer()
+  normal ggdG
   redir @"
   silent verbose map 
   silent verbose map!
   redir END
-  call s:OpenBuffer()
   put
-  call s:MarkBuffer()
   g/^$/d
   normal gg
 endfunction
