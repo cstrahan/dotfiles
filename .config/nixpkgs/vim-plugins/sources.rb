@@ -11,15 +11,17 @@
 # https://github.com/VundleVim/Vundle.vim
 # https://github.com/tpope/vim-pathogen
 
+
 require 'open-uri'
 require 'json'
 require 'tmpdir'
 require 'io/console'
+require 'shellwords'
+require 'pathname'
+
+SOURCES_PATH = Pathname.new(__FILE__).expand_path.dirname.join("sources.json")
 
 # nix-shell leaks a 'name' env-var.
-# nix-prefetch-zip picks up `name` from the environment,
-# and then gets confused.
-# thus, this fixes this script in a nix-shell.
 ENV['name'] = nil
 
 $plugins = []
@@ -27,6 +29,7 @@ print "GitHub User: "
 user = STDIN.gets.chomp
 print "Password: "
 pass = STDIN.noecho(&:gets).chomp
+puts ""
 $basic_auth = [user, pass]
 
 def plugin(name, url)
@@ -42,38 +45,30 @@ def plugin(name, url)
     :repo => repo,
     :rev => sha
   }
-  puts plugin.inspect
   $plugins << plugin
 end
 
 def calculate_sha256(plugin)
   owner, repo, rev = plugin[:owner], plugin[:repo], plugin[:rev]
-  cmd = "nix-prefetch-zip http://github.com/#{owner}/#{repo}/archive/#{rev}.tar.gz"
 
-  puts ""
-  puts cmd
+  fetchExpr = <<-EOF
+with (import <nixpkgs> {}); fetchFromGitHub {
+  owner  = "#{owner}";
+  repo   = "#{repo}";
+  rev    = "#{rev}";
+  sha256 = "0000000000000000000000000000000000000000000000000000";
+}
+EOF
 
-  `nix-prefetch-zip http://github.com/#{owner}/#{repo}/archive/#{rev}.tar.gz`.chomp
-end
-
-def to_nix(plugins)
-  nix_src = <<-CODE
-{ fetchFromGitHub }:
-{
-CODE
-  plugins.each do |plugin|
-    nix_src << <<-CODE
-  #{plugin[:name]} = fetchFromGitHub {
-    owner  = "#{plugin[:owner]}";
-    repo   = "#{plugin[:repo]}";
-    rev    = "#{plugin[:rev]}";
-    sha256 = "#{plugin[:sha256]}";
-  };
-CODE
+  res = `nix-build --hash -E #{fetchExpr.shellescape} 2>&1`
+  match = res.match(/with sha256 hash '([^.]+)'/)
+  if match
+    hash = match.captures[0]
+  else
+    raise "Couldn't find sha256 hash in nix-build output:\n\n#{res}"
   end
-  nix_src << "}"
 
-  nix_src
+  hash
 end
 
 def get_key(plugin)
@@ -83,33 +78,41 @@ end
 def process!
   # create sha256 cache/lookup
   sha_lookup = {}
-  old_plugins = JSON.parse(s, :symbolize_names => true) rescue []
+  old_plugins = JSON.parse(SOURCES_PATH.read, :symbolize_names => true) rescue []
   old_plugins.each do |plugin|
     sha_lookup[get_key(plugin)] = plugin[:sha256]
   end
 
   # calculate sha256s
   $plugins.each do |plugin|
-    plugin[:sha256] = sha_lookup[get_key(plugin)] || calculate_sha256(plugin)
+    sha256 = sha_lookup[get_key(plugin)]
+    if sha256
+      puts "[CACHED] #{get_key(plugin)} -> #{sha256}"
+    else
+      sha256 = calculate_sha256(plugin)
+      puts "         #{get_key(plugin)} -> #{sha256}"
+    end
+    plugin[:sha256] = sha256
   end
 
   $plugins = $plugins.sort_by {|p| p[:name]}
 
-  # write nix
-  File.open("sources.nix", "w") do |f|
-    nix_src = to_nix($plugins)
-    f.write(nix_src)
-  end
-
   # dump json
-  File.open("sources.json", "w") do |f|
+  File.open(SOURCES_PATH, "w") do |f|
     json = JSON.pretty_generate($plugins)
     f.write(json)
   end
 end
 
 # TODO?
-# https://github.com/yssl/QFEnter
+# https://github.com/Rip-Rip/clang_complete/issues
+# https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
+# vim-multiple-cursors
+# https://github.com/NLKNguyen/papercolor-theme
+# https://github.com/sebdah/vim-delve
+# https://github.com/Shougo/deoplete.nvim
+# https://github.com/morhetz/gruvbox
+# https://github.com/romainl/vim-qf
 # https://github.com/mhinz/vim-galore
 # https://github.com/mhinz/dotfiles/blob/master/.vim/vimrc
 # https://github.com/linkux-it/vimgalaxy
@@ -120,6 +123,7 @@ end
 # https://github.com/pelodelfuego/vim-swoop
 # https://github.com/hkupty/nvimux
 # https://github.com/lambdalisue/gina.vim
+# https://github.com/lambdalisue/lista.nvim
 # https://github.com/mhartington/dotfiles/blob/master/config/nvim/init.vim
 # https://github.com/danielfgray/dotfiles/blob/master/vimrc
 # https://github.com/brooth/far.vim
@@ -133,6 +137,8 @@ end
 # https://github.com/hecal3/vim-leader-guide
 # https://github.com/joshdick/onedark.vim
 # https://github.com/MaxSt/FlatColor
+
+plugin "QFEnter", "https://github.com/yssl/QFEnter.git"
 
 plugin "vim-nix", "https://github.com/LnL7/vim-nix.git"
 
@@ -178,7 +184,7 @@ plugin "vim-repeat", "https://github.com/tpope/vim-repeat.git"
 plugin "vim-indent-object", "https://github.com/michaeljsmith/vim-indent-object.git"
 plugin "unimpaired", "https://github.com/tpope/vim-unimpaired.git"
 plugin "syntastic", "https://github.com/scrooloose/syntastic.git" # TODO: replace with https://github.com/w0rp/ale
-plugin "ale", "https://github.com/w0rp/ale.git" # TODO: replace with https://github.com/w0rp/ale
+#plugin "ale", "https://github.com/w0rp/ale.git"
 plugin "tabmerge", "https://github.com/vim-scripts/tabmerge.git"
 plugin "tabular", "https://github.com/godlygeek/tabular.git"
 #plugin "vim-easy-align", "https://github.com/junegunn/vim-easy-align.git" # TODO: check this out
@@ -201,7 +207,7 @@ plugin "alternate", "https://github.com/vim-scripts/a.vim.git"
 plugin "headerguard", "https://github.com/vim-scripts/headerguard.vim.git"
 
 #plugin "vim-polyglot", "https://github.com/sheerun/vim-polyglot.git"
-plugin "nginx-vim-syntax", "https://github.com/evanmiller/nginx-vim-syntax.git"
+# TODO: https://github.com/chr4/nginx.vim
 plugin "haml", "https://github.com/tpope/vim-haml.git"
 plugin "slim", "https://github.com/slim-template/vim-slim.git"
 plugin "scss", "https://github.com/cakebaker/scss-syntax.vim.git"

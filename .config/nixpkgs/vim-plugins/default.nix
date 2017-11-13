@@ -6,9 +6,10 @@
 , darwin
 , ycmd
 }:
-let sources = with pkgs; import ./sources.nix {
-      inherit fetchFromGitHub;
-    };
+let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
+    sources = lib.foldl' (acc: x: acc // {
+      "${x.name}" = pkgs.fetchFromGitHub { inherit (x) owner repo rev sha256; };
+    }) { } sourcesJson;
     vimHelpTagsDef = ''
       vimHelpTags(){
         if [ -d "$1/doc" ]; then
@@ -37,17 +38,9 @@ let sources = with pkgs; import ./sources.nix {
         name = "youcompleteme";
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
-          #OLD
-          #sha256 = "1k46xn1yx36ghj97mhvms5dp6q57jqv6iwyj4xdf8aq3w7pdcs5l";
-          #rev = "f44435b88ec98156d17869aa67ad15f38cfecbf3";
-          #NEW
           sha256 = "0b8r8jrsipp2cf1j5i55czzhgvyhvvd2cwr08ya2rwhix0nblczw";
           rev = "c881441385ea95d6ac8051593406c1c78d373329";
         };
-        #buildInputs = [ python cmake ] ++ lib.optionals stdenv.isLinux [
-        #  llvmPackages.clang-unwrapped
-        #  llvmPackages.llvm
-        #];
         patchPhase = ''
           substituteInPlace plugin/youcompleteme.vim --replace \
             "'ycm_path_to_python_interpreter', '''" \
@@ -101,7 +94,7 @@ let sources = with pkgs; import ./sources.nix {
         src = sources.command-t;
         buildInputs = [ perl ruby darwin.libobjc ];
         buildPhase = ''
-          pushd ruby/command-t
+          pushd ruby/command-t/ext/command-t
           ruby extconf.rb
           make
           popd
