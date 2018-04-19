@@ -242,53 +242,58 @@ ACK_PAGER_COLOR="$PAGER"
 
 # Colors from http://wiki.archlinux.org/index.php/Color_Bash_Prompt
 # misc
-NO_COLOR='\e[0m' #disable any colors
+ESC=$(printf "\e")
+NO_COLOR=$ESC'[0m' #disable any colors
 # regular colors
-BLACK='\e[0;30m'
-RED='\e[0;31m'
-GREEN='\e[0;32m'
-YELLOW='\e[0;33m'
-BLUE='\e[0;34m'
-MAGENTA='\e[0;35m'
-CYAN='\e[0;36m'
-WHITE='\e[0;37m'
+BLACK=$ESC'[0;30m'
+RED=$ESC'[0;31m'
+GREEN=$ESC'[0;32m'
+YELLOW=$ESC'[0;33m'
+BLUE=$ESC'[0;34m'
+MAGENTA=$ESC'[0;35m'
+CYAN=$ESC'[0;36m'
+WHITE=$ESC'[0;37m'
 # emphasized (bolded) colors
-EBLACK='\e[1;30m'
-ERED='\e[1;31m'
-EGREEN='\e[1;32m'
-EYELLOW='\e[1;33m'
-EBLUE='\e[1;34m'
-EMAGENTA='\e[1;35m'
-ECYAN='\e[1;36m'
-EWHITE='\e[1;37m'
+EBLACK=$ESC'[1;30m'
+ERED=$ESC'[1;31m'
+EGREEN=$ESC'[1;32m'
+EYELLOW=$ESC'[1;33m'
+EBLUE=$ESC'[1;34m'
+EMAGENTA=$ESC'[1;35m'
+ECYAN=$ESC'[1;36m'
+EWHITE=$ESC'[1;37m'
 # underlined colors
-UBLACK='\e[4;30m'
-URED='\e[4;31m'
-UGREEN='\e[4;32m'
-UYELLOW='\e[4;33m'
-UBLUE='\e[4;34m'
-UMAGENTA='\e[4;35m'
-UCYAN='\e[4;36m'
-UWHITE='\e[4;37m'
+UBLACK=$ESC'[4;30m'
+URED=$ESC'[4;31m'
+UGREEN=$ESC'[4;32m'
+UYELLOW=$ESC'[4;33m'
+UBLUE=$ESC'[4;34m'
+UMAGENTA=$ESC'[4;35m'
+UCYAN=$ESC'[4;36m'
+UWHITE=$ESC'[4;37m'
 # background colors
-BBLACK='\e[40m'
-BRED='\e[41m'
-BGREEN='\e[42m'
-BYELLOW='\e[43m'
-BBLUE='\e[44m'
-BMAGENTA='\e[45m'
-BCYAN='\e[46m'
-BWHITE='\e[47m'
+BBLACK=$ESC'[40m'
+BRED=$ESC'[41m'
+BGREEN=$ESC'[42m'
+BYELLOW=$ESC'[43m'
+BBLUE=$ESC'[44m'
+BMAGENTA=$ESC'[45m'
+BCYAN=$ESC'[46m'
+BWHITE=$ESC'[47m'
+
+_jobscount() {
+    local jobs=($(jobs -p))
+    local count=${#jobs[@]}
+    (($count)) && echo -n " (${count}j)"
+}
 
 prompt_color() {
     VCPROMPT=""
-    if test -n "$(command -v vcprompt)" ; then
-        VCPROMPT="\$(vcprompt)"
-    else
-        false
+    if test -n "$(command -v vcprompt)"; then
+        VCPROMPT=" \$(vcprompt)"
     fi
 
-    PS1="\n\[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w \[$EBLACK\]$VCPROMPT\[$NO_COLOR\] \n\[$ERED\]→ \[$NO_COLOR\]"
+    PS1="\n\[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EBLACK\]$VCPROMPT\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]→ \[$NO_COLOR\]"
     PS2="\[$ERED\]> \[$NO_COLOR\]"
 }
 
