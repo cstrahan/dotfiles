@@ -16,7 +16,7 @@ let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
           echo "generating helptags"
           ${vim}/bin/vim -n -u NONE -i NONE -n -e -s -c "helptags $1/doc" +quit! ||
             echo "WARNING: could not generate helpdocs for $name"
-        else [ -d "$1/doc" ]
+        else
           echo "skipping vim helptags: no doc folder found at $1/doc"
         fi
       }
