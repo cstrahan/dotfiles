@@ -141,7 +141,7 @@ let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
       command-t = stdenv.mkDerivation {
         name = "command-t";
         src = sources.command-t;
-        buildInputs = [ perl ruby darwin.libobjc ];
+        buildInputs = [ perl ruby ] ++ lib.optional (stdenv.isDarwin) darwin.libobjc;
         buildPhase = ''
           pushd ruby/command-t/ext/command-t
           ruby extconf.rb
