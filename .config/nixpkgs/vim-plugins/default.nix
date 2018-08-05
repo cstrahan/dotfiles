@@ -1,5 +1,5 @@
 { stdenv, lib, pkgs, callPackage
-, fetchzip, fetchgit
+, fetchurl, fetchzip, fetchgit, fetchFromGitHub
 , cmake
 , vim, ruby, python, perl, llvmPackages
 , which
@@ -8,13 +8,16 @@
 }:
 let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
     sources = lib.foldl' (acc: x: acc // {
-      "${x.name}" = pkgs.fetchFromGitHub { inherit (x) owner repo rev sha256; };
+      "${x.name}" = fetchFromGitHub { inherit (x) owner repo rev sha256; };
     }) { } sourcesJson;
     vimHelpTagsDef = ''
       vimHelpTags(){
         if [ -d "$1/doc" ]; then
+          echo "generating helptags"
           ${vim}/bin/vim -n -u NONE -i NONE -n -e -s -c "helptags $1/doc" +quit! ||
             echo "WARNING: could not generate helpdocs for $name"
+        else [ -d "$1/doc" ]
+          echo "skipping vim helptags: no doc folder found at $1/doc"
         fi
       }
     '';
@@ -26,14 +29,60 @@ let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
         fi
       '';
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/vim-plugins
         target=$out/vim-plugins/$name
         cp -r . $target
         ${vimHelpTagsDef}
         vimHelpTags $target
+
+        runHook postInstall
       '';
     };
+    languageclient-bin = fetchurl {
+        url = https://github.com/autozimu/LanguageClient-neovim/releases/download/0.1.106/languageclient-0.1.106-x86_64-unknown-linux-musl;
+        sha256 = "1qya0z6sgwakivafm2zhm3a2ndv5ds8k3qgpdhcpa2nmndhxwgpw";
+    };
     plugins = lib.mapAttrs mkVimPlugin sources // {
+      languageclient = stdenv.mkDerivation rec {
+        name = "LanguageClient-neovim-${version}";
+        version = "0.1.106";
+        src = fetchFromGitHub {
+          owner = "autozimu";
+          repo = "LanguageClient-neovim";
+          rev = version;
+          sha256 = "06hbp56c0b6y7jjvgf23d2gvvxhqrz53jgczfaqm6asplnn7c1dh";
+        };
+        buildPhase = "true";
+        configurePhase = "true";
+        installPhase = ''
+          runHook preInstall
+
+          target=$out/vim-plugins/$name
+          mkdir -p $target
+
+          mkdir -p $target/bin
+          cp -v ${languageclient-bin} $target/bin/languageclient
+          chmod +x $target/bin/languageclient
+
+          cp -va autoload $target
+          cp -va doc      $target
+          cp -va plugin   $target
+          cp -va rplugin  $target
+
+          ${vimHelpTagsDef}
+          vimHelpTags $target
+
+          runHook postInstall
+        '';
+        meta = with lib; {
+          description = "Language Server Protocol (LSP) support for vim and neovim";
+          homepage    = https://github.com/autozimu/LanguageClient-neovim;
+          license     = licenses.mit;
+          platforms   = platforms.linux;
+        };
+      };
       youcompleteme = stdenv.mkDerivation {
         name = "youcompleteme";
         src = fetchgit {
