@@ -18,6 +18,10 @@
 # readline config
 : ${INPUTRC=~/.inputrc}
 
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
 # ----------------------------------------------------------------------
 #  Nix
 # ----------------------------------------------------------------------
@@ -93,6 +97,8 @@ umask 0022
 # we want the various sbins on the path along with /usr/local/bin
 PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:$PATH"
+PATH="$PATH:$HOME/go/bin"
+PATH="$PATH:/usr/local/go/bin"
 
 # put ~/bin on PATH if you have it
 test -d "$HOME/bin" &&
@@ -201,6 +207,9 @@ export FTP_PASSIVE
 FIGNORE="~:CVS:#:.pyc:.swp:.swa:apache-solr-*"
 
 # history stuff
+# don't put duplicate lines or lines starting with space in the history
+# append to the history file, don't overwrite it
+shopt -s histappend
 HISTCONTROL=ignoreboth
 HISTFILESIZE=10000
 HISTSIZE=10000
@@ -209,14 +218,14 @@ HISTSIZE=10000
 # PAGER / EDITOR
 # ----------------------------------------------------------------------
 
-# See what we have to work with ...
-HAVE_VIM=$(command -v vim)
-HAVE_GVIM=$(command -v gvim)
-
 # EDITOR
-test -n "$HAVE_VIM" &&
-EDITOR=vim ||
-EDITOR=vi
+if command -v nvim >/dev/null 2&>1; then
+    EDITOR=nvim
+elif command -v vim >/dev/null 2&>1; then
+    EDITOR=vim
+else
+    EDITOR=vi
+fi
 export EDITOR
 
 # PAGER
@@ -380,6 +389,7 @@ test -z "$BASH_COMPLETION" && {
         for f in /usr/local/etc/bash_completion \
                  /usr/pkg/etc/bash_completion \
                  /opt/local/etc/bash_completion \
+                 /usr/share/bash-completion/bash_completion \
                  /etc/bash_completion
         do
             test -f $f && {
