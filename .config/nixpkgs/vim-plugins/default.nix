@@ -87,8 +87,8 @@ let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
         name = "youcompleteme";
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
-          sha256 = "0b8r8jrsipp2cf1j5i55czzhgvyhvvd2cwr08ya2rwhix0nblczw";
-          rev = "c881441385ea95d6ac8051593406c1c78d373329";
+          rev = "15362d9cb8ec054c929e9a202252825eabe47e58";
+          sha256 = "0nk3wqlz15pvm6hbla8shd3sskbdmwd1x9cq85la223h6s138hwy";
         };
         patchPhase = ''
           substituteInPlace plugin/youcompleteme.vim --replace \
@@ -131,7 +131,7 @@ let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
           make -f make_mac.mak
         '';
         installPhase = ''
-          ensureDir $out/vim-plugins
+          mkdir -p $out/vim-plugins
           target=$out/vim-plugins/$name
           cp -a ./ $target
           ${vimHelpTagsDef}
@@ -149,7 +149,7 @@ let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
           popd
         '';
         installPhase = ''
-          ensureDir $out/vim-plugins
+          mkdir -p $out/vim-plugins
           target=$out/vim-plugins/$name
           cp -a ./ $target
           ${vimHelpTagsDef}

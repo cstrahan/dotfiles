@@ -73,8 +73,8 @@
     "name": "command-t",
     "owner": "wincent",
     "repo": "Command-T",
-    "rev": "c5882de56f0ca3ce8e891c434f192519aca5c7bb",
-    "sha256": "0icvqqxvh1gfdzyhzrxbkc6fngrbfmn6d4lk9w5d7abfvvqgaxi1"
+    "rev": "7147ba92c9c1eef8269fd47d47ba636ce7f365a6",
+    "sha256": "180767d6qm3vp716k4zmqlfzn4sqyc32vh5095hha3pwdgrs2pcx"
   },
   {
     "name": "ctrlp",
