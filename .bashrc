@@ -6,6 +6,11 @@
 # https://github.com/ryanb/dotfiles/
 # PeepCode's Advanced Shell Scripting
 
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
 # the basics
 : ${HOME=~}
@@ -219,9 +224,9 @@ HISTSIZE=10000
 # ----------------------------------------------------------------------
 
 # EDITOR
-if command -v nvim >/dev/null 2&>1; then
+if command -v nvim >/dev/null 2>&1; then
     EDITOR=nvim
-elif command -v vim >/dev/null 2&>1; then
+elif command -v vim >/dev/null 2>&1; then
     EDITOR=vim
 else
     EDITOR=vi
@@ -299,7 +304,7 @@ _jobscount() {
 prompt_color() {
     VCPROMPT=""
     if test -n "$(command -v vcprompt)"; then
-        VCPROMPT=" \$(vcprompt)"
+        VCPROMPT=" \$(vcprompt -f '(%b)')"
     fi
 
     PS1="\n\[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EBLACK\]$VCPROMPT\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]→ \[$NO_COLOR\]"
