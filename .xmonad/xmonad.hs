@@ -51,12 +51,18 @@ myManageHook = composeAll $
     ++ [ manageDocks <+> manageHook defaultConfig ]
     ++ [ (isFullscreen)  --> doFullFloat ]
     ++ [ (isDialog) --> doCenterFloat ]
+    ++ [ (className =? "Pinentry" ) --> doCenterFloat ]
     ++ [ (className =? "Xmessage" <&&> appName =? "xmessage") --> doCenterFloat ]
     ++ [ (className =? "Blueman-manager") --> doCenterFloat ]
     {- ++ [ stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doCenterFloat ] -}
   where
     floaters = [ "xcalc", "wpa_gui" ]
     ignore   = [ "stalonetray" ]
+
+-- e.g. pinentry uses the _NET_WM_STATE_ABOVE state, while not using a dialog
+-- type ...
+isAbove :: Query Bool
+isAbove = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE"
 
 -- Fix Java/AWT GUI apps. Otherwise: export _JAVA_AWT_WM_NONREPARENTING=1
 fixAWT conf = conf { startupHook = startupHook conf <+> setWMName "LG3D" }
@@ -97,13 +103,3 @@ main = do
         } `additionalKeys`
         [ ((mod4Mask, xK_z), spawn "xset s activate")
         ]
-
--- NOTES
---
---   WM_NAME:
---     title =? "Hangouts"
---   WM_CLASS:
---     appName =? "crx_nckgahadagoaajjgafhacjanaoiihapd"
---     className =? "Chromium"
---   WM_WINDOW_ROLE:
---     stringProperty "WM_WINDOW_ROLE" =? "pop-up"
