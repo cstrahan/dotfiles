@@ -1,15 +1,17 @@
 #
 # Executes commands at login pre-zshrc.
 #
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
 
 #
 # Nix
 #
 
-if [[ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
+if [[ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+  # Multi-user (i.e. daemon) setups.
+  # Normally /etc/profile.d/nix.sh sources this, but that only applies to
+  # login shells, so we'll go ahead and source that here.
+  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+elif [[ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
   . $HOME/.nix-profile/etc/profile.d/nix.sh;
 fi
 
