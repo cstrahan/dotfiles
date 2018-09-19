@@ -20,7 +20,7 @@ import XMonad.Util.EZConfig (additionalKeys)
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
-import System.Taffybar.Hooks.PagerHints (pagerHints)
+import System.Taffybar.Support.PagerHints (pagerHints)
 
 -- TODO: `loginctl lock-session` vs `xset s activate`?
 
