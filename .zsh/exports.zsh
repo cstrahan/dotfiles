@@ -1,7 +1,7 @@
 export GIT_EDITOR="vim"
 export EDITOR="vim"
 
-if [[ "$(uname)" == "Darwin" ]] & [[ -e $HOME/.nix-profile/etc/ca-bundle.crt ]]; then
+if [[ "$(uname)" == "Darwin" && -e $HOME/.nix-profile/etc/ca-bundle.crt ]]; then
   export GIT_SSL_CAINFO=$HOME/.nix-profile/etc/ca-bundle.crt
 fi
 
