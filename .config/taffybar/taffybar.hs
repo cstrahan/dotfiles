@@ -25,17 +25,18 @@ main = do
                                                       ]
                                   , graphLabel = Just "cpu"
                                   }
-  let clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
+  let
       workspaces = workspacesNew defaultWorkspacesConfig
-      wea = weatherNew (defaultWeatherConfig "KMSN") 10
       mpris2 = mpris2New
+      clock = textClockNew Nothing "<span fgcolor='orange'>%a %b %_d %H:%M</span>" 1
+      batt = textBatteryNew "$percentage$%"
       mem = pollingGraphNew memCfg 1 memCallback
       cpu = pollingGraphNew cpuCfg 0.5 cpuCallback
       tray = sniTrayNew
-      batt = textBatteryNew "$percentage$ ($time$)"
       simpleConfig = defaultSimpleTaffyConfig
                        { startWidgets = [ workspaces, mpris2 ]
-                       , endWidgets = [ wea, clock, batt, mem, cpu, tray ]
+                       , endWidgets = [ clock, batt, mem, cpu, tray ]
+                       , barHeight = 40
                        }
 
   simpleTaffybar simpleConfig

@@ -13,14 +13,16 @@ fi
 xset r rate 220 50
 
 # Use window compositor to fix tearing.
-compton --config /dev/null --backend glx --paint-on-overlay --glx-no-stencil --vsync opengl-swc &
+compton --config /dev/null --backend glx --glx-no-stencil --vsync opengl-swc --paint-on-overlay &
 
 # Set default mouse cursor.
 xsetroot -cursor_name left_ptr
 
 # upower-notify &
+# udiskie --appindicator --tray &
+status-notifier-watcher &
 sxhkd &
-nm-applet &
+nm-applet --indicator &
 taffybar &
 dropbox &
 xss-lock slimlock &
