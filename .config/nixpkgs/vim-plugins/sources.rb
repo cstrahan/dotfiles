@@ -18,6 +18,7 @@ require 'tmpdir'
 require 'io/console'
 require 'shellwords'
 require 'pathname'
+require 'open3'
 
 SOURCES_PATH = Pathname.new(__FILE__).expand_path.dirname.join("sources.json")
 
@@ -51,21 +52,13 @@ end
 def calculate_sha256(plugin)
   owner, repo, rev = plugin[:owner], plugin[:repo], plugin[:rev]
 
-  fetchExpr = <<-EOF
-with (import <nixpkgs> {}); fetchFromGitHub {
-  owner  = "#{owner}";
-  repo   = "#{repo}";
-  rev    = "#{rev}";
-  sha256 = "0000000000000000000000000000000000000000000000000000";
-}
-EOF
+  out, err, s = Open3.capture3("nix-prefetch-url --unpack https://github.com/#{owner}/#{repo}/archive/#{rev}.tar.gz")
 
-  res = `nix-build --hash -E #{fetchExpr.shellescape} 2>&1`
-  match = res.match(/with sha256 hash '([^.]+)'/)
-  if match
-    hash = match.captures[0]
+  hash = nil
+  if s.success?
+    hash = out.chomp
   else
-    raise "Couldn't find sha256 hash in nix-build output:\n\n#{res}"
+    raise "Couldn't get sha256 hash for #{owner}/#{repo}:\n\n#{err}"
   end
 
   hash
