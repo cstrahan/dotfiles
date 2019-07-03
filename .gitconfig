@@ -6,6 +6,8 @@
 	gpgsign = true
 [core]
   excludesfile = ~/.gitexcludes
+  # less -R needed to prevent mismatched indentation between added/removed lines
+  pager = less --tabs=4 -RFXm
 [color]
   ui = true
 [init]
@@ -23,6 +25,7 @@
 [branch]
   autosetuprebase = always
 [alias]
+  fdiff = -c color.ui=always -c core.pager=\"diff-so-fancy | less --tabs=4 -RFXm\" diff
   st = status
   ci = commit
   co = checkout
@@ -82,3 +85,16 @@
 #  compactionHeuristic = 1
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+	frag = magenta bold
+	func = cyan
