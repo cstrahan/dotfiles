@@ -2,6 +2,11 @@ let g:solarized_termcolors=256
 let g:indentLine_color_term = 239
 let g:indentLine_color_gui  = '#A4E57E'
 
+set guicursor=
+set guicursor+=n-v-c-sm:block-blinkon1
+set guicursor+=i-ci-ve:ver25
+set guicursor+=r-cr-o:hor20
+
 " true-color support
 if has("termguicolors")
   set termguicolors
@@ -14,8 +19,8 @@ if has("termguicolors")
 endif
 
 " scheme
-colorscheme hybrid
- 
+colorscheme nord
+
 " set terminal title
 set title
 autocmd BufEnter * let &titlestring = 'vim (' . expand("%:t") . ')'
