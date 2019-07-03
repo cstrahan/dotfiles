@@ -157,6 +157,7 @@ plugin "voom", "https://github.com/vim-scripts/VOoM.git"
 
 plugin "vim-sayonara", "https://github.com/mhinz/vim-sayonara.git"
 
+plugin "nord-vim", "https://github.com/arcticicestudio/nord-vim.git"
 plugin "vim-solarized8", "https://github.com/lifepillar/vim-solarized8.git"
 plugin "tomorrow-night", "https://github.com/chriskempson/vim-tomorrow-theme.git"
 plugin "base16", "https://github.com/chriskempson/base16-vim.git"

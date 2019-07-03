@@ -1,12 +1,13 @@
 { stdenv, lib, pkgs, callPackage
 , fetchurl, fetchzip, fetchgit, fetchFromGitHub
 , cmake
-, vim, ruby, python, perl, llvmPackages
+, vim, ruby, python, python3, perl, llvmPackages
 , which
 , darwin
 , ycmd
-}:
-let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
+}@args:
+let ycmd = args.ycmd.override { python = python3; };
+    sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
     sources = lib.foldl' (acc: x: acc // {
       "${x.name}" = fetchFromGitHub { inherit (x) owner repo rev sha256; };
     }) { } sourcesJson;
@@ -93,7 +94,7 @@ let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
         patchPhase = ''
           substituteInPlace plugin/youcompleteme.vim --replace \
             "'ycm_path_to_python_interpreter', '''" \
-            "'ycm_path_to_python_interpreter', '${python}/bin/python'"
+            "'ycm_path_to_python_interpreter', '${python3}/bin/python3'"
         '';
         configurePhase = "true";
         buildPhase = ''
