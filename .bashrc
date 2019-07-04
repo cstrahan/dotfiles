@@ -28,6 +28,19 @@ esac
 shopt -s checkwinsize
 
 # ----------------------------------------------------------------------
+# VTE terminal support
+# ----------------------------------------------------------------------
+
+if [[ $TERM == xterm-termite ]]; then
+    vte_script=$(find /etc/profile.d -maxdepth 1 -name "vte*.sh" | sort -rV  | head -n 1)
+    if [[ -n "$vte_script" ]]; then
+        . "$vte_script"
+        __vte_prompt_command
+    fi
+    unset vte_script
+fi
+
+# ----------------------------------------------------------------------
 #  Nix
 # ----------------------------------------------------------------------
 
