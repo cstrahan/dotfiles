@@ -55,6 +55,16 @@ elif [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
     . $HOME/.nix-profile/etc/profile.d/nix.sh
 fi
 
+if [[ -n "$NIX_USER_PROFILE_DIR" ]]; then
+    if [ -e "$NIX_USER_PROFILE_DIR" ]; then
+        export NIX_PATH=nixpkgs=$NIX_USER_PROFILE_DIR/channels/nixpkgs:$NIX_USER_PROFILE_DIR/channels
+    fi
+
+    # Handle Nixpkgs using a differenct glibc locale archive version
+    # https://github.com/NixOS/nixpkgs/issues/38991#issuecomment-496332104
+    export LOCALE_ARCHIVE_2_27="$(nix-build --no-out-link "<nixpkgs>" -A glibcLocales)/lib/locale/locale-archive"
+fi
+
 # ----------------------------------------------------------------------
 #  RVM
 # ----------------------------------------------------------------------
