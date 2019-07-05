@@ -320,8 +320,8 @@ prompt_color() {
         VCPROMPT=" \$(vcprompt -f '(%b)')"
     fi
 
-    PS1="\n\[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EBLACK\]$VCPROMPT\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]→ \[$NO_COLOR\]"
-    PS2="\[$ERED\]> \[$NO_COLOR\]"
+    PS1="\n\[$ERED\]┏━ \[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EBLACK\]$VCPROMPT\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]┗┫\[$NO_COLOR\] "
+    PS2="\[$ERED\] ┃ \[$NO_COLOR\]"
 }
 
 # ----------------------------------------------------------------------
