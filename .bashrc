@@ -315,18 +315,6 @@ PS2="\[$ERED\] ┃ \[$NO_COLOR\]"
 # ----------------------------------------------------------------------
 
 if [ "$UNAME" = Darwin ]; then
-    # put ports on the paths if /opt/local exists
-    test -x /opt/local -a ! -L /opt/local && {
-        PORTS=/opt/local
-
-        # setup the PATH and MANPATH
-        PATH="$PORTS/bin:$PORTS/sbin:$PATH"
-        MANPATH="$PORTS/share/man:$MANPATH"
-
-        # nice little port alias
-        alias port="sudo nice -n +18 $PORTS/bin/port"
-    }
-
     test -x /usr/pkg -a ! -L /usr/pkg && {
         PATH="/usr/pkg/sbin:/usr/pkg/bin:$PATH"
         MANPATH="/usr/pkg/share/man:$MANPATH"
@@ -442,21 +430,6 @@ alias ll="ls -l"
 alias l.="ls -d .*"
 
 # --------------------------------------------------------------------
-# MISC COMMANDS
-# --------------------------------------------------------------------
-
-# push SSH public key to another box
-push_ssh_cert() {
-    local _host
-    test -f ~/.ssh/id_dsa.pub || ssh-keygen -t dsa
-    for _host in "$@";
-    do
-        echo $_host
-        ssh $_host 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_dsa.pub
-    done
-}
-
-# --------------------------------------------------------------------
 # PATH MANIPULATION FUNCTIONS
 # --------------------------------------------------------------------
 
@@ -518,31 +491,6 @@ test -r ~/.shenv &&
 # condense PATH entries
 PATH=$(puniq $PATH)
 MANPATH=$(puniq $MANPATH)
-
-# -------------------------------------------------------------------
-# RUBY
-# -------------------------------------------------------------------
-
-# http://www.engineyard.com/blog/2011/tuning-the-garbage-collector-with-ruby-1-9-2/
-# http://www.engineyard.com/blog/2010/mri-memory-allocation-a-primer-for-developers/
-# http://www.viddler.com/v/87ae120a
-
-ruby_gc_default () {
-    export RUBY_HEAP_MIN_SLOTS           = 10000
-    export RUBY_HEAP_SLOTS_INCREMENT     = 10000
-    export RUBY_HEAP_SLOTS_GROWTH_FACTOR = 1.8
-    export RUBY_GC_MALLOC_LIMIT          = 8000000
-    export RUBY_HEAP_FREE_MIN            = 4096
-}
-
-ruby_gc_tuned () {
-    export RUBY_HEAP_MIN_SLOTS           = 1250000
-    export RUBY_HEAP_SLOTS_INCREMENT     = 100000
-    export RUBY_HEAP_SLOTS_GROWTH_FACTOR = 1
-    export RUBY_GC_MALLOC_LIMIT          = 30000000
-    export RUBY_HEAP_FREE_MIN            = 12500
-}
-
 
 # ----------------------------------------------------------------------
 #  Local Settings
