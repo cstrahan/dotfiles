@@ -7,6 +7,58 @@
 "let g:UltiSnipsJumpBackwardTrigger = ...
 "let g:UltiSnipsListSnippets = ...
 
+""" lightline
+
+"return the syntax highlight group under the cursor ''
+function! LightlineCurrentHighlight()
+    let name = synIDattr(synID(line('.'),col('.'),1),'name')
+    if name == ''
+        return ''
+    else
+        return '[' . name . ']'
+    endif
+endfunction
+
+" https://github.com/itchyny/lightline.vim/issues/96<Paste>
+function! LightlineFugitive() abort
+  if &filetype ==# 'help'
+    return ''
+  endif
+  if has_key(b:, 'lightline_fugitive') && reltimestr(reltime(b:lightline_fugitive_)) =~# '^\s*0\.[0-5]'
+    return b:lightline_fugitive
+  endif
+  try
+    if exists('*fugitive#head')
+      let head = fugitive#head()
+    else
+      return ''
+    endif
+    " unicode chars:  ⎇
+    let b:lightline_fugitive = " " . head
+    let b:lightline_fugitive_ = reltime()
+    return b:lightline_fugitive
+  catch
+  endtry
+  return ''
+endfunction
+
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified', 'gitbranch' ] ],
+      \   'right': [ [ 'lineinfo' ],
+      \              [ 'percent' ],
+      \              [ 'highlight', 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'LightlineFugitive',
+      \   'highlight': 'LightlineCurrentHighlight'
+      \ },
+      \ }
+      " \ 'separator': {'left': '', 'right': ''},
+      " \ 'subseparator': { 'left': '', 'right': '' },
+
 """ Eclim
 
 " vim-classpath stomps on eclim's Java command

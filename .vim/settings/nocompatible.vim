@@ -37,6 +37,5 @@ call pathogen#infect("~/.nix-profile/vim-plugins/{}")
 
 source $HOME/.vim/settings/ui.vim
 source $HOME/.vim/settings/editing.vim
-source $HOME/.vim/settings/statusline.vim
 source $HOME/.vim/settings/plugins.vim
 source $HOME/.vim/settings/autocommands.vim
