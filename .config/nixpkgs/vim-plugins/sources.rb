@@ -131,6 +131,8 @@ end
 # https://github.com/joshdick/onedark.vim
 # https://github.com/MaxSt/FlatColor
 
+plugin "lightline", "https://github.com/itchyny/lightline.vim"
+
 plugin "QFEnter", "https://github.com/yssl/QFEnter.git"
 
 plugin "vim-nix", "https://github.com/LnL7/vim-nix.git"

@@ -252,6 +252,13 @@
     "sha256": "0rhqcdry8ycnfbg534q4b3hm78an7mnqhiazxik7k08a57dk9dbm"
   },
   {
+    "name": "lightline",
+    "owner": "itchyny",
+    "repo": "lightline.vim",
+    "rev": "80c242c3c5394fd5143b5d7e2741989ba04ae46a",
+    "sha256": "0k42wzwwhiqj6i1s2zdkmdnay85kwl4aw129nwcrrc4ahqhhh9fy"
+  },
+  {
     "name": "liquid",
     "owner": "tpope",
     "repo": "vim-liquid",
