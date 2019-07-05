@@ -1,4 +1,7 @@
 if has("autocmd")
+  " misspelling things in git commit messages is embarrassing
+  autocmd FileType gitcommit setlocal spell
+
   " make special characters red (trail, nbsp, extends, precedes)
   "autocmd BufEnter * :hi SpecialKey ctermfg=161 guifg=161
 
