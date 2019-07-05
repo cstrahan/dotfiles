@@ -198,18 +198,6 @@ fi
 # ENVIRONMENT CONFIGURATION
 # ----------------------------------------------------------------------
 
-# detect interactive shell
-case "$-" in
-    *i*) INTERACTIVE=yes ;;
-    *)   unset INTERACTIVE ;;
-esac
-
-# detect login shell
-case "$0" in
-    -*) LOGIN=yes ;;
-    *)  unset LOGIN ;;
-esac
-
 # enable en_US locale w/ utf-8 encodings if not already configured
 : ${LANG:="en_US.UTF-8"}
 : ${LANGUAGE:="en"}
@@ -314,15 +302,13 @@ _jobscount() {
     (($count)) && echo -n " (${count}j)"
 }
 
-prompt_color() {
-    VCPROMPT=""
-    if test -n "$(command -v vcprompt)"; then
-        VCPROMPT=" \$(vcprompt -f '(%b)')"
-    fi
+VCPROMPT=""
+if test -n "$(command -v vcprompt)"; then
+    VCPROMPT=" \$(vcprompt -f '(%b)')"
+fi
 
-    PS1="\n\[$ERED\]┏━ \[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EBLACK\]$VCPROMPT\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]┗┫\[$NO_COLOR\] "
-    PS2="\[$ERED\] ┃ \[$NO_COLOR\]"
-}
+PS1="\n\[$ERED\]┏━ \[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EMAGENTA\]$VCPROMPT\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]┗┫\[$NO_COLOR\] "
+PS2="\[$ERED\] ┃ \[$NO_COLOR\]"
 
 # ----------------------------------------------------------------------
 # MACOS X / DARWIN SPECIFIC
@@ -402,7 +388,7 @@ alias gplo='git pull origin HEAD'
 
 test -z "$BASH_COMPLETION" && {
     bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-    test -n "$PS1" && test $bmajor -gt 1 && {
+    test $bmajor -gt 1 && {
         # search for a bash_completion file to source
         for f in /usr/local/etc/bash_completion \
                  /usr/pkg/etc/bash_completion \
@@ -533,10 +519,6 @@ test -r ~/.shenv &&
 PATH=$(puniq $PATH)
 MANPATH=$(puniq $MANPATH)
 
-# Use the color prompt by default when interactive
-test -n "$PS1" &&
-prompt_color
-
 # -------------------------------------------------------------------
 # RUBY
 # -------------------------------------------------------------------
@@ -574,7 +556,7 @@ fi
 # MOTD / FORTUNE
 # -------------------------------------------------------------------
 
-test -n "$INTERACTIVE" -a -n "$LOGIN" && {
+if [[ $- == *i* && $0 == -* ]]; then
     uname -npsr
     uptime
-}
+fi
