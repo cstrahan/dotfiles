@@ -1,12 +1,12 @@
 { stdenv, lib, pkgs, callPackage
 , fetchurl, fetchzip, fetchgit, fetchFromGitHub
 , cmake
-, vim, ruby, python, python3, perl, llvmPackages
+, vim, ruby, python, python3, perl, llvmPackages_7
 , which
 , darwin
 , ycmd
 }@args:
-let ycmd = args.ycmd.override { python = python3; };
+let ycmd = args.ycmd.override { python = python3; llvmPackages = llvmPackages_7; };
     sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
     sources = lib.foldl' (acc: x: acc // {
       "${x.name}" = fetchFromGitHub { inherit (x) owner repo rev sha256; };
@@ -88,10 +88,10 @@ let ycmd = args.ycmd.override { python = python3; };
         name = "youcompleteme";
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
-          rev = "15362d9cb8ec054c929e9a202252825eabe47e58";
-          sha256 = "0nk3wqlz15pvm6hbla8shd3sskbdmwd1x9cq85la223h6s138hwy";
+          rev = "94cfacd11ff97643a32409671fed072e3b1412d6";
+          sha256 = "0zrypbd8cwrcasg8pf7zxm7v64vq0jjqa3gwkywp76x9shxi6dk5";
         };
-        patchPhase = ''
+        postPatch = ''
           substituteInPlace plugin/youcompleteme.vim --replace \
             "'ycm_path_to_python_interpreter', '''" \
             "'ycm_path_to_python_interpreter', '${python3}/bin/python3'"

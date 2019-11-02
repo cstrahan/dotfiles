@@ -1,3 +1,5 @@
+set bind-tty-special-chars Off
+
 set visible-stats on
 
 set bell-style visible
@@ -10,7 +12,6 @@ set show-all-if-unmodified on
 
 set expand-tilde off
 
-set bind-tty-special-chars off
 $if mode=emacs
-  "\C-w": backward-kill-word 
+  "\C-w": backward-kill-word
 $endif
