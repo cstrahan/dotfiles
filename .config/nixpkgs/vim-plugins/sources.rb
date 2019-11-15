@@ -98,6 +98,16 @@ def process!
 end
 
 # TODO?
+# https://github.com/dyng/ctrlsf.vim
+# https://github.com/Shougo/dein.vim
+# https://github.com/Xuyuanp/vimrc/blob/master/plugins.vim
+# https://github.com/Shougo/unite-outline
+# https://github.com/francoiscabrol/ranger.vim
+# https://github.com/iberianpig/ranger-explorer.vim
+# https://github.com/jistr/vim-nerdtree-tabs
+# https://github.com/Xuyuanp/nerdtree-git-plugin
+# https://github.com/PickRelated/dotfiles/blob/master/vim/.vimrc
+#
 # https://github.com/Rip-Rip/clang_complete/issues
 # https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
 # vim-multiple-cursors
@@ -144,7 +154,7 @@ plugin "vinarise", "https://github.com/Shougo/vinarise.vim.git"
 #plugin "vim-lion", "https://github.com/tommcdo/vim-lion.git"
 plugin "vim-exchange", "https://github.com/tommcdo/vim-exchange.git"
 
-plugin "ctrlp", "https://github.com/kien/ctrlp.vim.git"
+plugin "ctrlp", "https://github.com/ctrlpvim/ctrlp.vim.git"
 plugin "command-t", "https://github.com/wincent/Command-T.git"
 plugin "nerdtree", "https://github.com/scrooloose/nerdtree.git"
 plugin "ack", "https://github.com/mileszs/ack.vim.git" # TODO: nix in favor of vim-grepper
