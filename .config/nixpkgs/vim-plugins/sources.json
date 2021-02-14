@@ -357,13 +357,6 @@
     "sha256": "19w0cvrka3klxbh9z1yq873v92rhmxdj68bdnqxzwybf24hgsk9g"
   },
   {
-    "name": "puppet",
-    "owner": "ajf",
-    "repo": "puppet-vim",
-    "rev": "eccd0e9e1e93acd92e4fd9a67ad07d8737ab4b47",
-    "sha256": "0gsfx6f04x0b6vyl7g8lraxc6ilzn2h1l56aqcbs8s5fnqs2lsn1"
-  },
-  {
     "name": "purescript-vim",
     "owner": "raichoo",
     "repo": "purescript-vim",
