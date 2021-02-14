@@ -17,6 +17,8 @@ esac
 : ${LOGNAME=$(id -un)}
 : ${UNAME=$(uname)}
 
+export GOPATH=$HOME/go
+
 # complete hostnames from this file
 : ${HOSTFILE=~/.ssh/known_hosts}
 
@@ -26,6 +28,26 @@ esac
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
+
+# ----------------------------------------------------------------------
+# ghcup
+# ----------------------------------------------------------------------
+
+[ -f ~/.ghcup/env ] && source ~/.ghcup/env
+
+# ----------------------------------------------------------------------
+# Node Version Manager
+# ----------------------------------------------------------------------
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# ----------------------------------------------------------------------
+# Deno
+# ----------------------------------------------------------------------
+
+export DENO_INSTALL="/home/cstrahan/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
 
 # ----------------------------------------------------------------------
 # VTE terminal support
@@ -41,29 +63,48 @@ if [[ $TERM == xterm-termite ]]; then
 fi
 
 # ----------------------------------------------------------------------
+#  direnv
+# ----------------------------------------------------------------------
+if command -v direnv >/dev/null 2>&1; then
+    eval "$(direnv hook bash)"
+fi
+
+# ----------------------------------------------------------------------
 #  Nix
 # ----------------------------------------------------------------------
+
+nixSetup () {
+    # Handle Nixpkgs using a different glibc locale archive version
+    # https://github.com/NixOS/nixpkgs/issues/38991#issuecomment-496332104
+    export LOCALE_ARCHIVE_2_27="$(nix-build --no-out-link "<nixpkgs>" -A glibcLocales)/lib/locale/locale-archive"
+    export LOCALE_ARCHIVE_2_32="$LOCALE_ARCHIVE_2_27"
+}
 
 # Handle non-NixOS installs.
 if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
     # Multi-user (i.e. daemon) setups.
+
     # Normally /etc/profile.d/nix.sh sources this, but that only applies to
     # login shells, so we'll go ahead and source that here.
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+    nixSetup
 elif [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
     # Single-user installs.
+
     . $HOME/.nix-profile/etc/profile.d/nix.sh
+
+    nixSetup
 fi
 
-if [[ -n "$NIX_USER_PROFILE_DIR" ]]; then
-    if [ -e "$NIX_USER_PROFILE_DIR" ]; then
-        export NIX_PATH=nixpkgs=$NIX_USER_PROFILE_DIR/channels/nixpkgs:$NIX_USER_PROFILE_DIR/channels
-    fi
+unset -f nixSetup
 
-    # Handle Nixpkgs using a differenct glibc locale archive version
-    # https://github.com/NixOS/nixpkgs/issues/38991#issuecomment-496332104
-    export LOCALE_ARCHIVE_2_27="$(nix-build --no-out-link "<nixpkgs>" -A glibcLocales)/lib/locale/locale-archive"
-fi
+# ----------------------------------------------------------------------
+#  nodejs/npm
+# ----------------------------------------------------------------------
+
+# make global packages install in ~/.local/bin (note: this conflicts with nvm)
+#export npm_config_prefix=$HOME/.local
 
 # ----------------------------------------------------------------------
 #  RVM
@@ -128,9 +169,9 @@ PATH="/usr/local/bin:$PATH"
 PATH="$PATH:$HOME/go/bin"
 PATH="$PATH:/usr/local/go/bin"
 
-# put ~/bin on PATH if you have it
-test -d "$HOME/bin" &&
-PATH="$HOME/bin:$PATH"
+# put ~/.local/bin on PATH if you have it
+test -d "$HOME/.local/bin" &&
+PATH="$HOME/.local/bin:$PATH"
 
 # Try to determine color support
 # http://vim.wikia.com/wiki/256_colors_in_vim
@@ -225,8 +266,11 @@ FIGNORE="~:CVS:#:.pyc:.swp:.swa:apache-solr-*"
 # history stuff
 # don't put duplicate lines or lines starting with space in the history
 # append to the history file, don't overwrite it
-shopt -s histappend
+# https://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history<Paste>
 HISTCONTROL=ignoreboth
+shopt -s histappend
+# append to history when printing the prompt
+PROMPT_COMMAND="builtin history -a${PROMPT_COMMAND:+";"}$PROMPT_COMMAND"
 HISTFILESIZE=10000
 HISTSIZE=10000
 
@@ -237,8 +281,10 @@ HISTSIZE=10000
 # EDITOR
 if command -v nvim >/dev/null 2>&1; then
     EDITOR=nvim
+    alias vi=nvim
 elif command -v vim >/dev/null 2>&1; then
     EDITOR=vim
+    alias vi=vim
 else
     EDITOR=vi
 fi
@@ -380,6 +426,9 @@ alias gfix='git fix'
 alias gplu='git pull upstream HEAD'
 alias gplo='git pull origin HEAD'
 
+alias k='kubectl'
+complete -F __start_kubectl k
+
 # ----------------------------------------------------------------------
 # BASH COMPLETION
 # ----------------------------------------------------------------------
@@ -439,9 +488,9 @@ alias ls="command ls $LS_COMMON"
 alias ll="ls -l"
 alias l.="ls -d .*"
 
-# --------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # PATH MANIPULATION FUNCTIONS
-# --------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 # Usage: pls [<var>]
 # List path entries of PATH or environment variable <var>.
@@ -490,9 +539,9 @@ puniq () {
     cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
 }
 
-# -------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # USER SHELL ENVIRONMENT
-# -------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 # source ~/.shenv now if it exists
 test -r ~/.shenv &&
@@ -510,11 +559,13 @@ if [[ -s ~/.bash/local.sh ]] ; then
     source ~/.bash/local.sh
 fi
 
-# -------------------------------------------------------------------
+# ----------------------------------------------------------------------
 # MOTD / FORTUNE
-# -------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 if [[ $- == *i* && $0 == -* ]]; then
     uname -npsr
     uptime
 fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
