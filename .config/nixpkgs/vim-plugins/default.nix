@@ -6,8 +6,7 @@
 , darwin
 , ycmd
 }@args:
-let ycmd = args.ycmd.override { python = python3; llvmPackages = llvmPackages_7; };
-    sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
+let sourcesJson = builtins.fromJSON (builtins.readFile ./sources.json);
     sources = lib.foldl' (acc: x: acc // {
       "${x.name}" = fetchFromGitHub { inherit (x) owner repo rev sha256; };
     }) { } sourcesJson;
@@ -88,8 +87,8 @@ let ycmd = args.ycmd.override { python = python3; llvmPackages = llvmPackages_7;
         name = "youcompleteme";
         src = fetchgit {
           url = "https://github.com/Valloric/YouCompleteMe.git";
-          rev = "94cfacd11ff97643a32409671fed072e3b1412d6";
-          sha256 = "0zrypbd8cwrcasg8pf7zxm7v64vq0jjqa3gwkywp76x9shxi6dk5";
+          rev = "e252f6512f1f4a9a515dfc42401baf30a5fe72c8";
+          sha256 = "0f0jrap8ivrywkzc7rwy27p6ssa5kll26df251ipsg1frmc7fmjm";
         };
         postPatch = ''
           substituteInPlace plugin/youcompleteme.vim --replace \
