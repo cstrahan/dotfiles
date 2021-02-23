@@ -296,12 +296,23 @@ _jobscount() {
     (($count)) && echo -n " (${count}j)"
 }
 
+# disable the default virtualenv prompt change
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+_virtualenv_info(){
+    # Get Virtual Env
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        # Strip out the path and just leave the env name
+        echo " (venv:${VIRTUAL_ENV##*/})"
+    fi
+}
+
 VCPROMPT=""
 if test -n "$(command -v vcprompt)"; then
     VCPROMPT=" \$(vcprompt -f '(%b)')"
 fi
 
-PS1="\n\[$ERED\]┏━ \[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EMAGENTA\]$VCPROMPT\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]┗┫\[$NO_COLOR\] "
+PS1="\n\[$ERED\]┏━ \[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EMAGENTA\]$VCPROMPT\[$EYELLOW\]\$(_virtualenv_info)\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]┗┫\[$NO_COLOR\] "
 PS2="\[$ERED\] ┃ \[$NO_COLOR\]"
 
 # ----------------------------------------------------------------------
