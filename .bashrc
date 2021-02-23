@@ -30,6 +30,41 @@ export GOPATH=$HOME/go
 shopt -s checkwinsize
 
 # ----------------------------------------------------------------------
+#  Nix
+# ----------------------------------------------------------------------
+
+nixSetup () {
+    # Handle Nixpkgs using a different glibc locale archive version
+    # https://github.com/NixOS/nixpkgs/issues/38991#issuecomment-496332104
+    #
+    # Use home-manager if available.
+    if [ -e $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then
+        . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+    else
+        export LOCALE_ARCHIVE_2_27="$(nix-build --no-out-link "<nixpkgs>" -A glibcLocales)/lib/locale/locale-archive"
+    fi
+}
+
+# Handle non-NixOS installs.
+if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+    # Multi-user (i.e. daemon) setups.
+
+    # Normally /etc/profile.d/nix.sh sources this, but that only applies to
+    # login shells, so we'll go ahead and source that here.
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+    nixSetup
+elif [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+    # Single-user installs.
+
+    . $HOME/.nix-profile/etc/profile.d/nix.sh
+
+    nixSetup
+fi
+
+unset -f nixSetup
+
+# ----------------------------------------------------------------------
 # bash-preexec
 # ----------------------------------------------------------------------
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
@@ -73,36 +108,6 @@ fi
 if command -v direnv >/dev/null 2>&1; then
     eval "$(direnv hook bash)"
 fi
-
-# ----------------------------------------------------------------------
-#  Nix
-# ----------------------------------------------------------------------
-
-nixSetup () {
-    # Handle Nixpkgs using a different glibc locale archive version
-    # https://github.com/NixOS/nixpkgs/issues/38991#issuecomment-496332104
-    export LOCALE_ARCHIVE_2_27="$(nix-build --no-out-link "<nixpkgs>" -A glibcLocales)/lib/locale/locale-archive"
-    export LOCALE_ARCHIVE_2_32="$LOCALE_ARCHIVE_2_27"
-}
-
-# Handle non-NixOS installs.
-if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
-    # Multi-user (i.e. daemon) setups.
-
-    # Normally /etc/profile.d/nix.sh sources this, but that only applies to
-    # login shells, so we'll go ahead and source that here.
-    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-
-    nixSetup
-elif [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-    # Single-user installs.
-
-    . $HOME/.nix-profile/etc/profile.d/nix.sh
-
-    nixSetup
-fi
-
-unset -f nixSetup
 
 # ----------------------------------------------------------------------
 #  nodejs/npm
