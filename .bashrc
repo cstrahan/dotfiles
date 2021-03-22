@@ -45,8 +45,11 @@ nixSetup () {
     fi
 }
 
-# Handle non-NixOS installs.
-if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+if [ -e /etc/os-release ] && grep -q ID=nixos /etc/os-release; then
+    # Handle NixOS installs.
+    :
+
+elif [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
     # Multi-user (i.e. daemon) setups.
 
     # Normally /etc/profile.d/nix.sh sources this, but that only applies to
