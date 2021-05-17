@@ -93,9 +93,20 @@ fi
 _nix_shell_path=$(echo ${PATH#$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:} | grep -o '^\(/nix/store/[^:]\+\(:\|$\)\)*')
 
 # ----------------------------------------------------------------------
+# cargo installed programs
+# ----------------------------------------------------------------------
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# ----------------------------------------------------------------------
 # bash-preexec
 # ----------------------------------------------------------------------
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+
+# ----------------------------------------------------------------------
+# python
+# ----------------------------------------------------------------------
+
+export PYTHONSTARTUP=$HOME/.pystartup
 
 # ----------------------------------------------------------------------
 # ghcup
@@ -257,7 +268,7 @@ fi
 export EDITOR
 
 # PAGER
-LESS="FirSwX"
+LESS="irSwX"
 export LESS
 
 if test -n "$(command -v less)" ; then
@@ -413,6 +424,11 @@ alias gplo='git pull origin HEAD'
 alias k='kubectl'
 complete -F __start_kubectl k
 
+daemonize() {
+    ( cd / ; setsid -w "$@" & >/dev/null 2>&1 ; disown )
+}
+
+
 # ----------------------------------------------------------------------
 # BASH COMPLETION
 # ----------------------------------------------------------------------
@@ -453,7 +469,7 @@ else
     LS_COMMON="-hBG"
 fi
 
-# if the dircolors utility is available, set that up to
+# if the dircolors utility is available, set that up too
 dircolors="$(type -P gdircolors dircolors | head -1)"
 test -n "$dircolors" && {
     COLORS=/etc/DIR_COLORS
