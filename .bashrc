@@ -30,42 +30,67 @@ export GOPATH=$HOME/go
 shopt -s checkwinsize
 
 # ----------------------------------------------------------------------
+#  XDG
+# ----------------------------------------------------------------------
+
+export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/local/share/:/usr/share/}
+
+# ----------------------------------------------------------------------
 #  Nix
 # ----------------------------------------------------------------------
 
-nixSetup () {
-    # Handle Nixpkgs using a different glibc locale archive version
-    # https://github.com/NixOS/nixpkgs/issues/38991#issuecomment-496332104
-    #
-    # Use home-manager if available.
-    if [ -e $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then
-        . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-    else
-        export LOCALE_ARCHIVE_2_27="$(nix-build --no-out-link "<nixpkgs>" -A glibcLocales)/lib/locale/locale-archive"
-    fi
-}
-
 if [ -e /etc/os-release ] && grep -q ID=nixos /etc/os-release; then
     # Handle NixOS installs.
+    # Nothing to do, currently.
     :
+else
+    # Handle non-NixOS installs.
+    # If we haven't sourced the profile script, try to do so now.
+    if [ -z "${__ETC_PROFILE_NIX_SOURCED:-}" ]; then
+        if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+            # Multi-user (i.e. daemon) setups.
+            # Normally /etc/profile.d/nix.sh sources this, but that only applies to
+            # login shells, so we'll go ahead and source that here.
+            . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+            __ETC_PROFILE_NIX_SOURCED=1
+        elif [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+            # Single-user installs.
+            . $HOME/.nix-profile/etc/profile.d/nix.sh
+            __ETC_PROFILE_NIX_SOURCED=1
+        fi
+    fi
 
-elif [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
-    # Multi-user (i.e. daemon) setups.
+    # At this point, if we have Nix installed, the profile should be sourced.
+    if [ -n "${__ETC_PROFILE_NIX_SOURCED:-}" ]; then
+        # Handle Nixpkgs using a different glibc locale archive version
+        # https://github.com/NixOS/nixpkgs/issues/38991#issuecomment-496332104
+        #
+        # Use home-manager if available.
+        if [ -e $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]; then
+            . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+        fi
 
-    # Normally /etc/profile.d/nix.sh sources this, but that only applies to
-    # login shells, so we'll go ahead and source that here.
-    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        # If we've installed the glibc locale archive in the default profile,
+        # point there.
+        #
+        # To install:
+        #
+        #   sudo NIX_PROFILE=/nix/var/nix/profiles/default $(which nix-env) -iA nixpkgs.glibcLocales
+        if [ -e /nix/var/nix/profiles/default/lib/locale/locale-archive ]; then
+            export LOCALE_ARCHIVE_2_27=/nix/var/nix/profiles/default/lib/locale/locale-archive
+        fi
 
-    nixSetup
-elif [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-    # Single-user installs.
-
-    . $HOME/.nix-profile/etc/profile.d/nix.sh
-
-    nixSetup
+        # ensure bash completions work (among other things)
+        export XDG_DATA_DIRS=$XDG_DATA_DIRS${XDG_DATA_DIRS:+:}$HOME/.nix-profile/share:/nix/var/nix/profiles/default/share
+    fi
 fi
 
-unset -f nixSetup
+# Hold on to any nix store paths at the front of $PATH.
+# These likely came from `nix-shell` or `nix develop`,
+# so we want to make sure they stay in front after we add our paths.
+#
+# Note that we remove the two paths that the nix profile script prefixes.
+_nix_shell_path=$(echo ${PATH#$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:} | grep -o '^\(/nix/store/[^:]\+\(:\|$\)\)*')
 
 # ----------------------------------------------------------------------
 # bash-preexec
@@ -315,7 +340,14 @@ if test -n "$(command -v vcprompt)"; then
     VCPROMPT=" \$(vcprompt -f '(%b)')"
 fi
 
-PS1="\n\[$ERED\]┏━ \[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EMAGENTA\]$VCPROMPT\[$EYELLOW\]\$(_virtualenv_info)\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]┗┫\[$NO_COLOR\] "
+# cheesy test for being in a `nix shell`.
+# nix-shell sets IN_NIX_SHELL=1, while `nix shell` does not.
+# just assume that having /nix/store/... on the path means we're in a nix shell.
+if [[ "$PATH" =~ (^|:)/nix/store ]]; then
+    IN_NIX_SHELL=1
+fi
+
+PS1="\n\[$ERED\]┏━ \[$EGREEN\]\u\[$EWHITE\]@\[$EGREEN\]\h\[$NO_COLOR\]:\[$EBLUE\]\w\[$EMAGENTA\]$VCPROMPT\[$EYELLOW\]\$(_virtualenv_info)\[$EYELLOW\]${IN_NIX_SHELL:+ (nix-shell)}\[$ERED\]\$(_jobscount)\[$NO_COLOR\] \n\[$ERED\]┗┫\[$NO_COLOR\] "
 PS2="\[$ERED\] ┃ \[$NO_COLOR\]"
 
 # ----------------------------------------------------------------------
@@ -498,6 +530,11 @@ puniq () {
 # source ~/.shenv now if it exists
 test -r ~/.shenv &&
 . ~/.shenv
+
+# Ensure executables from nix shell take precedence.
+# The final colon will be there - no need to add here.
+PATH=$_nix_shell_path$PATH
+unset _nix_shell_path
 
 # condense PATH entries
 PATH=$(puniq $PATH)
