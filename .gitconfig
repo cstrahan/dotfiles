@@ -1,27 +1,21 @@
-[user]
-	name = Charles Strahan
-	email = charles@cstrahan.com
-	signingkey = BB47AB4B8489B5A5
-[commit]
-	gpgsign = false
 [core]
 	excludesfile = ~/.gitexcludes
 	# less -R needed to prevent mismatched indentation between added/removed lines
-  #pager = less --tabs=4 -RFXm
-  pager = delta
+	#pager = less --tabs=4 -RFXm
+	pager = delta
 #[interactive]
 #	diffFilter = delta --color-only
 [delta]
-    plus-color = "#012800"
-    minus-color = "#340001"
-    syntax-theme = Monokai Extended
-    # would love to add side-by-side, but that 
-    features = line-numbers decorations
-    whitespace-error-style = 22 reverse
+	plus-color = "#012800"
+	minus-color = "#340001"
+	syntax-theme = Monokai Extended
+	# would love to add side-by-side, but that 
+	features = line-numbers decorations
+	whitespace-error-style = 22 reverse
 [delta "decorations"]
-    commit-decoration-style = bold yellow box ul
-    file-style = bold yellow ul
-    file-decoration-style = none
+	commit-decoration-style = bold yellow box ul
+	file-style = bold yellow ul
+	file-decoration-style = none
 [color]
 	ui = true
 [init]
@@ -127,9 +121,5 @@
 [status]
 	short = true
 	branch
-[includeIf "gitdir:~/src/work"]
-	path = .gitconfig-work
-[includeIf "gitdir:~/go/src/github.com/deciphernow"]
-	path = .gitconfig-work
-[includeIf "gitdir:~/go/src/github.com/DecipherNow"]
-	path = .gitconfig-work
+[include]
+	path = .gitconfig.local
