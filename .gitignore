@@ -6,6 +6,7 @@
 !/.bash_profile
 !/.config
 /.config/*
+!/.config/alacritty
 !/.config/dunst
 !/.config/nixpkgs
 !/.config/ranger

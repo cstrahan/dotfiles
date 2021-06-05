@@ -1,0 +1,122 @@
+# Configuration for Alacritty, the GPU enhanced terminal emulator.
+
+#scrolling:
+  # Maximum number of lines in the scrollback buffer.
+  # Specifying '0' will disable scrolling.
+  #history: 10000
+
+  # Scrolling distance multiplier.
+  #multiplier: 3
+
+# Font configuration
+font:
+  # Normal (roman) font face
+  normal:
+    # Font family
+    #
+    # Default:
+    #   - (macOS) Menlo
+    #   - (Linux/BSD) monospace
+    #   - (Windows) Consolas
+    family: PragmataPro Mono
+
+    # The `style` can be specified to pick a specific face.
+    #style: Regular
+
+  # Point size
+  size: 12.0
+
+  # Offset is the extra space around each character. `offset.y` can be thought
+  # of as modifying the line spacing, and `offset.x` as modifying the letter
+  # spacing.
+  offset:
+    x: 0
+    y: -1
+    #y: 0
+
+# If `true`, bold text is drawn using the bright color variants.
+draw_bold_text_with_bright_colors: true
+
+# GNOME Terminal Tango Dark
+colors:
+  primary:
+    #background: '0x2e3436'
+    #foreground: '0xd3d7cf'
+    background: '0x000000'
+    foreground: '0xffffff'
+
+  normal:
+    black: '0x2e3436'
+    red: '0xcc0000'
+    green: '0x4e9a06'
+    yellow: '0xc4a000'
+    blue: '0x3465a4'
+    magenta: '0x75507b'
+    cyan: '0x06989a'
+    white: '0xd3d7cf'
+
+  bright:
+    black: '0x555753'
+    red: '0xef2929'
+    green: '0x8ae234'
+    yellow: '0xfce94f'
+    blue: '0x729fcf'
+    magenta: '0xad7fa8'
+    cyan: '0x34e2e2'
+    white: '0xeeeeec'
+
+# Background opacity
+#
+# Window opacity as a floating point number from `0.0` to `1.0`.
+# The value `0.0` is completely transparent and `1.0` is opaque.
+#background_opacity: 1.0
+
+#selection:
+  # This string contains all characters that are used as separators for
+  # "semantic words" in Alacritty.
+  #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
+
+  # When set to `true`, selected text will be copied to the primary clipboard.
+  #save_to_clipboard: false
+
+cursor:
+  # Cursor style
+  style:
+    # Cursor shape
+    #
+    # Values for `shape`:
+    #   - ▇ Block
+    #   - _ Underline
+    #   - | Beam
+    shape: Block
+
+    # Cursor blinking state
+    #
+    # Values for `blinking`:
+    #   - Never: Prevent the cursor from ever blinking
+    #   - Off: Disable blinking by default
+    #   - On: Enable blinking by default
+    #   - Always: Force the cursor to always blink
+    blinking: Always
+
+  # Cursor blinking interval in milliseconds.
+  #blink_interval: 750
+
+# Live config reload (changes require restart)
+live_config_reload: true
+
+# Shell
+#
+# You can set `shell.program` to the path of your favorite shell, e.g.
+# `/bin/fish`. Entries in `shell.args` are passed unmodified as arguments to the
+# shell.
+#
+# Default:
+#   - (macOS) /bin/bash --login
+#   - (Linux/BSD) user login shell
+#   - (Windows) powershell
+#shell:
+#  program: /bin/bash
+#  args:
+#    - --login
+
