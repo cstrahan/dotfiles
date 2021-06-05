@@ -3,15 +3,36 @@
 	email = charles@cstrahan.com
 	signingkey = BB47AB4B8489B5A5
 [commit]
-	gpgsign = true
+	gpgsign = false
 [core]
 	excludesfile = ~/.gitexcludes
 	# less -R needed to prevent mismatched indentation between added/removed lines
-	pager = less --tabs=4 -RFXm
+  #pager = less --tabs=4 -RFXm
+  pager = delta
+#[interactive]
+#	diffFilter = delta --color-only
+[delta]
+    plus-color = "#012800"
+    minus-color = "#340001"
+    syntax-theme = Monokai Extended
+    # would love to add side-by-side, but that 
+    features = line-numbers decorations
+    whitespace-error-style = 22 reverse
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow ul
+    file-decoration-style = none
 [color]
 	ui = true
 [init]
 	templatedir = ~/.git_template
+	defaultBranch = main
+#[diff]
+#	compactionHeuristic = 1
+[difftool "kaleidoscope"]
+	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+[difftool "diffmerge"]
+	cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
 [merge]
 	tool = "fugitive"
 [mergetool.vimdiff3]
@@ -20,11 +41,16 @@
 	cmd = gvim -d -c 'wincmd J' "$MERGED" "$LOCAL" "$BASE" "$REMOTE"
 [mergetool.fugitive]
 	cmd = vim -f -c "Gdiff" "$MERGED"
-[difftool "kaleidoscope"]
-	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+[mergetool "diffmerge"]
+	cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
+	trustExitCode = true
 [branch]
 	autosetuprebase = always
 [alias]
+
+	frbi = "!f() { git rebase -i $(git log --pretty=oneline --color=always | fzf --ansi | cut -d ' ' -f1)^ ; }; f"
+	sw = !git checkout $(git branch -a --format '%(refname:short)' | sed 's~origin/~~' | sort | uniq | fzf)
+
 	fdiff = -c color.ui=always -c core.pager=\"diff-so-fancy | less --tabs=4 -RFXm\" diff
 	branches = for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)\" refs/remotes
 	pf = push --force-with-lease
@@ -69,27 +95,22 @@
 	#addcw = -c interactive.diffFilter=\"git diff --color-words\" add -p
 [push]
 	default = current
-[difftool "diffmerge"]
-	cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
-[mergetool "diffmerge"]
-	cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
-	trustExitCode = true
 [http]
-#	sslCAInfo = ~/certs/-.363-283.io
+#	sslCAInfo = ...
 [gpg]
 	program = gpg
-#[interactive]
-#	diffFilter = /run/current-system/sw/share/git/contrib/diff-highlight/diff-highlight
+
+
 #[pager]
 #	log = diff-highlight | less
 #	show = diff-highlight | less
 #	diff = diff-highlilight | less
-#[diff]
-#	compactionHeuristic = 1
-[url "git@github.com:deciphernow"]
+[url "git@github.com:deciphernow/"]
 	insteadOf = https://github.com/deciphernow/
-[url "git@github.com:DecipherNow"]
+[url "git@github.com:DecipherNow/"]
 	insteadOf = https://github.com/DecipherNow/
+[url "git@github.com:greymatter-io/"]
+	insteadOf = https://github.com/greymatter-io/
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
@@ -103,3 +124,12 @@
 	whitespace = red reverse
 	frag = magenta bold
 	func = cyan
+[status]
+	short = true
+	branch
+[includeIf "gitdir:~/src/work"]
+	path = .gitconfig-work
+[includeIf "gitdir:~/go/src/github.com/deciphernow"]
+	path = .gitconfig-work
+[includeIf "gitdir:~/go/src/github.com/DecipherNow"]
+	path = .gitconfig-work
