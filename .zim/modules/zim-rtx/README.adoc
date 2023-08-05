@@ -1,0 +1,6 @@
+= zim-rtx
+
+https://github.com/zimfw/zimfw[zim module] for https://github.com/jdxcode/rtx[rtx].
+
+TIP: Add this module as early as possible to the `.zimrc` file.
+  This allows other plugins to detect apps installed by `rtx`.

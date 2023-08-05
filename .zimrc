@@ -1,0 +1,66 @@
+zmodule joke/zim-rtx --use degit
+
+# Start configuration added by Zim install {{{
+#
+# This is not sourced during shell startup, and it's only used to configure the
+# zimfw plugin manager.
+#
+
+#
+# Modules
+#
+
+# Sets sane Zsh built-in environment options.
+zmodule environment --use degit
+# Provides handy git aliases and functions.
+zmodule git --use degit
+# Applies correct bindkeys for input events.
+zmodule input --use degit
+# Sets a custom terminal title.
+zmodule termtitle --use degit
+# Utility aliases and functions. Adds colour to ls, grep and less.
+zmodule utility --use degit
+
+#
+# Prompt
+#
+
+# Exposes to prompts how long the last command took to execute, used by asciiship.
+zmodule duration-info --use degit
+# Exposes git repository status information to prompts, used by asciiship.
+zmodule git-info --use degit
+# A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
+zmodule asciiship --use degit
+
+#
+# Completion
+#
+
+# Additional completion definitions for Zsh.
+zmodule zsh-users/zsh-completions --fpath src --use degit
+# Enables and configures smart and extensive tab completion.
+# completion must be sourced after all modules that add completion definitions.
+zmodule completion --use degit
+
+#
+# fzf-tab needs to be loaded after compinit, but before plugins which will wrap widgets,
+# such as zsh-autosuggestions or fast-syntax-highlighting
+#
+zmodule Aloxaf/fzf-tab --use degit --source fzf-tab.plugin.zsh
+
+#
+# Modules that must be initialized last
+#
+
+# Fish-like syntax highlighting for Zsh.
+# zsh-users/zsh-syntax-highlighting must be sourced after completion
+zmodule zsh-users/zsh-syntax-highlighting --use degit
+# Fish-like history search (up arrow) for Zsh.
+# zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-history-substring-search --use degit
+# Fish-like autosuggestions for Zsh.
+zmodule zsh-users/zsh-autosuggestions --use degit
+# }}} End configuration added by Zim install
+
+# Configures fzf for faster fetching of files and directories names.
+zmodule fzf --use degit

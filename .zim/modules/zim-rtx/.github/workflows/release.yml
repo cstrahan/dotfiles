@@ -1,0 +1,19 @@
+name: release
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+    steps:
+    - uses: GoogleCloudPlatform/release-please-action@v3.7
+      id: release
+      with:
+        release-type: simple
+        signoff: Joke de Buhr <joke@xckk.de>
+        token: ${{ secrets.RELEASE_PLEASE }}
