@@ -1,176 +1,84 @@
-#!/bin/bash
+#!/bin/sh
 
-# https://github.com/skwp/dotfiles/blob/master/osx
-# https://github.com/mathiasbynens/dotfiles/blob/master/.osx
+# Reference: https://macos-defaults.com/
 
-# Disable mute-on-typing in google hangout
-#defaults write com.google.googletalkplugind exps -string [\"-tm\"]
+# Put the Dock on the left of the screen
+defaults write com.apple.dock "orientation" -string "left"
 
-# Enable performance mode (increase maxproc et al limits; requires OS X Server)
-sudo serverinfo --setperfmode YES
+# Autohide the Dock when the mouse is out
+defaults write com.apple.dock "autohide" -bool "true"
 
-# Disable the warning before emptying the Trash
-defaults write com.apple.finder WarnOnEmptyTrash -bool false
+# Remove the autohide delay, the Dock appears instantly
+defaults write com.apple.dock "autohide-delay" -float "0"
 
-# When performing a search, search the current folder by default
-defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+# Remove the Dock autohide animation
+defaults write com.apple.dock "autohide-time-modifier" -float "0"
 
-# Show debug menu in Disk Utility (to reveal all partitions)
-defaults write com.apple.DiskUtility DUDebugMenuEnabled 1
+# Do not display recent apps in the Dock
+defaults write com.apple.dock "show-recents" -bool "false"
 
-# Show all files in Finder
-defaults write com.apple.finder AppleShowAllFiles -bool true
+# Minimize does scale animation
+defaults write com.apple.dock "mineffect" -string "scale"
 
-# Add "Quit" to the Finder menu
-defaults write com.apple.Finder QuitMenuItem -bool true
+# Restart dock
+killall Dock
 
-# Disable menu bar transparency
-defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
 
-# Always show scrollbars
-defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+# Safari: Show full website URL
+defaults write com.apple.safari "ShowFullURLInSmartSearchField" -bool "true" && killall Safari
 
-# Expand save panel by default
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+# Restart Safari
+killall Safari
 
-# Disable the “Are you sure you want to open this application?” dialog
-defaults write com.apple.LaunchServices LSQuarantine -bool false
 
-# Disable opening and closing window animations
-defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+# Display the Finder "Quit" option
+defaults write com.apple.finder "QuitMenuItem" -bool "true"
 
-# Increase window resize speed for Cocoa applications
-defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+# Show all file extensions inside the Finder
+defaults write NSGlobalDomain "AppleShowAllExtensions" -bool "true"
 
-# Enable subpixel font rendering on non-Apple LCDs
-defaults write NSGlobalDomain AppleFontSmoothing -int 2
+# Show hidden files inside the Finder
+defaults write com.apple.finder "AppleShowAllFiles" -bool "true"
 
-# Disable press-and-hold for keys in favor of key repeat
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# Add pathbar to bottom of Finder
+defaults write com.apple.finder "ShowPathbar" -bool "true"
 
-# Set a blazingly fast keyboard repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 0
+# Default to list view
+defaults write com.apple.finder "FXPreferredViewStyle" -string "Nlsv"
 
-# Set shorter key repeat delay
-defaults write NSGlobalDomain InitialKeyRepeat -int 12
+# Keep folders on top when searching by name
+defaults write com.apple.finder "_FXSortFoldersFirst" -bool "true"
 
-# Disable auto-correct
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+# Default to searching the current folder
+defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf"
 
-# Require password immediately after sleep or screen saver begins
-defaults write com.apple.screensaver askForPassword -int 1
-defaults write com.apple.screensaver askForPasswordDelay -int 0
+# Do not display the warning when changing file extension
+defaults write com.apple.finder "FXEnableExtensionChangeWarning" -bool "false"
 
-# Disable window animations and Get Info animations in Finder
-defaults write com.apple.finder DisableAllAnimations -bool true
+# Remove the delay when hovering the toolbar title
+defaults write NSGlobalDomain "NSToolbarTitleViewRolloverDelay" -float "0"
 
-# Show all filename extensions in Finder
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+# Desktop: keep folders on top
+defaults write com.apple.finder "_FXSortFoldersFirstOnDesktop" -bool "true"
 
-# Show status bar in Finder
-defaults write com.apple.finder ShowStatusBar -bool true
+# Restart 
+killall Finder
 
-# Allow text selection in Quick Look
-defaults write com.apple.finder QLEnableTextSelection -bool true
 
-# Display full POSIX path as Finder window title
-defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+# Key auto-repeat enabled
+defaults write NSGlobalDomain "ApplePressAndHoldEnabled" -bool "false"
 
-# Avoid creating .DS_Store files on network volumes
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
-# Disable the warning when changing a file extension
-defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+# Short key repeat delay
+defaults write com.apple.Accessibility "KeyRepeatDelay" -float "0.5"
 
-# Show item info below desktop icons
-/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
+# Faster key repeat speed
+defaults write com.apple.Accessibility "KeyRepeatInterval" -float "0.083333333"
 
-# Enable snap-to-grid for desktop icons
-/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 
-# Enable AirDrop over Ethernet and on unsupported Macs running Lion
-defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
+# Remap capslock to control
+#
+# Keycodes:
+#   https://developer.apple.com/library/archive/technotes/tn2450/_index.html#//apple_ref/doc/uid/DTS40017618-CH1-KEY_TABLE_USAGES
+hidutil property --set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc": 0x700000039, "HIDKeyboardModifierMappingDst": 0x7000000E0}]}'
 
-# Show the ~/Library folder
-chflags nohidden ~/Library
-
-# Place the dock on the left edge of the screen
-defaults write com.apple.Dock orientation -string left
-
-# Show indicator lights for open applications in the Dock
-defaults write com.apple.dock show-process-indicators -bool true
-
-# Don’t animate opening applications from the Dock
-defaults write com.apple.dock launchanim -bool false
-
-# Remove the auto-hiding Dock delay
-defaults write com.apple.Dock autohide-delay -float 0
-
-# Remove the animation when hiding/showing the Dock (actually, make it fast. If you want to remove, use 0)
-defaults write com.apple.dock autohide-time-modifier -float 0.25
-
-# Enable the 2D Dock
-defaults write com.apple.dock no-glass -bool true
-
-# Automatically hide and show the Dock
-defaults write com.apple.dock autohide -bool true
-
-# Disable "middle mouse opens dashboard"
-defaults write com.apple.dashboard mcx-disabled -boolean YES
-
-# Disable shadow in screenshots
-defaults write com.apple.screencapture disable-shadow -bool true
-
-# Disable Safari’s thumbnail cache for History and Top Sites
-defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
-
-# Enable Safari’s debug menu
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-
-# Make Safari’s search banners default to Contains instead of Starts With
-defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
-
-# Remove useless icons from Safari’s bookmarks bar
-defaults write com.apple.Safari ProxiesInBookmarksBar "()"
-
-# Add a context menu item for showing the Web Inspector in web views
-defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
-
-# Enable the debug menu in Address Book
-defaults write com.apple.addressbook ABShowDebugMenu -bool true
-
-# Enable the debug menu in iCal
-defaults write com.apple.iCal IncludeDebugMenu -bool true
-
-# Only use UTF-8 in Terminal.app
-defaults write com.apple.terminal StringEncodings -array 4
-
-# Disable the Ping sidebar in iTunes
-defaults write com.apple.iTunes disablePingSidebar -bool true
-
-# Disable all the other Ping stuff in iTunes
-defaults write com.apple.iTunes disablePing -bool true
-
-# Make ⌘ + F focus the search input in iTunes
-defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F"
-
-# Disable send and reply animations in Mail.app
-defaults write com.apple.Mail DisableReplyAnimations -bool true
-defaults write com.apple.Mail DisableSendAnimations -bool true
-
-# Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
-defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
-
-# Remap capslock to control on all connected keyboards
-ioreg -n IOHIDKeyboard -r |\
-  grep -E 'VendorID"|ProductID' |\
-  awk '{ print $4 }' |\
-  paste -s -d'-\n' - |\
-  xargs -I{} /usr/bin/defaults -currentHost write -g "com.apple.keyboard.modifiermapping.{}-0" -array "<dict><key>HIDKeyboardModifierMappingDst</key><integer>2</integer><key>HIDKeyboardModifierMappingSrc</key><integer>0</integer></dict>"
-
-# Reset Launchpad
-#[ -e ~/Library/Application\ Support/Dock/*.db ] && rm ~/Library/Application\ Support/Dock/*.db
-
-# Kill affected applications
-for app in Finder Dock Mail Safari iTunes iCal Address\ Book SystemUIServer; do killall "$app" > /dev/null 2>&1; done
-echo "OSX Hacks Done. Note that some of these changes require a logout/restart to take effect."
