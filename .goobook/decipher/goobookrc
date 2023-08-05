@@ -1,7 +1,0 @@
-[DEFAULT]
-oauth_db_filename: ~/.goobook/decipher/auth.json
-client_secret_filename: ~/.goobook/decipher/client_secret.json
-cache_filename: ~/.goobook/decipher/cache
-cache_expiry_hours: 24
-filter_groupless_contacts: yes
-default_group: Unsorted

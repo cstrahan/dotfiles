@@ -1,4 +1,0 @@
-" Only configure stuff if we're not running in vi compatible mode.
-if version >= 500
-  source $HOME/.vim/settings/nocompatible.vim
-endif

@@ -1,6 +1,0 @@
-#Triggers file version 1.0
--privmsgs -nocase -tags 'BitlBee' -regexp '</?(a|b|body|div|em|font|i|s|u)( +\w+=".*?")*>' -replace '' 
--privmsgs -nocase -tags 'BitlBee' -regexp '&amp;' -replace '&' 
--privmsgs -nocase -tags 'BitlBee' -regexp '&gt;' -replace '>' 
--privmsgs -nocase -tags 'BitlBee' -regexp '&lt;' -replace '<' 
--privmsgs -nocase -tags 'BitlBee' -regexp '&quot;' -replace '"' 
