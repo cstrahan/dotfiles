@@ -2,6 +2,10 @@
 
 # Reference: https://macos-defaults.com/
 
+nuke() {
+  command killall "$1" >/dev/null 2>&1
+}
+
 # Put the Dock on the left of the screen
 defaults write com.apple.dock "orientation" -string "left"
 
@@ -21,14 +25,14 @@ defaults write com.apple.dock "show-recents" -bool "false"
 defaults write com.apple.dock "mineffect" -string "scale"
 
 # Restart dock
-killall Dock
+nuke Dock
 
 
 # Safari: Show full website URL
-defaults write com.apple.safari "ShowFullURLInSmartSearchField" -bool "true" && killall Safari
+defaults write com.apple.safari "ShowFullURLInSmartSearchField" -bool "true"
 
 # Restart Safari
-killall Safari
+nuke Safari
 
 
 # Display the Finder "Quit" option
@@ -62,7 +66,7 @@ defaults write NSGlobalDomain "NSToolbarTitleViewRolloverDelay" -float "0"
 defaults write com.apple.finder "_FXSortFoldersFirstOnDesktop" -bool "true"
 
 # Restart 
-killall Finder
+nuke Finder
 
 
 # Key auto-repeat enabled
