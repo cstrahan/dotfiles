@@ -1,5 +1,18 @@
+# ignore everything,
+# unless otherwise indicated below.
 /*
 
+# even if we white list a directory,
+# we still don't ever want these.
+*.DS_Store
+*.dylib
+*.jpeg
+*.jpg
+*.png
+*.so
+*.zwc
+
+# whitelist
 !/.Xdefaults
 !/.Xresources
 !/.ackrc
@@ -8,18 +21,15 @@
 /.config/*
 !/.config/alacritty
 !/.config/dunst
+!/.config/lf
 !/.config/nixpkgs
 !/.config/ranger
 !/.config/sxhkd
 !/.config/taffybar
 !/.config/taffybar/taffybar.hs
 !/.config/taffybar/taffybar.rc
-!/.config/vdirsyncer
-/.config/vdirsyncer/*
-!/.config/vdirsyncer/config
-!/.config/vdirsyncer/passwd
 !/.config/zathura
-!/.ctags
+!/.config/wezterm
 !/.dircolors
 !/.gdb
 !/.gdb/**/*
@@ -36,34 +46,16 @@
 !/.gnupg/dirmngr.conf
 !/.gnupg/gpg.conf
 !/.gnupg/gpg-agent.conf
-!/.goobook
-/.goobook/*
-!/.goobook/decipher
-/.goobook/decipher/*
-!/.goobook/decipher/goobookrc
 !/.inputrc
 !/.irbrc
 !/.irssi
 !/.mbsyncrc
 !/.msmtprc
-!/.mutt
-/.mutt/*
-!/.mutt/accounts
-!/.mutt/gpg.rc
-!/.mutt/mailcap
-!/.mutt/muttrc
-!/.mutt/signature
-!/.mutt/theme
 !/.nixpkgs
 !/.notmuch-config
 !/.pystartup
 !/.tmux
-!/.vim
-!/.vimrc
-!/.xmonad
-/.xmonad/*
-!/.xmonad/**/*.hs
-!/.xsession
+!/.zim
 !/.zlogin
 !/.zprofile
 !/.zsh
