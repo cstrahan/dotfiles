@@ -4,6 +4,9 @@
 # completions
 fpath+=~/.zfunc
 
+# display raw control chars
+export LESS="-r"
+
 # macOS path setup
 if [[ ${OSTYPE} == darwin* ]]; then
   # see "Discussion: longterm Homebrew prefix on Apple Silicon Macs": https://github.com/Homebrew/brew/issues/9177
@@ -127,7 +130,7 @@ if [[ ${OSTYPE} == darwin* ]]; then
 
   # mouse support, if we have less from homebrew
   if [[ $commands[less] = $HOMEBREW_PREFIX/bin/less ]]; then
-    export LESS="--mouse"
+    export LESS="$LESS --mouse"
     export PAGER="$HOMEBREW_PREFIX/bin/less"
     export DELTA_PAGER="$PAGER"
     export MANPAGER="$PAGER"
