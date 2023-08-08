@@ -1,26 +1,53 @@
 # TODO: https://github.com/romkatv/gitstatus
+# TDOO: https://egeek.me/2020/04/18/enabling-locate-on-osx/
 
 # completions
 fpath+=~/.zfunc
 
 # macOS path setup
 if [[ ${OSTYPE} == darwin* ]]; then
-  # inline the results of: /usr/local/bin/brew shellenv
-  export HOMEBREW_PREFIX="/usr/local";
-  export HOMEBREW_CELLAR="/usr/local/Cellar";
-  export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
-  export PATH="/usr/local/bin:/usr/local/sbin${PATH+:$PATH}";
-  export MANPATH="/usr/local/share/man${MANPATH+:$MANPATH}:";
-  export INFOPATH="/usr/local/share/info:${INFOPATH:-}";
+  # see "Discussion: longterm Homebrew prefix on Apple Silicon Macs": https://github.com/Homebrew/brew/issues/9177
+  # inline the results of either:
+  #   /usr/local/bin/brew shellenv
+  #   /opt/homebrew/bin/brew shellenv
+  if [[ -d /opt/homebrew ]]; then
+    export HOMEBREW_PREFIX="/opt/homebrew";
+    export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+    export HOMEBREW_REPOSITORY="/opt/homebrew";
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+    export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+  elif [[ -d /usr/local/Homebrew ]]; then
+    export HOMEBREW_PREFIX="/usr/local";
+    export HOMEBREW_CELLAR="/usr/local/Cellar";
+    export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
+    export PATH="/usr/local/bin:/usr/local/sbin${PATH+:$PATH}";
+    export MANPATH="/usr/local/share/man${MANPATH+:$MANPATH}:";
+    export INFOPATH="/usr/local/share/info:${INFOPATH:-}";
+  elif [[ $(uname -m) == "arm64" ]]; then
+    export HOMEBREW_PREFIX="/opt/homebrew";
+    export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+    export HOMEBREW_REPOSITORY="/opt/homebrew";
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+    export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+  else # x86_64
+    export HOMEBREW_PREFIX="/usr/local";
+    export HOMEBREW_CELLAR="/usr/local/Cellar";
+    export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
+    export PATH="/usr/local/bin:/usr/local/sbin${PATH+:$PATH}";
+    export MANPATH="/usr/local/share/man${MANPATH+:$MANPATH}:";
+    export INFOPATH="/usr/local/share/info:${INFOPATH:-}";
+  fi
 
   # wezterm and wezterm-gui
   PATH=/Applications/WezTerm.app/Contents/MacOS:$PATH
 
   # provide GNU man pages for e.g. ls
-  #export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:${MANPATH}"
+  #export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman:${MANPATH}"
 
   # provide GNU man pages for e.g. gls
-  export MANPATH="/usr/local/opt/coreutils/share/man/:${MANPATH}"
+  export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/share/man/:${MANPATH}"
 fi
 
 # rtx path
@@ -99,9 +126,9 @@ if [[ ${OSTYPE} == darwin* ]]; then
   fi
 
   # mouse support, if we have less from homebrew
-  if [[ $commands[less] = /usr/local/bin/less ]]; then
+  if [[ $commands[less] = $HOMEBREW_PREFIX/bin/less ]]; then
     export LESS="--mouse"
-    export PAGER="/usr/local/bin/less"
+    export PAGER="$HOMEBREW_PREFIX/bin/less"
     export DELTA_PAGER="$PAGER"
     export MANPAGER="$PAGER"
   fi
@@ -293,8 +320,8 @@ if (( $+commands[lsd] )); then
   zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd --color=always --icon=always $realpath'
 elif (( $+commands[exa] )); then
   zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-elif [[ -x /usr/local/bin/gls ]]; then
-  zstyle ':fzf-tab:complete:cd:*' fzf-preview '/usr/local/bin/gls --color=always $realpath'
+elif [[ -n "$HOMEBREW_PREFIX" ]] && [[ -x "$HOMEBREW_PREFIX/bin/gls" ]]; then
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview "$HOMEBREW_PREFIX"'/bin/gls --color=always $realpath'
 elif command ls --version >/dev/null 2>&1; then
   zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color=always $realpath'
 else
