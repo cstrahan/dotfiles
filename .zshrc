@@ -4,7 +4,7 @@
 # completions
 fpath+=~/.zfunc
 
-# display raw control chars
+# raw control chars
 export LESS="-r"
 
 # macOS path setup
@@ -15,33 +15,24 @@ if [[ ${OSTYPE} == darwin* ]]; then
   #   /opt/homebrew/bin/brew shellenv
   if [[ -d /opt/homebrew ]]; then
     export HOMEBREW_PREFIX="/opt/homebrew";
-    export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
     export HOMEBREW_REPOSITORY="/opt/homebrew";
-    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
-    export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
-    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
   elif [[ -d /usr/local/Homebrew ]]; then
     export HOMEBREW_PREFIX="/usr/local";
-    export HOMEBREW_CELLAR="/usr/local/Cellar";
     export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
-    export PATH="/usr/local/bin:/usr/local/sbin${PATH+:$PATH}";
-    export MANPATH="/usr/local/share/man${MANPATH+:$MANPATH}:";
-    export INFOPATH="/usr/local/share/info:${INFOPATH:-}";
   elif [[ $(uname -m) == "arm64" ]]; then
     export HOMEBREW_PREFIX="/opt/homebrew";
-    export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
     export HOMEBREW_REPOSITORY="/opt/homebrew";
-    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
-    export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
-    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
   else # x86_64
     export HOMEBREW_PREFIX="/usr/local";
-    export HOMEBREW_CELLAR="/usr/local/Cellar";
     export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
-    export PATH="/usr/local/bin:/usr/local/sbin${PATH+:$PATH}";
-    export MANPATH="/usr/local/share/man${MANPATH+:$MANPATH}:";
-    export INFOPATH="/usr/local/share/info:${INFOPATH:-}";
   fi
+  export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
+  export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}";
+  export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
+  export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}";
+
+  # completions from homebrew packages
+  FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions:${FPATH}"
 
   # wezterm and wezterm-gui
   PATH=/Applications/WezTerm.app/Contents/MacOS:$PATH
@@ -51,6 +42,24 @@ if [[ ${OSTYPE} == darwin* ]]; then
 
   # provide GNU man pages for e.g. gls
   export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/share/man/:${MANPATH}"
+
+  export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+  export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+  export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+fi
+
+alias logcatfs="adb logcat -v color -s 'fullstory:*' 'zygote:E' 'System.out:*' 'System.err:*' 'AndroidRuntime:*' 'SystemWebChromeClient:*' 'CordovaWebViewImpl:*'"
+alias logcatc="adb logcat -c"
+
+# local dev profile
+SKIP_FS_PS1=1
+FS_SKIP_CD=1
+FS_SKIP_COMP=1
+if [[ -f $HOME/.fsprofile ]]; then
+  source $HOME/.fsprofile
+fi
+if (( $+commands[direnv] )); then
+  eval "$(direnv hook zsh)"
 fi
 
 # rtx path
@@ -408,5 +417,15 @@ _fzf_compgen_path() {
 }
 _fzf_compgen_dir() {
     bfs -H "$1" -color -exclude \( -depth +0 -hidden \) -type d 2>/dev/null
+}
+
+listening() {
+    if [ $# -eq 0 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P
+    elif [ $# -eq 1 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
+    else
+        echo "Usage: listening [pattern]"
+    fi
 }
 
