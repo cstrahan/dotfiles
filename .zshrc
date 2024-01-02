@@ -3,6 +3,7 @@
 
 # completions
 fpath+=~/.zfunc
+#fpath+=~/src/nix-zsh-completions
 
 # raw control chars
 export LESS="-r"
@@ -429,3 +430,5 @@ listening() {
     fi
 }
 
+source /Users/charles/.fsprofile
+eval "$(direnv hook zsh)"
