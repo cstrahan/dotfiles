@@ -1,8 +1,8 @@
 # These settings are synced to GitHub by https://probot.github.io/apps/settings/
 repository:
-  name: zim-rtx
-  description: zim module for rtx
-  topics: zim, zimfw, module, zsh, rtx
+  name: zim-mise
+  description: zim module for mise
+  topics: zim, zimfw, module, zsh, mise
   private: false
   has_issues: true
   has_projects: false

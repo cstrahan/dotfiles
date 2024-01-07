@@ -63,9 +63,6 @@ if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
 fi
 
-# rtx path
-PATH=$HOME/.local/share/rtx/bin:$PATH
-
 # go install stuff
 PATH=$HOME/go/bin:$PATH
 

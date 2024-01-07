@@ -1,0 +1,6 @@
+= zim-mise
+
+https://github.com/zimfw/zimfw[zim module] for https://github.com/jdx/mise[mise].
+
+TIP: Add this module as early as possible to the `.zimrc` file.
+  This allows other plugins to detect apps installed by `mise`.

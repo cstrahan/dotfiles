@@ -1,4 +1,4 @@
-zmodule joke/zim-rtx --use degit
+zmodule joke/zim-mise --use degit
 
 # Start configuration added by Zim install {{{
 #
