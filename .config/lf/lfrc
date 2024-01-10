@@ -1,0 +1,111 @@
+# lf config
+
+# NOTES
+#
+# selected file(s), see $f $fs $fx in `lf -doc`
+# for file slated for copy/move, see: ~/.local/share/lf/files
+
+
+# https://github.com/gokcehan/lf/wiki/Tips#
+# https://codeberg.org/tplasdio/lf-config
+# https://github.com/gokcehan/lf/issues/140
+
+# shortcut to edit config and reload
+cmd edit-config ${{
+  $EDITOR ~/.config/lf/lfrc
+  env > ~/env.dump
+  lf -remote "send $id source ~/.config/lf/lfrc"
+}}
+map C edit-config
+
+# set term title
+cmd on-cd &{{
+  printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
+}}
+# also run at startup
+on-cd
+
+set previewer '~/.config/lf/previewer'
+
+set drawbox
+set period 1
+set hidden!
+set ratios 2:3:4
+set icons
+set truncatechar "…"
+set scrolloff 5
+set shell "bash"
+set shellopts '-eu'
+set incsearch
+set incfilter
+
+
+# show file-size/dir-count
+set info size
+set dircounts
+
+# add lf_selmode and df to ruler
+# set selmode all vs set selmode dir
+set ruler 'lf_selmode:df:acc:progress:selection:filter:ind'
+
+cmd mkdir %IFS=" "; mkdir -p -- "$*"
+map a push :mkdir<space>
+
+map <c-z> $ kill -STOP $PPID
+
+map _ ${{
+  $HOME/rgfzf --lf-cd
+}}
+
+# unmap the default rename keybinding
+#map r
+#map i rename
+#map I :rename; cmd-home
+#map A :rename; cmd-end
+#map c :rename; cmd-delete-home
+#map C :rename; cmd-end; cmd-delete-home
+
+cmd follow_link %{{
+  lf -remote "send ${id} select '$(readlink $f)'"
+}}
+map gL follow_link
+
+
+cmd bulkrename ${{
+  vimv -- $(echo "$fx" | sed "s|^$PWD/||")
+  lf -remote "send $id load"
+  lf -remote "send $id unselect"
+}}
+map R bulkrename
+
+cmd copy_to_clipboard %{{
+  if type pbcopy > /dev/null 2>&1; then
+    printf '%s' "$f" | pbcopy
+  elif type xsel > /dev/null 2>&1; then
+    printf '%s' "$f" | xsel -ib
+  fi
+}}
+map <c-c> :copy_to_clipboard
+
+
+# override default preview map.
+# if we're using bat, prevent it from closing from implicit -F.
+map i ${{ BAT_PAGER="less -R" $PAGER "$f" }}
+
+# override delete command
+cmd trash ${{
+  set -f
+  printf "$fx\n" 
+  printf "delete?[y/n] " 
+  read ans 
+  if [[ $ans == "y" ]]; then
+    if [[ -x /usr/local/bin/trash ]]; then
+      echo trashing
+      /usr/local/bin/trash -F $fx
+    elif gio trash 2>/dev/null; then
+      gio trash $fx
+    fi
+  fi
+  sleep 3
+}}
+
