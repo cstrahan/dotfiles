@@ -1,3 +1,5 @@
+# vim: set tabstop=2:softtabstop=2:shiftwidth=2:expandtab
+
 # TODO: https://github.com/romkatv/gitstatus
 # TDOO: https://egeek.me/2020/04/18/enabling-locate-on-osx/
 
@@ -36,7 +38,7 @@ if [[ ${OSTYPE} == darwin* ]]; then
   FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions:${FPATH}"
 
   # wezterm and wezterm-gui
-  PATH=/Applications/WezTerm.app/Contents/MacOS:$PATH
+  #PATH=/Applications/WezTerm.app/Contents/MacOS:$PATH
 
   # provide GNU man pages for e.g. ls
   #export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman:${MANPATH}"
@@ -152,6 +154,19 @@ if [[ -f ~/.fzf.zsh ]]; then
   source ~/.fzf.zsh
 fi
 
+# wezterm
+# if wezterm integration wasn't loaded through /etc/{zshenv,zprofile,zshrc}
+#if ! (( $+functions[__wezterm_user_vars_precmd])); then
+#  if [[ ${OSTYPE} == darwin* ]]; then
+#    if [[ -e /Applications/WezTerm.app/Contents/Resources/wezterm.sh ]]; then
+#      . /Applications/WezTerm.app/Contents/Resources/wezterm.sh
+#    fi
+#  fi
+#fi
+
+
+#WEZTERM_SHELL_SKIP_ALL=1
+
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells
@@ -193,6 +208,10 @@ WORDCHARS=${WORDCHARS//[#]}
 
 # Use degit instead of git as the default tool to install and update modules.
 #zstyle ':zim:zmodule' use 'degit'
+
+# Don't automatically upgrade zim itself.
+zstyle ':zim' 'disable-version-check' 'true'
+
 
 # --------------------
 # Module configuration
@@ -262,9 +281,9 @@ if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
   fi
 fi
 # Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
-# if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
-#   source ${ZIM_HOME}/zimfw.zsh init -q
-# fi
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
@@ -289,8 +308,9 @@ unset key
 export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
 export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold
 export LESS_TERMCAP_me=$'\E[0m'           # end mode
+#export LESS_TERMCAP_so=$'\E[38;5;246m'    # begin standout-mode - info box (grey)
+export LESS_TERMCAP_so=$'\E[30;43m'       # begin standout-mode - info box (yellow, inverted)
 export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
-export LESS_TERMCAP_so=$'\E[38;5;246m'    # begin standout-mode - info box
 export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
@@ -299,19 +319,6 @@ setopt CHECK_JOBS
 
 # send SIGHUP to jobs on shell exit
 setopt HUP
-
-# wezterm
-# we'll let the termtitle zmodule handle this
-WEZTERM_SHELL_SKIP_CWD=1
-# if wezterm integration wasn't loaded through /etc/{zshenv,zprofile,zshrc}
-if ! (( $+functions[__wezterm_user_vars_precmd])); then
-  if [[ ${OSTYPE} == darwin* ]]; then
-    if [[ -e /Applications/WezTerm.app/Contents/Resources/wezterm.sh ]]; then
-      . /Applications/WezTerm.app/Contents/Resources/wezterm.sh
-    fi
-  fi
-fi
-
 
 # fzf-tab settings
 #
@@ -343,18 +350,12 @@ zstyle ':fzf-tab:*' switch-group '<' '>'
 
 # Change working dir in shell to last dir in lf on exit (adapted from ranger).
 lfcd () {
-    local tmp="$(mktemp)"
-    # `command` is needed in case `lfcd` is aliased to `lf`
-    command lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        local dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        if [ -d "$dir" ]; then
-            if [ "$dir" != "$(pwd)" ]; then
-                cd "$dir"
-            fi
-        fi
+  local dir="$(command lf -print-last-dir "$@")"
+  if [ -d "$dir" ]; then
+    if [ "$dir" != "$(pwd)" ]; then
+      cd "$dir"
     fi
+  fi
 }
 bindkey -s '^o' 'lfcd\n'
 
@@ -427,5 +428,6 @@ listening() {
     fi
 }
 
-source /Users/charles/.fsprofile
-eval "$(direnv hook zsh)"
+#eval "$(/Users/cstrahan/.local/bin/mise activate zsh)"
+
+[ -f "/Users/cstrahan/.ghcup/env" ] && source "/Users/cstrahan/.ghcup/env" # ghcup-env

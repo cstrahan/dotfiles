@@ -64,3 +64,9 @@ zmodule zsh-users/zsh-autosuggestions --use degit
 
 # Configures fzf for faster fetching of files and directories names.
 zmodule fzf --use degit
+
+# Configure wezterm
+zmodule cstrahan/zim-wezterm --use degit
+
+# Configure Rust
+zmodule cstrahan/zim-rust --use degit
