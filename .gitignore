@@ -56,6 +56,8 @@
 !/.pystartup
 !/.tmux
 !/.zim
+/.zim/*.zsh*.old
+/.zim/init.zsh*
 !/.zlogin
 !/.zprofile
 !/.zsh
