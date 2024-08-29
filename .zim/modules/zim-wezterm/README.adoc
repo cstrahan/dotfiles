@@ -1,0 +1,3 @@
+= zim-wezterm
+
+https://github.com/zimfw/zimfw[zim module] for https://wezfurlong.org/wezterm[wezterm].
