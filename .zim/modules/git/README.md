@@ -20,6 +20,7 @@ Aliases
   * `Gbd` detaches *HEAD* at the tip of the current or given branch.
   * `Gbl` lists branches and their commits.
   * `GbL` lists local and remote branches and their commits.
+  * `Gbn` lists branches that do not contain a given commit.
   * `Gbm` renames a branch.
   * `GbM` renames a branch even if the new branch name already exists.
   * `GbR` resets a branch even if the branch name already exists.
@@ -69,6 +70,7 @@ Aliases
   * `Gdu` lists untracked files.
   * `Gdk` lists killed files.
   * `Gdi` lists ignored files.
+  * `GdI` lists commited files that would be ignored.
 
 ### Fetch
 
@@ -91,13 +93,15 @@ Aliases
 
 ### Help
 
-  * `Gh` displays help information about Git
+  * `Gh` displays help information about Git.
+  * `Ghw` displays manual page for the command in the web browser.
 
 ### Index
 
   * `Gia` adds file contents to the index.
   * `GiA` adds file contents to the index interactively.
-  * `Giu` adds file contents to the index (updates only known files).
+  * `Giu` adds file contents to the index (updates all tracked files).
+  * `GiU` adds file contents to the index (updates all files).
   * `Gid` displays changes between the index and a named commit (diff).
   * `GiD` displays changes between the index and a named commit (word diff).
   * `Gir` resets the current *HEAD* to the specified state.
@@ -124,9 +128,10 @@ Aliases
   * `Gm` joins two or more development histories together.
   * `Gma` aborts the conflict resolution, and reconstructs the pre-merge state.
   * `Gmc` continues the merge after conflicts are resolved.
-  * `GmC` performs the merge but does not commit.
+  * `GmC` performs a merge but does not commit.
   * `GmF` creates a merge commit even if the merge could be resolved as a fast-forward.
-  * `GmS` performs the merge and GPG-signs the resulting commit.
+  * `Gms` performs a squash merge but does not commit.
+  * `GmS` performs a merge and GPG-signs the resulting commit.
   * `Gmv` verifies the GPG signature of the tip commit of the side branch being merged.
   * `Gmt` runs the merge conflict resolution tools to resolve conflicts.
 
@@ -227,6 +232,7 @@ Aliases
 ### Switch
 
   * `Gy` switches branches.
+  * `Gyc` creates a new branch with given name before switching to it.
   * `Gyd` switches to a commit for inspection and discardable experiments.
 
 ### Misc

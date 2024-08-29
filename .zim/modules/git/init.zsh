@@ -6,7 +6,7 @@
 # See https://git-scm.com/docs/pretty-formats
 typeset -g _git_log_fuller_format='%C(bold yellow)commit %H%C(auto)%d%n%C(bold)Author: %C(blue)%an <%ae> %C(reset)%C(cyan)%ai (%ar)%n%C(bold)Commit: %C(blue)%cn <%ce> %C(reset)%C(cyan)%ci (%cr)%C(reset)%n%+B'
 typeset -g _git_log_oneline_format='%C(bold yellow)%h%C(reset) %s%C(auto)%d%C(reset)'
-typeset -g _git_log_oneline_medium_format='%C(bold yellow)%h%C(reset) %<(50,trunc)%s %C(bold blue)<%an> %C(reset)%C(cyan)(%ar)%C(auto)%d%C(reset)'
+typeset -g _git_log_oneline_medium_format='%C(bold yellow)%h%C(reset) %<(50,trunc)%s %C(bold blue)%an %C(reset)%C(cyan)%as (%ar)%C(auto)%d%C(reset)'
 local gmodule_home=${0:A:h}
 
 #
@@ -25,6 +25,7 @@ alias ${gprefix}bc='git checkout -b'
 alias ${gprefix}bd='git checkout --detach'
 alias ${gprefix}bl='git branch -vv'
 alias ${gprefix}bL='git branch --all -vv'
+alias ${gprefix}bn='git branch --no-contains'
 alias ${gprefix}bm='git branch --move'
 alias ${gprefix}bM='git branch --move --force'
 alias ${gprefix}bR='git branch --force'
@@ -71,6 +72,7 @@ alias ${gprefix}dm='git ls-files --modified'
 alias ${gprefix}du='git ls-files --other --exclude-standard'
 alias ${gprefix}dk='git ls-files --killed'
 alias ${gprefix}di='git status --porcelain --short --ignored | sed -n "s/^!! //p"'
+alias ${gprefix}dI='git ls-files --ignored --exclude-per-directory=.gitignore --cached'
 
 # Fetch (f)
 alias ${gprefix}f='git fetch'
@@ -91,11 +93,13 @@ alias ${gprefix}gw='git grep --word-regexp'
 
 # Help (h)
 alias ${gprefix}h='git help'
+alias ${gprefix}hw='git help --web'
 
 # Index (i)
 alias ${gprefix}ia='git add'
 alias ${gprefix}iA='git add --patch'
 alias ${gprefix}iu='git add --update'
+alias ${gprefix}iU='git add --verbose --all'
 alias ${gprefix}id='git diff --no-ext-diff --cached'
 alias ${gprefix}iD='git diff --no-ext-diff --cached --word-diff'
 alias ${gprefix}ir='git reset'
@@ -104,15 +108,15 @@ alias ${gprefix}ix='git rm --cached -r'
 alias ${gprefix}iX='git rm --cached -rf'
 
 # Log (l)
-alias ${gprefix}l='git log --topo-order --pretty=format:"${_git_log_fuller_format}"'
-alias ${gprefix}ls='git log --topo-order --stat --pretty=format:"${_git_log_fuller_format}"'
-alias ${gprefix}ld='git log --topo-order --stat --patch --pretty=format:"${_git_log_fuller_format}"'
-alias ${gprefix}lf='git log --topo-order --stat --patch --follow --pretty=format:"${_git_log_fuller_format}"'
-alias ${gprefix}lo='git log --topo-order --pretty=format:"${_git_log_oneline_format}"'
-alias ${gprefix}lO='git log --topo-order --pretty=format:"${_git_log_oneline_medium_format}"'
-alias ${gprefix}lg='git log --graph --pretty=format:"${_git_log_oneline_format}"'
-alias ${gprefix}lG='git log --graph --pretty=format:"${_git_log_oneline_medium_format}"'
-alias ${gprefix}lv='git log --topo-order --show-signature --pretty=format:"${_git_log_fuller_format}"'
+alias ${gprefix}l='git log --date-order --pretty=format:"${_git_log_fuller_format}"'
+alias ${gprefix}ls='git log --date-order --stat --pretty=format:"${_git_log_fuller_format}"'
+alias ${gprefix}ld='git log --date-order --stat --patch --pretty=format:"${_git_log_fuller_format}"'
+alias ${gprefix}lf='git log --date-order --stat --patch --follow --pretty=format:"${_git_log_fuller_format}"'
+alias ${gprefix}lo='git log --date-order --pretty=format:"${_git_log_oneline_format}"'
+alias ${gprefix}lO='git log --date-order --pretty=format:"${_git_log_oneline_medium_format}"'
+alias ${gprefix}lg='git log --date-order --graph --pretty=format:"${_git_log_oneline_format}"'
+alias ${gprefix}lG='git log --date-order --graph --pretty=format:"${_git_log_oneline_medium_format}"'
+alias ${gprefix}lv='git log --date-order --show-signature --pretty=format:"${_git_log_fuller_format}"'
 alias ${gprefix}lc='git shortlog --summary --numbered'
 alias ${gprefix}lr='git reflog'
 
@@ -122,6 +126,7 @@ alias ${gprefix}ma='git merge --abort'
 alias ${gprefix}mc='git merge --continue'
 alias ${gprefix}mC='git merge --no-commit'
 alias ${gprefix}mF='git merge --no-ff'
+alias ${gprefix}ms='git merge --squash'
 alias ${gprefix}mS='git merge -S'
 alias ${gprefix}mv='git merge --verify-signatures'
 alias ${gprefix}mt='git mergetool'
@@ -214,6 +219,7 @@ alias ${gprefix}WX='git worktree remove --force'
 
 # Switch (y)
 alias ${gprefix}y='git switch' # requires Git 2.23
+alias ${gprefix}yc='git switch --create'
 alias ${gprefix}yd='git switch --detach'
 
 # Misc
