@@ -16,6 +16,11 @@ end
 
 config.scrollback_lines = scrollback_lines
 
+-- window decorations aren't (yet) working on Wayland,
+-- so disable wayland backend for now.
+-- https://github.com/wez/wezterm/issues/4962
+config.enable_wayland = false
+
 config.enable_kitty_keyboard = true
 config.use_resize_increments = true
 config.enable_scroll_bar = true
