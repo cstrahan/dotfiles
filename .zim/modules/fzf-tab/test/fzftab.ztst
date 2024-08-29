@@ -61,6 +61,29 @@
 >C1:{file2}
 
   comptest $': d\t'
+0:unambiguous prefix
+>line: {: dir}{}
+
+  comptesteval '_tst() { compadd ".#abc" ".#def" ".#hij" }'
+  comptest $'tst ".#"\t'
+0:unambiguous prefix in quote string
+>line: {tst ".#abc }{"}
+>QUERY:{.#}
+>C0:{.#abc}
+>C0:{.#def}
+>C0:{.#hij}
+
+  comptesteval '_tst() { compadd /home /usr /lib; compstate[insert]=menu }'
+  comptest $'tst \t'
+0:force list
+>line: {tst /home }{}
+>QUERY:{/}
+>C0:{/home}
+>C0:{/lib}
+>C0:{/usr}
+
+  comptesteval 'zstyle ":completion:*" menu true'
+  comptest $': d\t'
 0:prefix
 >line: {: dir1/}{}
 >QUERY:{dir}
@@ -108,8 +131,8 @@
 0:warnings
 >line: {: asd}{}
 >WARN:{`file'}
->WARN:{`file'}
-# FIXME：why two warnings？
+
+# enclose ' for syntax highlight
 
   comptesteval "touch 'abc def'"
   comptest $': ./a\t'
@@ -148,7 +171,6 @@
   comptest $'git add dir1\t'
 0:add empty word
 >line: {git add dir1/}{}
-# FIXME：why two warnings？
 
   comptesteval "zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'"
   comptesteval "touch vim.coc"
@@ -205,6 +227,26 @@
 >C1:{dir1/}
 >C1:{dir2/}
 
+  comptesteval 'zstyle ":completion:*" menu false'
+  comptesteval "local prefix_1=1 prefix_2=1 prenofix_3=1"
+  comptest $'echo $pre\t'
+  comptesteval 'zstyle ":completion:*" menu true'
+0:parameter completion
+>line: {echo $pre}{}
+>QUERY:{}
+>DESCRIPTION:{parameter}
+>C1:{prefix_1}
+>C1:{prefix_2}
+>C1:{prenofix_3}
+
+  comptesteval '_tst() { compadd -J packages -X package openpgp-keys-gentoo-release -MERGING-pnpm-bin }'
+  comptest $'tst \t'
+0:completions starts with dash
+>line: {tst }{}
+>QUERY:{}
+>C1:{package }
+>C1:{openpgp-keys-gentoo-release}
+>C1:{-MERGING-pnpm-bin}
 %clean
 
   zmodload -ui zsh/zpty

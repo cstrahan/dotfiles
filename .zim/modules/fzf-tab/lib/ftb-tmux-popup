@@ -75,6 +75,7 @@ if (( cursor_y * 2 > window_height )); then
   if zstyle -T ":fzf-tab:$_ftb_curcontext" popup-smart-tab; then
     fzf_opts+=(--bind=tab:up,btab:down)
   fi
+  fzf_opts+=(--layout=default)
 else
   # show below the cursor
   popup_height=$(( min(max(comp_lines + 4, popup_min_size[2]), window_height - cursor_y + window_top - 1) + adjust_height ))
@@ -86,7 +87,7 @@ fi
 popup_width=$(( min(max(comp_length + 5, popup_min_size[1]), window_width) ))
 popup_x=$(( cursor_x + popup_width > window_width ? window_width - popup_width : cursor_x ))
 
-echo -E "$commands[fzf] ${(qq)fzf_opts[@]} < $tmp_dir/completions.$$ > $tmp_dir/result-$$" > $tmp_dir/fzf-$$
+echo -E "env SHELL=$ZSH_NAME $commands[fzf] ${(qq)fzf_opts[@]} < $tmp_dir/completions.$$ > $tmp_dir/result-$$" > $tmp_dir/fzf-$$
 {
   tmux popup -x $popup_x -y $popup_y \
        -w $popup_width -h $popup_height \

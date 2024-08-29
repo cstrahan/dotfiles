@@ -348,6 +348,9 @@ fi
 # key bindings to switch to previous and next group
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
+# ensure fzf-tab is enabled
+enable-fzf-tab
+
 # Change working dir in shell to last dir in lf on exit (adapted from ranger).
 lfcd () {
   local dir="$(command lf -print-last-dir "$@")"
