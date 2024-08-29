@@ -1,0 +1,3 @@
+= zim-rust
+
+https://github.com/zimfw/zimfw[zim module] for https://www.rust-lang.org/[Rust].
