@@ -1,7 +1,8 @@
 # vi: ft=gitconfig
 
-[include]
-	path = ~/.gitconfig.local
+[user]
+	name = Charles Strahan
+	email = charles@cstrahan.com
 [core]
 	fsmonitor = true
 	untrackedcache = true
@@ -26,3 +27,12 @@
 [status]
 	short = true
   branch = true
+[alias]
+  s = status
+  sa = -c status.showUntrackedFiles=all status
+
+# include ~/.gitconfig.local last,
+# so it can take priority.
+[include]
+	path = ~/.gitconfig.local
+
