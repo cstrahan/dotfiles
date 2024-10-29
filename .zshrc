@@ -1,5 +1,7 @@
 # vim: set tabstop=2:softtabstop=2:shiftwidth=2:expandtab
 
+#set -x
+
 # TODO: https://github.com/romkatv/gitstatus
 # TDOO: https://egeek.me/2020/04/18/enabling-locate-on-osx/
 
@@ -49,8 +51,17 @@ if [[ ${OSTYPE} == darwin* ]]; then
   export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
   export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
   export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
-fi
 
+  if [[ -d "$HOMEBREW_PREFIX/opt/binutils/bin" ]]; then
+    alias readelf="$HOMEBREW_PREFIX/opt/binutils/bin/readelf"
+  fi
+
+  if [[ -d "/Applications/kitty.app/Contents/MacOS" ]]; then
+    PATH="$PATH:/Applications/kitty.app/Contents/MacOS"
+  fi
+
+  #alias axbrew='PATH=/usr/local/homebrew/opt/pkg-config/bin:$PATH arch -x86_64 /usr/local/homebrew/bin/brew'
+fi
 alias logcatfs="adb logcat -v color -s 'fullstory:*' 'zygote:E' 'System.out:*' 'System.err:*' 'AndroidRuntime:*' 'SystemWebChromeClient:*' 'CordovaWebViewImpl:*'"
 alias logcatc="adb logcat -c"
 
@@ -148,24 +159,6 @@ else
   # presume Linux
   alias ls="command ls -hBG --color=auto"
 fi
-
-# load fzf
-if [[ -f ~/.fzf.zsh ]]; then
-  source ~/.fzf.zsh
-fi
-
-# wezterm
-# if wezterm integration wasn't loaded through /etc/{zshenv,zprofile,zshrc}
-#if ! (( $+functions[__wezterm_user_vars_precmd])); then
-#  if [[ ${OSTYPE} == darwin* ]]; then
-#    if [[ -e /Applications/WezTerm.app/Contents/Resources/wezterm.sh ]]; then
-#      . /Applications/WezTerm.app/Contents/Resources/wezterm.sh
-#    fi
-#  fi
-#fi
-
-
-#WEZTERM_SHELL_SKIP_ALL=1
 
 # Start configuration added by Zim install {{{
 #
@@ -431,6 +424,25 @@ listening() {
     fi
 }
 
-#eval "$(/Users/cstrahan/.local/bin/mise activate zsh)"
+if [ -f "$HOME/.ghcup/env" ]; then
+  source "$HOME/.ghcup/env" # ghcup-env
+fi
 
-[ -f "/Users/cstrahan/.ghcup/env" ] && source "/Users/cstrahan/.ghcup/env" # ghcup-env
+if (( $+commands[atuin] )); then
+  eval "$(atuin init zsh)"
+fi
+
+if (( $+commands[gh] )); then
+  if (gh extension list | grep copilot >/dev/null); then
+    eval "$(gh copilot alias -- zsh)"
+  fi
+fi
+
+# fzf binary can be installed via:
+#
+#   cd ~/.local
+#   wget https://raw.githubusercontent.com/junegunn/fzf/refs/heads/master/install
+#   bash ./install --bin
+#   rm install
+#   cd -
+# 
