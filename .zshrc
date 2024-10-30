@@ -342,7 +342,11 @@ fi
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
 # ensure fzf-tab is enabled
-enable-fzf-tab
+if (( ${+commands[fzf]} )); then
+  enable-fzf-tab
+else
+  disable-fzf-tab
+fi
 
 # Change working dir in shell to last dir in lf on exit (adapted from ranger).
 lfcd () {
