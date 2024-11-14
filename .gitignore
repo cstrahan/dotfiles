@@ -28,8 +28,9 @@
 !/.config/taffybar
 !/.config/taffybar/taffybar.hs
 !/.config/taffybar/taffybar.rc
-!/.config/zathura
 !/.config/wezterm
+!/.config/yazi
+!/.config/zathura
 !/.dircolors
 !/.gdb
 !/.gdb/**/*
