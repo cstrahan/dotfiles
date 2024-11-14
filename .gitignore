@@ -21,6 +21,7 @@
 /.config/*
 !/.config/alacritty
 !/.config/dunst
+!/.config/kitty
 !/.config/lf
 !/.config/nixpkgs
 !/.config/ranger
