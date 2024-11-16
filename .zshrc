@@ -348,6 +348,11 @@ else
   disable-fzf-tab
 fi
 
+if [ -f "$HOME/.fzf-git.sh" ]; then
+  source "$HOME/.fzf-git.sh"
+fi
+
+
 # Change working dir in shell to last dir in lf on exit (adapted from ranger).
 lfcd () {
   local dir="$(command lf -print-last-dir "$@")"
