@@ -437,9 +437,9 @@ if [ -f "$HOME/.ghcup/env" ]; then
   source "$HOME/.ghcup/env" # ghcup-env
 fi
 
-if (( $+commands[atuin] )); then
-  eval "$(atuin init zsh)"
-fi
+#if (( $+commands[atuin] )); then
+#  eval "$(atuin init zsh)"
+#fi
 
 if (( $+commands[gh] )); then
   if (gh extension list | grep copilot >/dev/null); then
