@@ -12,80 +12,8 @@ fpath+=~/.zfunc
 # raw control chars
 export LESS="-r"
 
-# macOS path setup
-if [[ ${OSTYPE} == darwin* ]]; then
-  # see "Discussion: longterm Homebrew prefix on Apple Silicon Macs": https://github.com/Homebrew/brew/issues/9177
-  # inline the results of either:
-  #   /usr/local/bin/brew shellenv
-  #   /opt/homebrew/bin/brew shellenv
-  if [[ -d /opt/homebrew ]]; then
-    export HOMEBREW_PREFIX="/opt/homebrew";
-    export HOMEBREW_REPOSITORY="/opt/homebrew";
-  elif [[ -d /usr/local/Homebrew ]]; then
-    export HOMEBREW_PREFIX="/usr/local";
-    export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
-  elif [[ $(uname -m) == "arm64" ]]; then
-    export HOMEBREW_PREFIX="/opt/homebrew";
-    export HOMEBREW_REPOSITORY="/opt/homebrew";
-  else # x86_64
-    export HOMEBREW_PREFIX="/usr/local";
-    export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
-  fi
-  export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
-  export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}";
-  export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
-  export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}";
-
-  # completions from homebrew packages
-  FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions:${FPATH}"
-
-  # wezterm and wezterm-gui
-  #PATH=/Applications/WezTerm.app/Contents/MacOS:$PATH
-
-  # provide GNU man pages for e.g. ls
-  #export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman:${MANPATH}"
-
-  # provide GNU man pages for e.g. gls
-  export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/share/man/:${MANPATH}"
-
-  export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
-  export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
-  export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
-
-  if [[ -d "$HOMEBREW_PREFIX/opt/binutils/bin" ]]; then
-    alias readelf="$HOMEBREW_PREFIX/opt/binutils/bin/readelf"
-  fi
-
-  if [[ -d "/Applications/kitty.app/Contents/MacOS" ]]; then
-    PATH="$PATH:/Applications/kitty.app/Contents/MacOS"
-  fi
-
-  #alias axbrew='PATH=/usr/local/homebrew/opt/pkg-config/bin:$PATH arch -x86_64 /usr/local/homebrew/bin/brew'
-fi
-alias logcatfs="adb logcat -v color -s 'fullstory:*' 'zygote:E' 'System.out:*' 'System.err:*' 'AndroidRuntime:*' 'SystemWebChromeClient:*' 'CordovaWebViewImpl:*'"
-alias logcatc="adb logcat -c"
-
-# local dev profile
-SKIP_FS_PS1=1
-FS_SKIP_CD=1
-FS_SKIP_COMP=1
-if [[ -f $HOME/.fsprofile ]]; then
-  source $HOME/.fsprofile
-fi
-if (( $+commands[direnv] )); then
-  eval "$(direnv hook zsh)"
-fi
-
-# go install stuff
-PATH=$HOME/go/bin:$PATH
-
-# local binaries
-PATH=$HOME/.local/bin:$PATH
-
-# rustup
-if [[ -e "$HOME/.cargo/env" ]]; then
-  . "$HOME/.cargo/env"
-fi
+# show all the history stored.
+#alias history="fc -l 1"
 
 # editor
 if (( $+commands[lvim] )); then
@@ -102,36 +30,16 @@ if [[ -n "$EDITOR" ]]; then
   VISUAL=$EDITOR
 fi
 
-# show all the history stored.
-#alias history="fc -l 1"
-
-# stop using ag
-if (( $+commands[rg] )); then
-  alias ag=rg
-fi
-
-# LS_COLORS
-local dircolors_cmd
-if (( $+commands[dircolors] )); then
-  dircolors_cmd=dircolors
-elif (( $+commands[gdircolors] )); then
-  # for macOS: brew install coreutils
-  dircolors_cmd=gdircolors
-fi
-test -n "$dircolors_cmd" && {
-  local COLORS
-  # interesting:
-  #   https://github.com/trapd00r/LS_COLORS
-  #   https://github.com/sharkdp/vivid
-  if [[ -e "$HOME/.dircolors" ]]; then
-    COLORS="$HOME/.dircolors"
-  fi
-  eval `${dircolors_cmd} --sh $COLORS`
-}
-unset dircolors_cmd
-
-# use ls with LS_COLORS support
 if [[ ${OSTYPE} == darwin* ]]; then
+  # https://eternalstorms.at/yoink/mac
+  alias yoink='open -a Yoink'
+
+  # https://apple.stackexchange.com/questions/15318/how-to-use-terminal-to-copy-a-file-to-the-clipboard/15484#15484
+  #function copy_file() {
+  #  osascript -e"{'on run{a}','set the clipboard to posix file a',end}" "$(readlink -f -- "$1")"
+  #}
+
+  # use ls with LS_COLORS support
   # BSD (and macOS) has a different format for LS_COLORS,
   # and the environment variable is LSCOLORS instead.
   # See: https://github.com/lucas-flowers/gnu2bsd
@@ -297,15 +205,6 @@ for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 # }}} End configuration added by Zim install
 
-# make man colorful (overriding the defaults from Zim)
-export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
-export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold
-export LESS_TERMCAP_me=$'\E[0m'           # end mode
-#export LESS_TERMCAP_so=$'\E[38;5;246m'    # begin standout-mode - info box (grey)
-export LESS_TERMCAP_so=$'\E[30;43m'       # begin standout-mode - info box (yellow, inverted)
-export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
-export LESS_TERMCAP_ue=$'\E[0m'           # end underline
-export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 # warn if I have background jobs
 setopt CHECK_JOBS
@@ -330,7 +229,7 @@ if (( $+commands[lsd] )); then
   zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd --color=always --icon=always $realpath'
 elif (( $+commands[exa] )); then
   zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-elif [[ -n "$HOMEBREW_PREFIX" ]] && [[ -x "$HOMEBREW_PREFIX/bin/gls" ]]; then
+elif [[ -x "$HOMEBREW_PREFIX/bin/gls" ]]; then
   zstyle ':fzf-tab:complete:cd:*' fzf-preview "$HOMEBREW_PREFIX"'/bin/gls --color=always $realpath'
 elif command ls --version >/dev/null 2>&1; then
   zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color=always $realpath'
@@ -437,6 +336,7 @@ if [ -f "$HOME/.ghcup/env" ]; then
   source "$HOME/.ghcup/env" # ghcup-env
 fi
 
+# Disable atuin for now
 #if (( $+commands[atuin] )); then
 #  eval "$(atuin init zsh)"
 #fi
@@ -465,3 +365,36 @@ function y() {
 #   rm install
 #   cd -
 # 
+
+# debug startup with: zsh -x -i -l -c true
+
+# Load order:
+# +----------------+-----------+-----------+------+
+# |                |Interactive|Interactive|Script|
+# |                |login      |non-login  |      |
+# +----------------+-----------+-----------+------+
+# |/etc/zshenv     |    A      |    A      |  A   |
+# +----------------+-----------+-----------+------+
+# |~/.zshenv       |    B      |    B      |  B   |
+# +----------------+-----------+-----------+------+
+# |/etc/zprofile   |    C      |           |      |
+# +----------------+-----------+-----------+------+
+# |~/.zprofile     |    D      |           |      |
+# +----------------+-----------+-----------+------+
+# |/etc/zshrc      |    E      |    C      |      |
+# +----------------+-----------+-----------+------+
+# |~/.zshrc        |    F      |    D      |      |
+# +----------------+-----------+-----------+------+
+# |/etc/zlogin     |    G      |           |      |
+# +----------------+-----------+-----------+------+
+# |~/.zlogin       |    H      |           |      |
+# +----------------+-----------+-----------+------+
+# |                |           |           |      |
+# +----------------+-----------+-----------+------+
+# |                |           |           |      |
+# +----------------+-----------+-----------+------+
+# |~/.zlogout      |    I      |           |      |
+# +----------------+-----------+-----------+------+
+# |/etc/zlogout    |    J      |           |      |
+# +----------------+-----------+-----------+------+
+# Source: https://medium.com/@rajsek/zsh-bash-startup-files-loading-order-bashrc-zshrc-etc-e30045652f2e):
