@@ -1,11 +1,11 @@
 # See note in ~/.zshenv about macOS's /etc/profile messing up PATH.
 # This puts my preferred paths in front of those set by /usr/libexec/path_helper.
 if (( ${#path_before_etc_profile} )); then
-  path=( $path_before_etc_profile $path )
+  path[1,0]=($path_before_etc_profile)
 fi
 
 if (( ${#manpath_before_etc_profile} )); then
-  manpath=( $manpath_before_etc_profile $manpath )
+  manpath[1,0]=($manpath_before_etc_profile)
 fi
 
 # OrbStack: command-line tools and integration

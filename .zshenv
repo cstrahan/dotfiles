@@ -46,42 +46,43 @@ if [[ ${OSTYPE} == darwin* ]]; then
     export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
   fi
   export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
-  export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin${PATH+:$PATH}";
-  export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}";
+  path[1,0]=("$HOMEBREW_PREFIX/bin")
+  path[1,0]=("$HOMEBREW_PREFIX/sbin")
+  manpath[1,0]=("$HOMEBREW_PREFIX/share/man")
   export INFOPATH="$HOMEBREW_PREFIX/share/info${INFOPATH+:$INFOPATH}";
 
   # completions from homebrew packages
-  FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions:${FPATH}"
+  fpath[1,0]=("$HOMEBREW_PREFIX/share/zsh/site-functions")
 
   # wezterm and wezterm-gui
   if [[ -d "/Applications/WezTerm.app/Contents/MacOS" ]]; then
-    PATH=/Applications/WezTerm.app/Contents/MacOS${PATH+:$PATH}
+    path[1,0]=("/Applications/WezTerm.app/Contents/MacOS")
   fi
 
   # provide GNU man pages for e.g. ls
-  #export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman:${MANPATH}"
+  #manpath[1,0]=("$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman")
 
   # provide GNU man pages for e.g. gls
-  export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/share/man${MANPATH+:$MANPATH}"
+  manpath[1,0]=("$HOMEBREW_PREFIX/opt/coreutils/share/man")
 
   export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
-  export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
-  export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+  path+="$ANDROID_SDK_ROOT/emulator"
+  path+="$ANDROID_SDK_ROOT/platform-tools"
 
   if [[ -d "$HOMEBREW_PREFIX/opt/binutils/bin" ]]; then
     alias readelf="$HOMEBREW_PREFIX/opt/binutils/bin/readelf"
   fi
 
   if [[ -d "/Applications/kitty.app/Contents/MacOS" ]]; then
-    PATH="$PATH:/Applications/kitty.app/Contents/MacOS"
+    path+="/Applications/kitty.app/Contents/MacOS"
   fi
 fi
 
 # go install stuff
-PATH=$HOME/go/bin:$PATH
+path[1,0]=("$HOME/go/bin")
 
 # local binaries
-PATH=$HOME/.local/bin:$PATH
+path[1,0]=("$HOME/.local/bin")
 
 # rustup
 if [[ -e "$HOME/.cargo/env" ]]; then
