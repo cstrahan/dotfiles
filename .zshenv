@@ -84,6 +84,9 @@ path[1,0]=("$HOME/go/bin")
 # local binaries
 path[1,0]=("$HOME/.local/bin")
 
+# local manpages
+manpath[1,0]=("$HOME/.local/share/man")
+
 # rustup
 if [[ -e "$HOME/.cargo/env" ]]; then
   . "$HOME/.cargo/env"
