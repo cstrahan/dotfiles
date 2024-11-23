@@ -101,16 +101,15 @@ fi
 # editor
 if (( $+commands[lvim] )); then
   export EDITOR=lvim
-  alias vi=lvim
 elif (( $+commands[nvim] )); then
   export EDITOR=nvim
-  alias vi=nvim
 elif (( $+commands[vim] )); then
   export EDITOR=vim
-  alias vi=vim
 fi
 if [[ -n "$EDITOR" ]]; then
   VISUAL=$EDITOR
+  SUDO_EDITOR=$commands[$EDITOR]
+  alias vi=$EDITOR
 fi
 
 # Remove any empty path strings.
