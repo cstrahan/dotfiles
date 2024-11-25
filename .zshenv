@@ -121,7 +121,7 @@ unset exclude
 # this tells man to also search the default paths,
 # as would be reported by:
 #   env -u MANPATH manpath
-manpath+=(":")
+manpath+=("")
 
 # Remove paths that are either dead links (-/) or do not
 # exist at all (N) and apply that to all in array (^)
