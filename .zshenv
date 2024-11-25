@@ -48,7 +48,7 @@ if [[ ${OSTYPE} == darwin* ]]; then
   export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
   path[1,0]=("$HOMEBREW_PREFIX/bin")
   path[1,0]=("$HOMEBREW_PREFIX/sbin")
-  manpath[1,0]=("$HOMEBREW_PREFIX/share/man")
+  manpath[1,0]=("$HOMEBREW_PREFIX/share/man")  #
   export INFOPATH="$HOMEBREW_PREFIX/share/info${INFOPATH+:$INFOPATH}";
 
   # completions from homebrew packages
@@ -117,6 +117,11 @@ exclude=( '' )
 path=("${(@)path:|exclude}")
 manpath=("${(@)manpath:|exclude}")
 unset exclude
+
+# this tells man to also search the default paths,
+# as would be reported by:
+#   env -u MANPATH manpath
+manpath+=(":")
 
 # Remove paths that are either dead links (-/) or do not
 # exist at all (N) and apply that to all in array (^)
