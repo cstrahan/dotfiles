@@ -1,9 +1,5 @@
 # vim:fileencoding=utf-8:foldmethod=marker
 
-#map ctrl+f launch --type=overlay --stdin-source=@screen_scrollback /Users/cstrahan/.local/bin/fzf --no-sort --no-mouse --exact -i --tac
-#map ctrl+f launch --type=overlay --stdin-source=@screen_scrollback /bin/sh -c "/Users/cstrahan/.local/bin/fzf --no-sort --no-mouse --exact -i --tac | kitty +kitten clipboard"
-#map ctrl+shift+f combine : show_scrollback : send_text normal,application /
-
 #: Fonts {{{
 
 #: kitty has very powerful font management. You can configure
@@ -50,11 +46,6 @@ font_size        14.0
 #: the text as LTR, which FriBidi expects for terminals.
 
 # symbol_map
-
-# https://sw.kovidgoyal.net/kitty/faq/#kitty-is-not-able-to-use-my-favorite-font
-# Use kitty's built in "Symbols Nerd Font Mono" font for any nerd font symbols.
-# Nerd Fonts v3.2.0
-symbol_map U+e000-U+e00a,U+ea60-U+ebeb,U+e0a0-U+e0c8,U+e0ca,U+e0cc-U+e0d7,U+e200-U+e2a9,U+e300-U+e3e3,U+e5fa-U+e6b1,U+e700-U+e7c5,U+ed00-U+efc1,U+f000-U+f2ff,U+f000-U+f2e0,U+f300-U+f372,U+f400-U+f533,U+f0001-U+f1af0 Symbols Nerd Font Mono
 
 #: E.g. symbol_map U+E0A0-U+E0A3,U+E0C0-U+E0C7 PowerlineSymbols
 
@@ -364,7 +355,6 @@ cursor_blink_interval 0
 #: Scrollback {{{
 
 # scrollback_lines 2000
-scrollback_lines 50000
 
 #: Number of lines of history to keep in memory for scrolling back.
 #: Memory is allocated on demand. Negative numbers are (effectively)
@@ -790,7 +780,6 @@ scrollback_lines 50000
 #: Terminal bell {{{
 
 # enable_audio_bell yes
-enable_audio_bell no
 
 #: The audio bell. Useful to disable it in environments that require
 #: silence.
@@ -821,8 +810,7 @@ enable_audio_bell no
 #: macOS or the taskbar flash on Linux.
 
 # bell_on_tab "🔔 "
-# bell_on_tab no
-# bell_on_tab "!"
+bell_on_tab no
 
 #: Some text or a Unicode symbol to show on the tab if a window in the
 #: tab that does not have focus has a bell. If you want to use leading
@@ -1072,14 +1060,8 @@ tab_bar_min_tabs 1
 tab_bar_edge top
 tab_bar_style powerline
 tab_powerline_style angled
-#tab_title_template         {index}: {f'{title[:16]}…{title[-16:]}' if title.rindex(title[-1]) + 1 > 36 else title.center(1)} [{index}]{fmt.fg.magenta}{fmt.bold}{activity_symbol}{fmt.nobold}
-tab_title_template "{fmt.fg._52ad70}[{index}] {fmt.fg.yellow}{activity_symbol}{fmt.fg.red}{bell_symbol}{fmt.fg.tab}{title}"
-#tab_title_template {title}{' :{}:'.format(num_windows) if num_windows > 1 else ''}[{index}]{fmt.fg.magenta}{fmt.bold}{activity_symbol}{fmt.nobold}
-#tab_title_template         {title} [{index}]{fmt.fg.magenta}{fmt.bold}{activity_symbol}{fmt.nobold}
-#active_tab_title_template  {title}
-tab_activity_symbol "A "
-bell_on_tab "B "
-tab_title_max_length 36
+tab_title_template {title}{' :{}:'.format(num_windows) if num_windows > 1 else ''}
+#tab_title_template " {index}: {f'{title[:6]}…{title[-6:]}' if title.rindex(title[-1]) + 1 > 13 else title.center(7)} "
 
 # tab_bar_edge bottom
 
@@ -1870,7 +1852,7 @@ shell_integration no-cursor
 #: background_opacity. If you want to use both, you are probably
 #: better off just hiding the titlebar with hide_window_decorations.
 
-macos_option_as_alt left
+# macos_option_as_alt no
 
 #: Use the Option key as an Alt key on macOS. With this set to no,
 #: kitty will use the macOS native Option+Key to enter Unicode
@@ -2700,6 +2682,6 @@ macos_option_as_alt left
 
 
 # BEGIN_KITTY_THEME
-# Alabaster Dark
+# neobones_dark
 include current-theme.conf
 # END_KITTY_THEME
