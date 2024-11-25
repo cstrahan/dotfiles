@@ -11,6 +11,16 @@ skip_global_compinit=1
 typeset -TUx PATH path
 typeset -TUx MANPATH manpath
 
+# this empty path tells man to also search the default paths,
+# as would be reported by:
+#
+#   env -u MANPATH manpath
+#
+# the same could be done by leaving MANPATH unset,
+# but we expect that MANPATH will be touched elsewhere,
+# so explicitly set this path upfront.
+manpath+=("")
+
 # LS_COLORS
 # gdircolors --sh .dircolors > .dircolors.sh
 if [[ -f "$HOME/.dircolors.sh" ]]; then
@@ -48,7 +58,6 @@ if [[ ${OSTYPE} == darwin* ]]; then
   export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
   path[1,0]=("$HOMEBREW_PREFIX/bin")
   path[1,0]=("$HOMEBREW_PREFIX/sbin")
-  manpath[1,0]=("$HOMEBREW_PREFIX/share/man")  #
   export INFOPATH="$HOMEBREW_PREFIX/share/info${INFOPATH+:$INFOPATH}";
 
   # completions from homebrew packages
@@ -58,12 +67,6 @@ if [[ ${OSTYPE} == darwin* ]]; then
   if [[ -d "/Applications/WezTerm.app/Contents/MacOS" ]]; then
     path[1,0]=("/Applications/WezTerm.app/Contents/MacOS")
   fi
-
-  # provide GNU man pages for e.g. ls
-  #manpath[1,0]=("$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman")
-
-  # provide GNU man pages for e.g. gls
-  manpath[1,0]=("$HOMEBREW_PREFIX/opt/coreutils/share/man")
 
   export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
   path+="$ANDROID_SDK_ROOT/emulator"
@@ -83,9 +86,6 @@ path[1,0]=("$HOME/go/bin")
 
 # local binaries
 path[1,0]=("$HOME/.local/bin")
-
-# local manpages
-manpath[1,0]=("$HOME/.local/share/man")
 
 # rustup
 if [[ -e "$HOME/.cargo/env" ]]; then
@@ -115,13 +115,7 @@ fi
 # Remove any empty path strings.
 exclude=( '' )
 path=("${(@)path:|exclude}")
-manpath=("${(@)manpath:|exclude}")
 unset exclude
-
-# this tells man to also search the default paths,
-# as would be reported by:
-#   env -u MANPATH manpath
-manpath+=("")
 
 # Remove paths that are either dead links (-/) or do not
 # exist at all (N) and apply that to all in array (^)
@@ -148,6 +142,6 @@ manpath+=("")
 # So I'll keep track of PATH before /etc/profile screws it up,
 # and in ~/.profile I'll push all of my desired paths back to the front.
 if [[ ${OSTYPE} == darwin* ]]; then
-  path_before_etc_profile=( $path )
-  manpath_before_etc_profile=( $manpath )
+  path_before_etc_profile=( "$path[@]" )
+  manpath_before_etc_profile=( "$manpath[@]" )
 fi
