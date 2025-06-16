@@ -6,6 +6,46 @@ nuke() {
   command killall "$1" >/dev/null 2>&1
 }
 
+
+# Disable the "Are you sure you want to open this application?" dialog.
+defaults write com.apple.LaunchServices "LSQuarantine" -bool "false"
+
+
+# Always open new documents in tabs.
+defaults write NSGlobalDomain "AppleWindowTabbingMode" "always"
+
+
+# Keyboard
+defaults write NSGlobalDomain "KeyRepeat" -int "2"
+defaults write NSGlobalDomain "InitialKeyRepeat" -int "15"
+
+
+# Expand print panel by default.
+defaults write NSGlobalDomain "NSNavPanelExpandedStateForPrintMode" -bool "true"
+defaults write NSGlobalDomain "NSNavPanelExpandedStateForPrintMode2" -bool "true"
+
+# Expand save panel by default.
+defaults write NSGlobalDomain "NSNavPanelExpandedStateForSaveMode" -bool "true"
+defaults write NSGlobalDomain "NSNavPanelExpandedStateForSaveMode2" -bool "true"
+
+
+# Text correction
+defaults write NSGlobalDomain "NSAutomaticCapitalizationEnabled" -bool "false"      # Disable automatic capitalization.
+defaults write NSGlobalDomain "NSAutomaticPeriodSubstitutionEnabled" -bool "false"  # Disable peroid substitution.
+defaults write NSGlobalDomain "NSAutomaticQuoteSubstitutionEnabled" -bool "false"   # Disable smart quotes.
+defaults write NSGlobalDomain "NSAutomaticDashSubstitutionEnabled" -bool "false"    # Disable smart dashes.
+defaults write NSGlobalDomain "NSAutomaticCapitalizationEnabled" -bool "false"      # Disable automatic capitalization.
+defaults write NSGlobalDomain "NSAutomaticSpellingCorrectionEnabled" -bool "false"  # Disable auto-correct.
+defaults write NSGlobalDomain "NSAutomaticTextCompletionEnabled" -bool "false"      # Disable text-completion.
+
+
+# Set default to plain text in TextEdit
+defaults write com.apple.TextEdit "RichText" -bool "true"
+
+# Quotes will remain in the form they are typed
+defaults write com.apple.TextEdit "SmartQuotes" -bool "false"
+
+
 # Put the Dock on the left of the screen
 defaults write com.apple.dock "orientation" -string "left"
 
@@ -38,6 +78,17 @@ nuke Safari
 # Display the Finder "Quit" option
 defaults write com.apple.finder "QuitMenuItem" -bool "true"
 
+# Set default location for new Finder windows
+# Computer     : `PfCm`
+# Volume       : `PfVo`
+# $HOME        : `PfHm`
+# Desktop      : `PfDe`
+# Documents    : `PfDo`
+# All My Files : `PfAF`
+# Other…       : `PfLo`
+defaults write com.apple.finder NewWindowTarget -string "PfHm"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
+
 # Show all file extensions inside the Finder
 defaults write NSGlobalDomain "AppleShowAllExtensions" -bool "true"
 
@@ -47,7 +98,14 @@ defaults write com.apple.finder "AppleShowAllFiles" -bool "true"
 # Add pathbar to bottom of Finder
 defaults write com.apple.finder "ShowPathbar" -bool "true"
 
-# Default to list view
+# Add statusbar to bottom of Finder
+defaults write com.apple.finder "ShowStatusBar" -bool "true"
+
+# Set preferred view style.
+# Icon View   : `icnv`
+# List View   : `Nlsv`
+# Column View : `clmv`
+# Cover Flow  : `Flwv`
 defaults write com.apple.finder "FXPreferredViewStyle" -string "Nlsv"
 
 # Keep folders on top when searching by name
