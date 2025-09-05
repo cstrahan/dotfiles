@@ -10,6 +10,12 @@ fpath+=~/.zfunc
 # but this lets me autoload others too.
 autoload -Uz ~/.zfunc/*(:t)
 
+#
+# If we're being recorded by VHS:
+#if [[ "vhs" == "$(ps -p $(ps -p $(ps -p $$ -o ppid=) -o ppid=) -o comm=)" ]] then
+#  :
+#fi
+
 # raw control chars
 export LESS="-r"
 
