@@ -166,6 +166,11 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 #typeset -A ZSH_HIGHLIGHT_STYLES
 #ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
 
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]="fg=006"
+typeset -A FAST_HIGHLIGHT_STYLES
+FAST_HIGHLIGHT_STYLES[comment]='fg=006'
+
 # ------------------
 # Initialize modules
 # ------------------
@@ -191,8 +196,6 @@ source ${ZIM_HOME}/init.zsh
 # ------------------------------
 # Post-init module configuration
 # ------------------------------
-
-FAST_HIGHLIGHT_STYLES[comment]='fg=006'
 
 #
 # zsh-history-substring-search
