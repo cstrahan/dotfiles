@@ -38,6 +38,11 @@ export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 if [[ ${OSTYPE} == darwin* ]]; then
+  # Some software, like lazygit, will use ~/Library/Application\ Support/,
+  # unless XDG_CONFIG_HOME is set.
+  # Let's keep everything under ~/.config
+  export XDG_CONFIG_HOME="$HOME/.config"
+
   # see "Discussion: longterm Homebrew prefix on Apple Silicon Macs": https://github.com/Homebrew/brew/issues/9177
   # inline the results of either:
   #   /usr/local/bin/brew shellenv
