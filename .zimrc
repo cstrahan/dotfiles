@@ -62,13 +62,16 @@ zmodule zdharma-continuum/fast-syntax-highlighting --use degit
 #zmodule zsh-users/zsh-syntax-highlighting --use degit
 # Fish-like history search (up arrow) for Zsh.
 # zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
-zmodule zsh-users/zsh-history-substring-search --use degit
+#zmodule zsh-users/zsh-history-substring-search --use degit # using atuin instead
 # Fish-like autosuggestions for Zsh.
 zmodule zsh-users/zsh-autosuggestions --use degit
 # }}} End configuration added by Zim install
 
 # Configures fzf for faster fetching of files and directories names.
 zmodule fzf --use degit
+
+# Atuin for shell history
+zmodule cstrahan/zim-atuin --use degit
 
 # Configure wezterm
 zmodule cstrahan/zim-wezterm --use degit
