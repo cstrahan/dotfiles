@@ -1,0 +1,50 @@
+#compdef ghcp
+
+_ghcp() {
+  local context state line
+  typeset -A opt_args
+  
+  _arguments -C \
+    '-h[help]' \
+    '--help[help]' \
+    '--hostname=[The GitHub host to use for authentication]:hostname:' \
+    '-v[version for copilot]' \
+    '--version[version for copilot]' \
+    '1:command:->command' \
+    '*::args:->args'
+  
+  case $state in
+    command)
+      local -a commands
+      commands=(
+        'alias:Generate shell-specific aliases for convenience'
+        'config:Configure options'
+        'explain:Explain a command'
+        'suggest:Suggest a command'
+      )
+      _describe -t commands 'copilot command' commands
+      ;;
+    args)
+      case $words[2] in
+        alias)
+          # No additional arguments for 'alias'
+          ;;
+        config)
+          # No additional arguments for 'config'
+          ;;
+        explain)
+          _message 'Provide the command you want to explain'
+          ;;
+        suggest)
+          _message 'Provide a description of what you want to do'
+          ;;
+      esac
+      ;;
+  esac
+}
+
+if [ "$funcstack[1]" = "_ghcp" ]; then
+    _ghcp "$@"
+else
+    compdef _ghcp ghcp
+fi
