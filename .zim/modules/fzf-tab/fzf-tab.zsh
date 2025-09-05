@@ -25,7 +25,7 @@ builtin unalias -m '[^+]*'
   # or fzf-tab is disabled in the current context
   if (( $#_oad != 0 || ! IN_FZF_TAB )) \
     || { -ftb-zstyle -m disabled-on "any" } \
-    || ({ -ftb-zstyle -m disabled-on "files" } && [[ -n $isfile ]]); then
+    || { -ftb-zstyle -m disabled-on "files" && [[ -n $isfile ]] }; then
     builtin compadd "$@"
     return
   fi
@@ -111,7 +111,7 @@ builtin unalias -m '[^+]*'
   -ftb-generate-complist # sets `_ftb_complist`
 
   -ftb-zstyle -s continuous-trigger continuous_trigger || {
-    [[ $OSTYPE == msys ]] && continuous_trigger=// || continuous_trigger=/
+    [[ $OSTYPE == cygwin ]] && continuous_trigger=// || continuous_trigger=/
   }
 
   case $#_ftb_complist in
@@ -192,7 +192,7 @@ _fzf-tab-apply() {
     local -A v=("${(@0)${_ftb_compcap[(r)${(b)choice}$bs*]#*$bs}}")
     local -a args=("${(@ps:\1:)v[args]}")
     [[ -z $args[1] ]] && args=()  # don't pass an empty string
-    IPREFIX=$v[IPREFIX] PREFIX=$v[PREFIX] SUFFIX=$v[SUFFIX] ISUFFIX=$v[ISUFFIX]
+    IPREFIX=${v[IPREFIX]-} PREFIX=${v[PREFIX]-} SUFFIX=${v[SUFFIX]-} ISUFFIX=${v[ISUFFIX]-}
     builtin compadd "${args[@]:--Q}" -Q -- "$v[word]"
   done
 
