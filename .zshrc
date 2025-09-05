@@ -363,6 +363,9 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+if [ -f "$HOME/.zshrc.local" ]; then
+  source "$HOME/.zshrc.local"
+fi
 
 
 
