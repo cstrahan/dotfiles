@@ -58,6 +58,7 @@
 !/.notmuch-config
 !/.pystartup
 !/.tmux
+!/.zfunc
 !/.zim
 /.zim/*.zsh*.old
 /.zim/init.zsh*
