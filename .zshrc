@@ -5,9 +5,12 @@
 # TODO: https://github.com/romkatv/gitstatus
 # TDOO: https://egeek.me/2020/04/18/enabling-locate-on-osx/
 
-# completions
+# completions and other functions
 fpath+=~/.zfunc
-#fpath+=~/src/nix-zsh-completions
+# automatically autoload any functions in ~/.zfunc
+# the completion system already adds _* functions,
+# but this lets me autoload others too.
+autoload -Uz ~/.zfunc/*(:t)
 
 # raw control chars
 export LESS="-r"
@@ -513,6 +516,12 @@ ghce() {
 # 
 
 # debug startup with: zsh -x -i -l -c true
+
+# move my functions to the start of fpath
+exclude=( ~/.zfunc )
+fpath=("${(@)fpath:|exclude}")
+fpath[1,0]=(~/.zfunc)
+unset exclude
 
 # Load order:
 # +----------------+-----------+-----------+------+
