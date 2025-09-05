@@ -143,3 +143,8 @@ if [[ ${OSTYPE} == darwin* ]]; then
   path_before_etc_profile=( "$path[@]" )
   manpath_before_etc_profile=( "$manpath[@]" )
 fi
+
+# Atuin history search
+if [[ -e "$HOME/.atuin/bin/env" ]]; then
+  . "$HOME/.atuin/bin/env"
+fi
