@@ -26,6 +26,7 @@
 !/.config/lazygit
 !/.config/lf
 !/.config/nixpkgs
+!/.config/nvim
 !/.config/ranger
 !/.config/sxhkd
 !/.config/taffybar
