@@ -1,0 +1,390 @@
+#compdef llm
+
+# Main completion function
+_llm() {
+    local curcontext="$curcontext" state line ret=1
+    typeset -A opt_args
+
+    # Common options used across subcommands
+    local -a common_options=('--help[Show help message]')
+
+    # Helper function to describe commands
+    _llm_describe_commands() {
+        local -a commands=($@)
+        _describe -t commands 'llm commands' commands && ret=0
+    }
+
+    # Helper function to describe subcommands
+    _llm_describe_subcommands() {
+        local -a subcommands=($@)
+        _describe -t commands 'subcommands' subcommands && ret=0
+    }
+
+    # Helper function to handle options for a subcommand
+    _llm_handle_options() {
+        local -a options=($@)
+        _arguments $common_options $options && ret=0
+    }
+
+    # Helper function to fetch dynamic completions
+    _llm_fetch_list() {
+        local cmd="$1" field="$2" desc="$3"
+        local -a items
+        #items=(${(f)"$(llm $cmd 2>/dev/null | awk -F': ' '{ if ($'$field') print $'$field' }' | sort -u)"})
+        items=(${(f)"$(llm ${=cmd} 2>/dev/null | awk -F': | \\(aliases' '{ if ($'$field') print $'$field' }' | sort -u)"})
+        [[ -n $items ]] && _describe "$desc" items || _message "No $desc available"
+    }
+
+    # Specific helpers for dynamic completions
+    _llm_get_models() { _llm_fetch_list "models list" 2 "models"; }
+    _llm_get_templates() { _llm_fetch_list "templates list" 1 "templates"; }
+    _llm_get_collections() { _llm_fetch_list "collections list" 1 "collections"; }
+    _llm_get_schemas() { _llm_fetch_list "schemas list" 1 "schemas"; }
+    _llm_output_formats() {
+        local -a formats=('json' 'blob' 'base64' 'hex')
+        _describe 'output formats' formats
+    }
+    _llm_file_formats() {
+        local -a formats=('json' 'csv' 'tsv' 'nl')
+        _describe 'file formats' formats
+    }
+
+    # Cache models for performance
+    local -a _cached_models
+    if [[ -z ${_cached_models[(I)*]} ]]; then
+        _cached_models=(${(f)"$(llm models list 2>/dev/null | awk -F': ' '{ if ($2) print $2 }' | sort -u)"})
+    fi
+
+    _arguments -C \
+        '1: :->command' \
+        '*:: :->args' && ret=0
+
+    case $state in
+        command)
+            local -a commands=(
+                'prompt:Execute a prompt'
+                'chat:Hold an ongoing chat'
+                'keys:Manage stored API keys'
+                'logs:View and manage logs'
+                'models:Manage available models'
+                'templates:Manage stored templates'
+                'collections:Manage embeddings collections'
+                'embed:Embed text and return results'
+                'embed-multi:Batch embed multiple texts'
+                'embed-models:Manage available embedding models'
+                'similar:Find similar items'
+                'install:Install packages'
+                'uninstall:Uninstall packages'
+                'plugins:List installed plugins'
+                'openai:Interact with OpenAI API'
+                'aliases:Manage model aliases'
+                'fragments:Manage stored fragments'
+                'schemas:Manage stored schemas'
+                'tools:Manage available tools'
+            )
+            _llm_describe_commands $commands
+            ;;
+        args)
+            case $words[1] in
+                prompt)
+                    _llm_handle_options \
+                        '-s+[System prompt]:system prompt:_default' \
+                        '-m+[Model]:model:_llm_get_models' \
+                        '-a+[Attachment]:attachment:_files' \
+                        '--at+[Attachment Type]:type:_default' \
+                        '-o+[Options]:options:_default' \
+                        '-t+[Template]:template:_llm_get_templates' \
+                        '-p+[Template Params]:params:_default' \
+                        '--no-stream[Disable streaming]' \
+                        '-n[Do not log to database]' \
+                        '--log[Log prompt and response]' \
+                        '-c[Continue last conversation]' \
+                        '--cid+[Conversation ID]:id:_default' \
+                        '--key+[API Key]:key:_default' \
+                        '--save[Save as template]' \
+                        '--async[Run asynchronously]' \
+                        '-u[Show token usage]' \
+                        '-x[Extract first code block]' \
+                        '--xl[Extract last code block]'
+                    ;;
+                chat)
+                    _llm_handle_options \
+                        '-s+[System prompt]:system prompt:_default' \
+                        '-m+[Model]:model:_llm_get_models' \
+                        '-c[Continue last conversation]' \
+                        '--cid+[Conversation ID]:id:_default' \
+                        '-t+[Template]:template:_llm_get_templates' \
+                        '-p+[Template Params]:params:_default' \
+                        '-o+[Options]:options:_default' \
+                        '--no-stream[Disable streaming]' \
+                        '--key+[API Key]:key:_default'
+                    ;;
+                keys)
+                    local -a subcommands=(
+                        'list:List stored API keys'
+                        'get:Get a stored API key'
+                        'set:Set an API key'
+                        'path:Show keys.json location'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            set) _llm_handle_options '1:key name:_default' '--value+[Value to set]:value:_default' ;;
+                            get) _llm_handle_options '1:key name:_default' ;;
+                            list|path) _llm_handle_options ;;
+                        esac
+                    fi
+                    ;;
+                logs)
+                    local -a subcommands=(
+                        'list:Show recent logs'
+                        'on:Enable logging'
+                        'off:Disable logging'
+                        'status:Show logging status'
+                        'path:Show logs.db path'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            list)
+                                _llm_handle_options \
+                                    '-n+[Number of entries]:number:_default' \
+                                    '-p+[Path to log database]:path:_files' \
+                                    '-m+[Filter by model]:model:_llm_get_models' \
+                                    '-q+[Search query]:query:_default' \
+                                    '-t[Truncate output]' \
+                                    '-s[Shorter output]' \
+                                    '-u[Include token usage]' \
+                                    '-r[Just output last response]' \
+                                    '-x[Extract first code block]' \
+                                    '--xl[Extract last code block]' \
+                                    '-c[Show current conversation logs]' \
+                                    '--cid+[Show logs for conversation]:id:_default' \
+                                    '--json[Output as JSON]'
+                                ;;
+                            on|off|status|path) _llm_handle_options ;;
+                        esac
+                    fi
+                    ;;
+                models)
+                    local -a subcommands=(
+                        'list:List available models'
+                        'add:Add a new model'
+                        'remove:Remove a model'
+                        'schema:Show model schema'
+                        'options:Show model options'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            list) _llm_handle_options '1:model:_llm_get_models' '-q+[Search query]:query:_default' '--json[Output as JSON]' ;;
+                            add) _llm_handle_options '1:model name:_default' '2:model type:_default' '3:model options:_default' ;;
+                            remove) _llm_handle_options '1:model:_llm_get_models' ;;
+                            schema|options) _llm_handle_options '1:model:_llm_get_models' ;;
+                        esac
+                    fi
+                    ;;
+                embed)
+                    _llm_handle_options \
+                        '-i+[Input file]:file:_files' \
+                        '-m+[Model]:model:_llm_get_models' \
+                        '--store[Store text in database]' \
+                        '-d+[Database file]:database:_files' \
+                        '-c+[Content to embed]:content:_default' \
+                        '--binary[Treat input as binary]' \
+                        '--metadata+[JSON metadata]:metadata:_default' \
+                        '-f+[Output format]:format:_llm_output_formats'
+                    ;;
+                embed-multi)
+                    _llm_handle_options \
+                        '--format+[Input format]:format:_llm_file_formats' \
+                        '--files+[Embed files]:files:_files -/' \
+                        '--encoding+[File encoding]:encoding:_default' \
+                        '--binary[Treat files as binary]' \
+                        '--sql+[SQL query]:query:_default' \
+                        '--attach+[Attach database]:database:_files' \
+                        '--batch-size+[Batch size]:size:_default' \
+                        '--prefix+[ID prefix]:prefix:_default' \
+                        '-m+[Model]:model:_llm_get_models' \
+                        '--prepend+[Prepend to content]:content:_default' \
+                        '--store[Store text in database]' \
+                        '-d+[Database file]:database:_files'
+                    ;;
+                embed-models)
+                    local -a subcommands=(
+                        'list:List available embedding models'
+                        'default:Show or set default model'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            list) _llm_handle_options '-q+[Search query]:query:_default' ;;
+                            default) _llm_handle_options '--remove-default[Reset to no default]' ;;
+                        esac
+                    fi
+                    ;;
+                templates)
+                    local -a subcommands=(
+                        'list:List available prompt templates'
+                        'edit:Edit template using default $EDITOR'
+                        'show:Show the specified prompt template'
+                        'path:Output the path to templates directory'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            edit|show) _llm_handle_options '1:template name:_llm_get_templates' ;;
+                            list|path) _llm_handle_options ;;
+                        esac
+                    fi
+                    ;;
+                aliases)
+                    local -a subcommands=(
+                        'list:List model aliases'
+                        'set:Set a model alias'
+                        'remove:Remove a model alias'
+                        'path:Show alias file path'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            list|path) _llm_handle_options ;;
+                            set) _llm_handle_options '1:alias:_default' '2:model:_llm_get_models' ;;
+                            remove) _llm_handle_options '1:alias:_default' ;;
+                        esac
+                    fi
+                    ;;
+                fragments)
+                    local -a subcommands=(
+                        'list:List current fragments'
+                        'set:Set an alias for a fragment'
+                        'remove:Remove a fragment alias'
+                        'show:Display the fragment stored under an alias or hash'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            list)
+                                _llm_handle_options \
+                                    '-q+[Search for fragments matching strings]:query:_default' \
+                                    '--query+[Search for fragments matching strings]:query:_default' \
+                                    '--aliases[Show only fragments with aliases]' \
+                                    '--json[Output as JSON]'
+                                ;;
+                            set) _llm_handle_options '1:alias:_default' '2:fragment path or input:_files' ;;
+                            show) _llm_handle_options '1:alias or hash:_default' ;;
+                            remove) _llm_handle_options '1:alias:_default' ;;
+                        esac
+                    fi
+                    ;;
+                collections)
+                    local -a subcommands=(
+                        'list:List collections'
+                        'create:Create a collection'
+                        'delete:Delete a collection'
+                        'add:Add embeddings to a collection'
+                        'search:Search a collection'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            list) _llm_handle_options '-d+[Database path]:database:_files' ;;
+                            create) _llm_handle_options '1:collection name:_default' '-d+[Database file]:database:_files' ;;
+                            delete) _llm_handle_options '1:collection name:_llm_get_collections' '-d+[Database file]:database:_files' ;;
+                            add) _llm_handle_options '1:collection name:_llm_get_collections' '-d+[Database file]:database:_files' '-i+[Input file]:file:_files' ;;
+                            search) _llm_handle_options '1:collection name:_llm_get_collections' '-d+[Database file]:database:_files' '-q+[Query]:query:_default' '-n+[Number of results]:number:_default' ;;
+                        esac
+                    fi
+                    ;;
+                schemas)
+                    local -a subcommands=(
+                        'list:List stored schemas'
+                        'dsl:Convert LLM'\''s schema DSL to a JSON schema'
+                        'show:Show a stored schema'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        case $words[2] in
+                            list) _llm_handle_options ;;
+                            dsl) _llm_handle_options '1:schema name:_llm_get_schemas' ;;
+                            show) _llm_handle_options '1:schema name:_llm_get_schemas' ;;
+                        esac
+                    fi
+                    ;;
+                similar)
+                    _llm_handle_options \
+                        '-d+[Database file]:database:_files' \
+                        '-c+[Collection name]:collection:_llm_get_collections' \
+                        '-q+[Query text]:query:_default' \
+                        '-i+[Input file]:file:_files' \
+                        '-n+[Number of results]:number:_default' \
+                        '--binary[Treat input as binary]' \
+                        '-m+[Model]:model:_llm_get_models' \
+                        '--metadata-sql+[SQL for metadata filter]:sql:_default' \
+                        '--ids-only[Only return IDs]' \
+                        '--json[Output as JSON]'
+                    ;;
+                install)
+                    _llm_handle_options \
+                        '1:package:_default' \
+                        '--upgrade[Upgrade if already installed]'
+                    ;;
+                uninstall)
+                    _llm_handle_options '1:package:_default'
+                    ;;
+                plugins)
+                    _llm_handle_options '--json[Output as JSON]'
+                    ;;
+                openai)
+                    local -a subcommands=(
+                        'assistants:Work with OpenAI assistants'
+                        'threads:Work with OpenAI threads'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $subcommands
+                    else
+                        local -a subsubcommands=(
+                            'list:List items'
+                            'create:Create a new item'
+                            'delete:Delete an item'
+                        )
+                        case $words[2] in
+                            assistants|threads)
+                                if (( CURRENT == 3 )); then
+                                    _llm_describe_subcommands $subsubcommands
+                                else
+                                    _llm_handle_options
+                                fi
+                                ;;
+                        esac
+                    fi
+                    ;;
+                tools)
+                    local -a tool_subcommands=(
+                        'list:List available tools'
+                    )
+                    if (( CURRENT == 2 )); then
+                        _llm_describe_subcommands $tool_subcommands
+                    else
+                        case $words[2] in
+                            list) _llm_handle_options ;;                            
+                        esac
+                    fi
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_llm "$@"
