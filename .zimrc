@@ -75,3 +75,6 @@ zmodule cstrahan/zim-wezterm --use degit
 
 # Configure Rust
 zmodule cstrahan/zim-rust --use degit
+
+# Generate command lines via llm
+zmodule day50-dev/Zummoner --use degit
