@@ -1,0 +1,6 @@
+#compdef bindlist
+
+_bindlist () {
+  _gnu_generic "$@"
+}
+_bindlist "$@"
