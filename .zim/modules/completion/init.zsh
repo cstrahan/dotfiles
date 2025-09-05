@@ -15,14 +15,15 @@ fi
 
   # Check if dumpfile is up-to-date by comparing the full path and
   # last modification time of all the completion functions in fpath.
-  local zdumpfile zstats zold_dat
+  local zdumpfile zold_dat
+  local -a zmtimes
   local -i zdump_dat=1
   zstyle -s ':zim:completion' dumpfile 'zdumpfile' || zdumpfile=${ZDOTDIR:-${HOME}}/.zcompdump
   LC_ALL=C local -r zcomps=(${^fpath}/^([^_]*|*~|*.zwc)(N))
   if (( ${#zcomps} )); then
-    zmodload -F zsh/stat b:zstat && zstat -A zstats +mtime ${zcomps} || return 1
+    zmodload -F zsh/stat b:zstat && zstat -A zmtimes +mtime ${zcomps} || return 1
   fi
-  local -r znew_dat=${ZSH_VERSION}$'\0'${(pj:\0:)zcomps}$'\0'${(pj:\0:)zstats}
+  local -r znew_dat=${ZSH_VERSION}$'\0'${(pj:\0:)zcomps}$'\0'${(pj:\0:)zmtimes}
   if [[ -e ${zdumpfile}.dat ]]; then
     zmodload -F zsh/system b:sysread && sysread -s ${#znew_dat} zold_dat <${zdumpfile}.dat || return 1
     if [[ ${zold_dat} == ${znew_dat} ]] zdump_dat=0
@@ -32,7 +33,7 @@ fi
   fi
 
   # Load and initialize the completion system
-  autoload -Uz compinit && compinit -C -d ${zdumpfile} || return 1
+  autoload -Uz compinit && compinit -C -d ${zdumpfile} && [[ -e ${zdumpfile} ]] || return 1
 
   if [[ ! ${zdumpfile}.dat -nt ${zdumpfile} ]]; then
     >! ${zdumpfile}.dat <<<${znew_dat}
@@ -55,6 +56,9 @@ zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || comp
 # Move cursor to end of word if a full completion is inserted.
 setopt ALWAYS_TO_END
 
+# Completion is done from both ends of the cursor.
+setopt COMPLETE_IN_WORD
+
 if [[ ${glob_case_sensitivity} == sensitive ]]; then
   setopt CASE_GLOB
 else
@@ -72,7 +76,7 @@ setopt NO_LIST_BEEP
 zstyle ':completion::complete:*' use-cache on
 
 # Group matches and describe.
-zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' menu select
 zstyle ':completion:*:matches' group yes
 zstyle ':completion:*:options' description yes
 zstyle ':completion:*:options' auto-description '%d'
@@ -80,13 +84,14 @@ zstyle ':completion:*:corrections' format '%F{green}-- %d (errors: %e) --%f'
 zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*:messages' format '%F{purple}-- %d --%f'
 zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
-zstyle ':completion:*' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
 if [[ ${completion_case_sensitivity} == sensitive ]]; then
-  zstyle ':completion:*' matcher-list '' 'r:|?=**'
+  zstyle ':completion:*' matcher-list '' '+r:|[._-]=* r:|=*' '+l:|=*'
 else
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+  # This is actually "smart" case sensitivity. Case insensitive is 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
+  # which is broken in Zsh 5.9. See https://www.zsh.org/mla/workers/2022/msg01229.html
+  zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' '+r:|[._-]=* r:|=*' '+l:|=*'
 fi
 
 # Insert a TAB character instead of performing completion when left buffer is empty.
