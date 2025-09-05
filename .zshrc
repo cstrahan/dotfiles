@@ -192,6 +192,8 @@ source ${ZIM_HOME}/init.zsh
 # Post-init module configuration
 # ------------------------------
 
+FAST_HIGHLIGHT_STYLES[comment]='fg=006'
+
 #
 # zsh-history-substring-search
 #
