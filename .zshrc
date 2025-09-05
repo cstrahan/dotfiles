@@ -100,6 +100,9 @@ WORDCHARS=${WORDCHARS//[\/]}
 # Remove # from WORDCHARS
 WORDCHARS=${WORDCHARS//[#]}
 
+# Incremental completion via llm
+ZUMMONER_SPELL=1
+
 # -----------------
 # Zim configuration
 # -----------------
