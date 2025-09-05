@@ -99,9 +99,7 @@ if [[ -o interactive ]] && (( $+commands[direnv] )); then
 fi
 
 # editor
-if (( $+commands[lvim] )); then
-  export EDITOR=lvim
-elif (( $+commands[nvim] )); then
+if (( $+commands[nvim] )); then
   export EDITOR=nvim
 elif (( $+commands[vim] )); then
   export EDITOR=vim
