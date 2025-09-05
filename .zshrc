@@ -16,10 +16,7 @@ export LESS="-r"
 #alias history="fc -l 1"
 
 # editor
-if (( $+commands[lvim] )); then
-  export EDITOR=lvim
-  alias vi=lvim
-elif (( $+commands[nvim] )); then
+if (( $+commands[nvim] )); then
   export EDITOR=nvim
   alias vi=nvim
 elif (( $+commands[vim] )); then
