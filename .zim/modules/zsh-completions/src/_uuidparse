@@ -1,6 +1,6 @@
-#compdef clang-check
+#compdef uuidparse
 # ------------------------------------------------------------------------------
-# Copyright (c) 2022 Github zsh-users - https://github.com/zsh-users
+# Copyright (c) 2025 Github zsh-users - https://github.com/zsh-users
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@
 # Description
 # -----------
 #
-#  Completion script for clang-check v20.1.2 (https://clang.llvm.org/docs/ClangCheck.html)
+#  Completion script for uuidparse 2.40.2 (https://github.com/util-linux/util-linux)
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -34,28 +34,18 @@
 #
 # ------------------------------------------------------------------------------
 
+_uuidparse_types() {
+  local -a types=(UUID VARIANT TYPE TIME)
+  _values -s ',' types $types
+}
+
 _arguments \
-  '(- *)--help[Display available options]' \
-  '(- *)--help-hidden[Display available more options]' \
-  '(- *)--help-list[Display list of available options]' \
-  '(- *)--help-list-hidden[Display list of more available options]' \
-  '(- *)--version[Display the version of this program]' \
-  '--analyze[Run static analysis engine]' \
-  '--analyzer-output-path=[Write output to file]: :_files' \
-  '--ast-dump[Build ASTs and then debug dump them]' \
-  '--ast-dump-filter=[Use with -ast-dump or -ast-print to dump/print only AST declaration nodes having a certain substring]:string' \
-  '--ast-list[Build ASTs and print the list of declaration node qualified names]' \
-  '--ast-print[Build ASTs and then pretty-print them]' \
-  '*--extra-arg=[Additional argument to append to the compiler command line]:arg' \
-  '*--extra-arg-before=[Additional argument to prepend to the compiler command line]:arg' \
-  '--fix-what-you-can[Apply fix-it advice even in the presence of unfixable errors]' \
-  '--fixit[Apply fix-it advice to the input source]' \
-  '-p[Build directory where compile_commands.json is]: :_files -/' \
-  '--print-all-options[Print all option values after command line parsing]' \
-  '--print-options[Print non-default options after command line parsing]' \
-  '--syntax-tree-dump[dump the syntax tree]' \
-  '--tokens-dump[dump the preprocessed tokens]' \
-  '*: :_files'
+  '(-J --json -n --noheadings -r --raw)'{-J,--json}'[use JSON output format]' \
+  '(-J --json -n --noheadings)'{-n,--noheadings}'[do not print a header line]' \
+  '(-o --output)'{-o,--output}'[specify which output columns to print]:type:_uuidparse_types' \
+  '(-r --raw -J --json)'{-r,--raw}'[use the raw output format]' \
+  '(- *)'{-h,--help}'[display help text and exit]' \
+  '(- *)'{-V,--version}'[print version and exit]'
 
 # Local Variables:
 # mode: Shell-Script

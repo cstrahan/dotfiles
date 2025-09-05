@@ -1,6 +1,6 @@
-#compdef clang-check
+#compdef uuidd
 # ------------------------------------------------------------------------------
-# Copyright (c) 2022 Github zsh-users - https://github.com/zsh-users
+# Copyright (c) 2025 Github zsh-users - https://github.com/zsh-users
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@
 # Description
 # -----------
 #
-#  Completion script for clang-check v20.1.2 (https://clang.llvm.org/docs/ClangCheck.html)
+#  Completion script for uuidd 2.40.2 (https://github.com/util-linux/util-linux)
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -35,27 +35,21 @@
 # ------------------------------------------------------------------------------
 
 _arguments \
-  '(- *)--help[Display available options]' \
-  '(- *)--help-hidden[Display available more options]' \
-  '(- *)--help-list[Display list of available options]' \
-  '(- *)--help-list-hidden[Display list of more available options]' \
-  '(- *)--version[Display the version of this program]' \
-  '--analyze[Run static analysis engine]' \
-  '--analyzer-output-path=[Write output to file]: :_files' \
-  '--ast-dump[Build ASTs and then debug dump them]' \
-  '--ast-dump-filter=[Use with -ast-dump or -ast-print to dump/print only AST declaration nodes having a certain substring]:string' \
-  '--ast-list[Build ASTs and print the list of declaration node qualified names]' \
-  '--ast-print[Build ASTs and then pretty-print them]' \
-  '*--extra-arg=[Additional argument to append to the compiler command line]:arg' \
-  '*--extra-arg-before=[Additional argument to prepend to the compiler command line]:arg' \
-  '--fix-what-you-can[Apply fix-it advice even in the presence of unfixable errors]' \
-  '--fixit[Apply fix-it advice to the input source]' \
-  '-p[Build directory where compile_commands.json is]: :_files -/' \
-  '--print-all-options[Print all option values after command line parsing]' \
-  '--print-options[Print non-default options after command line parsing]' \
-  '--syntax-tree-dump[dump the syntax tree]' \
-  '--tokens-dump[dump the preprocessed tokens]' \
-  '*: :_files'
+  '(-C --cont-clock)'{-C,--cont-clock=-}'[activate continuous clock handling for time based UUIDs]:time' \
+  '(-d --debug)'{-d,--debug}'[run uuidd in debugging mode]' \
+  '(-F --no-fork)'{-F,--no-fork}'[do not daemonize using a double-fork]' \
+  '(-k --kill)'{-k,--kill}'[if currently a uuidd daemon is running, kill it]' \
+  '(-n --uuids)'{-n,--uuids}'[request a bulk response of number UUIDs]:number' \
+  '(-P --no-pid -p --pid)'{-P,--no-pid}'[do not create a pid file]' \
+  '(-P --no-pid -p --pid)'{-p,--pid}'[specify the path name where the pid file should be written]:path:_files' \
+  '(-q --quiet)'{-q,--quiet}'[suppress some failure messages]' \
+  '(-r --random)'{-r,--random}'[connect to running uuid daemon and request to return a random-based UUID]' \
+  '(-S --socket-activation -s --socket)'{-S,--socket-activation}'[do not create a socket]' \
+  '(-S --socket-activation -s --socket)'{-s,--socket}'[make uuidd use this path name for the unix-domain socket]:sokect:_files' \
+  '(-T --timeout)'{-T,--timeout}'[make uuidd exit after number seconds of inactivity]:seconds' \
+  '(-t --time)'{-t,--time}'[connect to running uuid daemon and request to return a time-based UUID]' \
+  '(- *)'{-h,--help}'[display help text and exit]' \
+  '(- *)'{-V,--version}'[print version and exit]'
 
 # Local Variables:
 # mode: Shell-Script

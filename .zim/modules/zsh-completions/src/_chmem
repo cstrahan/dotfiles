@@ -1,6 +1,6 @@
-#compdef kak
+#compdef chmem
 # ------------------------------------------------------------------------------
-# Copyright (c) 2017 Github zsh-users - https://github.com/zsh-users
+# Copyright (c) 2016 Github zsh-users - https://github.com/zsh-users
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,46 +28,21 @@
 # Description
 # -----------
 #
-#  Completion script for kak 2024.05.18 (https://github.com/mawww/kakoune)
+# Completion script for chmem, util-linux 2.40.2 (https://github.com/util-linux/util-linux/)
+# - configure memory
 #
-# ------------------------------------------------------------------------------
-# Authors
-# -------
-#
-#  * Frank LENORMAND <https://github.com/lenormf>
-#
+# Author:
+#   *Aditi Sharma (https://github.com/Aditi76117)
 # ------------------------------------------------------------------------------
 
-_kak_sessions() {
-  local -a session_ids expl
-  session_ids=($(_call_program session_names kak -l))
-  _description session-ids expl "session name"
-  compadd "$expl[@]" -a session_ids
-}
-
-_kak() {
-  _arguments \
-    '-c[connect to given session]:session_id:_kak_sessions' \
-    '-e[execute argument on client initialization phase]:keys' \
-    '-E[execute argument on server initialization]:keys' \
-    "-n[do not load the system's kakrc]" \
-    '-s[set the current session name]:session_id' \
-    '-d[run as a headless session (requires -s)]' \
-    '-p[just send stdin as commands to the given session]:session_id:_kak_sessions' \
-    "-f[enter in 'filter mode':select the whole file, then execute keys]:keys" \
-    '-i[backup the files on which a filter is applied using the given suffix]:suffix' \
-    '-q[in filter mode, do not print any errors]' \
-    '-ui[set the type of user interface to use (terminal, dummy, or json)]:ui_type:(terminal dummy json)' \
-    '-l[list existing sessions]:session_id:_kak_sessions' \
-    '-clear[clear dead sessions]' \
-    '-debug[initial debug option value]:arg' \
-    '(- *)-version[display Kakoune version and quit]' \
-    '-ro[readonly mode]' \
-    '(- *)-help[display a help message and quit]' \
-    '*::files:_files'
-}
-
-_kak "$@"
+_arguments -s \
+  '(-b --blocks)'{-b,--blocks}'[Use a BLOCKRANGE parameter instead of RANGE or SIZE]' \
+  '(-d --disable)'{-d,--disable}'[Set the specified RANGE, SIZE, or BLOCKRANGE of memory offline]' \
+  '(-e --enable)'{-e,--enable}'[Set the specified RANGE, SIZE, or BLOCKRANGE of memory online]' \
+  '(-z --zone)'{-z,--zone}'[Select the memory ZONE where to set the specified RANGE, SIZE, or BLOCKRANGE of memory online or offline]' \
+  '(-v --verbose)'{-v,--verbose}'[Verbose mode]' \
+  '(- *)'{-h,--help}'[Display help text and exit]' \
+  '(- *)'{-V,--version}'[Print version and exit]'
 
 # Local Variables:
 # mode: Shell-Script

@@ -1,6 +1,6 @@
-#compdef kak
+#compdef fallocate
 # ------------------------------------------------------------------------------
-# Copyright (c) 2017 Github zsh-users - https://github.com/zsh-users
+# Copyright (c) 2016 Github zsh-users - https://github.com/zsh-users
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,46 +28,29 @@
 # Description
 # -----------
 #
-#  Completion script for kak 2024.05.18 (https://github.com/mawww/kakoune)
-#
+# Completion for fallocate, util-linux 2.40.2 (https://github.com/util-linux/util-linux/)
+# - preallocate or deallocate space to a file
+# https://man7.org/linux/man-pages/man1/fallocate.1.html
 # ------------------------------------------------------------------------------
 # Authors
 # -------
-#
-#  * Frank LENORMAND <https://github.com/lenormf>
-#
+#  * Aditi Sharma (https://github.com/Aditi76117)
 # ------------------------------------------------------------------------------
 
-_kak_sessions() {
-  local -a session_ids expl
-  session_ids=($(_call_program session_names kak -l))
-  _description session-ids expl "session name"
-  compadd "$expl[@]" -a session_ids
-}
-
-_kak() {
-  _arguments \
-    '-c[connect to given session]:session_id:_kak_sessions' \
-    '-e[execute argument on client initialization phase]:keys' \
-    '-E[execute argument on server initialization]:keys' \
-    "-n[do not load the system's kakrc]" \
-    '-s[set the current session name]:session_id' \
-    '-d[run as a headless session (requires -s)]' \
-    '-p[just send stdin as commands to the given session]:session_id:_kak_sessions' \
-    "-f[enter in 'filter mode':select the whole file, then execute keys]:keys" \
-    '-i[backup the files on which a filter is applied using the given suffix]:suffix' \
-    '-q[in filter mode, do not print any errors]' \
-    '-ui[set the type of user interface to use (terminal, dummy, or json)]:ui_type:(terminal dummy json)' \
-    '-l[list existing sessions]:session_id:_kak_sessions' \
-    '-clear[clear dead sessions]' \
-    '-debug[initial debug option value]:arg' \
-    '(- *)-version[display Kakoune version and quit]' \
-    '-ro[readonly mode]' \
-    '(- *)-help[display a help message and quit]' \
-    '*::files:_files'
-}
-
-_kak "$@"
+_arguments \
+  '(-c --collapse-range)'{-c,--collapse-range}'[Removes a byte range from a file without leaving a hole]' \
+  '(-d --dig-holes)'{-d,--dig-holes}'[Detect and dig holes]' \
+  '(-i --insert-range)'{-i,--insert-range}'[Insert a hole of length bytes from offset]' \
+  '(-l --length)'{-l+,--length}'[Specifies the length of the range, in bytes]:bytes' \
+  '(-n --keep-size)'{-n,--keep-size}'[Do not modify the apparent length of the file]' \
+  '(-o --offset)'{-o+,--offset}'[Specifies the beginning offset of the range, in bytes]:offset' \
+  '(-p --punch-hole)'{-p,--punch-hole}'[Deallocates space in the byte range starting at offset and continuing for length bytes]' \
+  '(-v --verbose)'{-v,--verbose}'[Enable verbose mode]' \
+  '(-x --posix)'{-p,--posix}'[Enable POSIX operation mode]' \
+  '(-z --zero-range)'{-z,--zero-range}'[Zeroes space in the byte range starting at offset and continuing for length bytes]' \
+  '(- *)'{-h,--help}'[Display help text and exit]' \
+  '(- *)'{-V,--version}'[Print version and exit]' \
+  '*:filename:_files'
 
 # Local Variables:
 # mode: Shell-Script

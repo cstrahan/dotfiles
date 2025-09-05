@@ -1,6 +1,6 @@
-#compdef kak
+#compdef ipcmk
 # ------------------------------------------------------------------------------
-# Copyright (c) 2017 Github zsh-users - https://github.com/zsh-users
+# Copyright (c) 2016 Github zsh-users - https://github.com/zsh-users
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,46 +28,20 @@
 # Description
 # -----------
 #
-#  Completion script for kak 2024.05.18 (https://github.com/mawww/kakoune)
+# Completion script for ipcmk, util-linux 2.40.2 (https://github.com/util-linux/util-linux/)
+# - create various IPC resources
 #
-# ------------------------------------------------------------------------------
-# Authors
-# -------
-#
-#  * Frank LENORMAND <https://github.com/lenormf>
-#
+# Author:
+#   * Aditi Sharma (https://github.com/Aditi76117)
 # ------------------------------------------------------------------------------
 
-_kak_sessions() {
-  local -a session_ids expl
-  session_ids=($(_call_program session_names kak -l))
-  _description session-ids expl "session name"
-  compadd "$expl[@]" -a session_ids
-}
-
-_kak() {
-  _arguments \
-    '-c[connect to given session]:session_id:_kak_sessions' \
-    '-e[execute argument on client initialization phase]:keys' \
-    '-E[execute argument on server initialization]:keys' \
-    "-n[do not load the system's kakrc]" \
-    '-s[set the current session name]:session_id' \
-    '-d[run as a headless session (requires -s)]' \
-    '-p[just send stdin as commands to the given session]:session_id:_kak_sessions' \
-    "-f[enter in 'filter mode':select the whole file, then execute keys]:keys" \
-    '-i[backup the files on which a filter is applied using the given suffix]:suffix' \
-    '-q[in filter mode, do not print any errors]' \
-    '-ui[set the type of user interface to use (terminal, dummy, or json)]:ui_type:(terminal dummy json)' \
-    '-l[list existing sessions]:session_id:_kak_sessions' \
-    '-clear[clear dead sessions]' \
-    '-debug[initial debug option value]:arg' \
-    '(- *)-version[display Kakoune version and quit]' \
-    '-ro[readonly mode]' \
-    '(- *)-help[display a help message and quit]' \
-    '*::files:_files'
-}
-
-_kak "$@"
+_arguments -s \
+  '(-M --shmem)'{-M,--shmem}'[Create a shared memory segment of size bytes]:size' \
+  '(-Q --queue)'{-Q,--queue}'[Create a message queue]' \
+  '(-S --semaphore)'{-S,--semaphore}'[Create a semaphore array with number of elements]:number' \
+  '(-p --mode)'{-p,--mode}'[Access permissions for the resource]:mode' \
+  '(- *)'{-h,--help}'[Display help text and exit]' \
+  '(- *)'{-V,--version}'[Print version and exit]'
 
 # Local Variables:
 # mode: Shell-Script
@@ -76,3 +50,6 @@ _kak "$@"
 # sh-basic-offset: 2
 # End:
 # vim: ft=zsh sw=2 ts=2 et
+
+# Note: This script is useful only on systems with `ipcmk` (typically Linux).
+# macOS does not include this command.
