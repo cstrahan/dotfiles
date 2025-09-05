@@ -20,6 +20,7 @@
 !/.config
 /.config/*
 !/.config/alacritty
+!/.config/atuin
 !/.config/dunst
 !/.config/kitty
 !/.config/lf
