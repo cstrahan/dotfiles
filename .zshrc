@@ -1,7 +1,5 @@
 # vim: set tabstop=2:softtabstop=2:shiftwidth=2:expandtab
 
-#set -x
-
 # TODO: https://github.com/romkatv/gitstatus
 # TDOO: https://egeek.me/2020/04/18/enabling-locate-on-osx/
 
