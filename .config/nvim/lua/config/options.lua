@@ -8,3 +8,7 @@ opt.title = true
 
 vim.g.snacks_animate = false
 vim.g.autoformat = false
+
+vim.opt.listchars = 'eol:¬,tab:▸ ,trail:·,nbsp:␣,extends:»,precedes:«'
+-- lazyvim defaults:
+--vim.opt.listchars = 'tab:> ,trail:-,nbsp:+'
