@@ -11,6 +11,9 @@ vim.g.snacks_animate = false
 vim.g.autoformat = false
 
 -- useful characters: (␍␤¬▸·␣»«⏎)
-vim.opt.listchars = 'eol:⏎,tab:▸ ,trail:·,nbsp:␣,extends:»,precedes:«'
+-- note: (neo)vim will still show a eol char at the end of the file,
+-- even when there isn't a newline, so eol is (IMO) pointless noise.
+-- we'll instead use a [noeol] statusline component to keep tabs on final EOL char.
+vim.opt.listchars = 'tab:▸ ,trail:·,nbsp:␣,extends:»,precedes:«'
 -- lazyvim defaults:
 --vim.opt.listchars = 'tab:> ,trail:-,nbsp:+'
