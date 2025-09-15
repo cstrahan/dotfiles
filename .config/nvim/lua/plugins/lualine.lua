@@ -6,8 +6,7 @@ return {
         return "[noeol]"
       end,
       cond = function()
-        --return not vim.bo.endofline
-        return true
+        return not vim.bo.endofline
       end,
       color = { fg = "#e55561", gui = "bold" },
     }
