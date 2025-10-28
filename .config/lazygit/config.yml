@@ -3,4 +3,6 @@ git:
   # conflicts but no longer do; and it will also ask you if you want to
   # continue a merge or rebase if you've resolved all conflicts. If false, it
   # won't do either of these things.
+  #
+  # I have this disabled because it annoys me that it stages ALL files with changes.
   autoStageResolvedConflicts: false
