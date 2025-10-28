@@ -7,12 +7,14 @@
 	fsmonitor = true
 	untrackedcache = true
 	pager = delta
+	excludesfile = ~/.gitignore_global
 [delta]
 	plus-color = "#012800"
 	minus-color = "#340001"
 	syntax-theme = Monokai Extended
 	features = line-numbers decorations
 	whitespace-error-style = 22 reverse
+	navigate = true
 [delta "decorations"]
 	commit-decoration-style = bold yellow box ul
 	file-style = bold yellow ul
@@ -31,8 +33,14 @@
   s = status
   sa = -c status.showUntrackedFiles=all status
 
+[interactive]
+	diffFilter = delta --color-only
+[merge]
+	conflictStyle = zdiff3
+[push]
+  autoSetupRemote = true
+
 # include ~/.gitconfig.local last,
 # so it can take priority.
 [include]
 	path = ~/.gitconfig.local
-
