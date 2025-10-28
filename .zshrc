@@ -330,19 +330,28 @@ kp() {
 # https://sidneyliebrand.medium.com/how-fzf-and-ripgrep-improved-my-workflow-61c7ca212861
 # https://sidneyliebrand.medium.com/combining-caniuse-with-fzf-fb93ad235bae
 
-# fd is used by default, but I can use bfs like so:
-# https://github.com/tavianator/bfs/discussions/119
-#export FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -nohidden -printf '%P\n' 2>/dev/null"
-#export FZF_ALT_C_COMMAND="bfs -color -mindepth 1 -nohidden -type d -printf '%P\n' 2>/dev/null"
 export FZF_DEFAULT_OPTS='-x --ansi'
-export FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \\( -name .git -or -name .hg \\) -printf '%P\n' 2>/dev/null"
-export FZF_ALT_C_COMMAND="bfs -color -mindepth 1 -exclude \\( -name .git -or -name .hg \\) -type d -printf '%P\n' 2>/dev/null"
-_fzf_compgen_path() {
-    bfs -H "$1" -color -exclude \( -depth +0 -hidden \) 2>/dev/null
-}
-_fzf_compgen_dir() {
-    bfs -H "$1" -color -exclude \( -depth +0 -hidden \) -type d 2>/dev/null
-}
+
+if (( ${+commands[bfs]} )); then
+  # The defaults set up by zim:
+  #   export FZF_CTRL_T_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d,f -printf '%P\n' 2>/dev/null"
+  #   export FZF_ALT_C_COMMAND="command bfs -mindepth 1 -exclude -name .git -type d -printf '%P\n' 2>/dev/null"
+  #   _fzf_compgen_path () {
+  #   	command bfs ${1} -exclude -name .git -type d,f -a -not -path ${1} -print
+  #   }
+  #   _fzf_compgen_dir () {
+  #   	command bfs ${1} -exclude -name .git -type d -a -not -path ${1} -print
+  #   }
+
+ export FZF_CTRL_T_COMMAND="bfs -color -mindepth 1 -exclude \\( -name .git -or -name .hg \\) -printf '%P\n' 2>/dev/null"
+ export FZF_ALT_C_COMMAND="bfs -color -mindepth 1 -exclude \\( -name .git -or -name .hg \\) -type d -printf '%P\n' 2>/dev/null"
+ _fzf_compgen_path() {
+   bfs -H "$1" -color -exclude \( -depth +0 -hidden \) 2>/dev/null
+ }
+ _fzf_compgen_dir() {
+   bfs -H "$1" -color -exclude \( -depth +0 -hidden \) -type d 2>/dev/null
+ }
+fi
 
 listening() {
     if [ $# -eq 0 ]; then
