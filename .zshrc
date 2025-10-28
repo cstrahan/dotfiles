@@ -348,11 +348,6 @@ if [ -f "$HOME/.ghcup/env" ]; then
   source "$HOME/.ghcup/env" # ghcup-env
 fi
 
-# Disable atuin for now
-#if (( $+commands[atuin] )); then
-#  eval "$(atuin init zsh)"
-#fi
-
 # cd into directory with yazi
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd

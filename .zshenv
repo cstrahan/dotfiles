@@ -115,6 +115,11 @@ if [[ -n "$EDITOR" ]]; then
   alias vi=$EDITOR
 fi
 
+# Atuin history search
+if [[ -e "$HOME/.atuin/bin/env" ]]; then
+  . "$HOME/.atuin/bin/env"
+fi
+
 # Remove any empty path strings.
 exclude=( '' )
 path=("${(@)path:|exclude}")
