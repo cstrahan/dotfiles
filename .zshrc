@@ -175,6 +175,11 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[comment]="fg=006"
+
+# For fast-syntax-highlighting, if the theme is changed,
+# be sure to apply the overlay to re-set the comment color (if needed):
+#
+#   fast-theme -t XDG:overlay
 typeset -A FAST_HIGHLIGHT_STYLES
 FAST_HIGHLIGHT_STYLES[comment]='fg=006'
 
