@@ -123,14 +123,24 @@
   args:
     creates: /usr/share/terminfo/x/xterm-kitty
 
+- name: Check if ghostty terminfo exists
+  ansible.builtin.stat:
+    path: /usr/share/terminfo/x/xterm-ghostty
+  register: ghostty_terminfo
+
+- name: Copy ghostty terminfo to remote
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/assets/xterm-ghostty.terminfo"
+    dest: /tmp/xterm-ghostty.terminfo
+    mode: '0644'
+  when: not ghostty_terminfo.stat.exists
+
 - name: Install ghostty terminfo
   ansible.builtin.shell: |
     set -e
-    cp {{ playbook_dir }}/assets/xterm-ghostty.terminfo /tmp/xterm-ghostty.terminfo
     tic -x -o /usr/share/terminfo /tmp/xterm-ghostty.terminfo
     rm /tmp/xterm-ghostty.terminfo
-  args:
-    creates: /usr/share/terminfo/x/xterm-ghostty
+  when: not ghostty_terminfo.stat.exists
 
 - name: Configure global aqua tools with mise
   ansible.builtin.shell: ~/.local/bin/mise use --global aqua:fd aqua:ripgrep aqua:bat aqua:delta aqua:lsd
