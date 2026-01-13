@@ -1,0 +1,9 @@
+- name: Provision non-root User
+  hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_remote_tmp: /tmp
+  tasks:
+    - ansible.builtin.include_tasks: tasks/user.yml

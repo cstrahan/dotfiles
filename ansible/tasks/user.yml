@@ -1,0 +1,236 @@
+- name: Get login user
+  ansible.builtin.command: whoami
+  become: false
+  changed_when: false
+  register: login_user_result
+  when: user is not defined
+
+- name: Set user fact
+  ansible.builtin.set_fact:
+    user: "{{ user | default(login_user_result.stdout) }}"
+
+- name: Get user info
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ user }}"
+
+- name: Set user_home fact
+  ansible.builtin.set_fact:
+    user_home: "{{ ansible_facts.getent_passwd[user][4] }}"
+
+- name: Set ansible_async_dir for user
+  ansible.builtin.set_fact:
+    ansible_async_dir: "{{ user_home }}/.ansible_async"
+
+- name: Install zsh
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+
+- name: Check if zsh is installed and executable
+  ansible.builtin.stat:
+    path: /usr/bin/zsh
+  register: zsh_binary
+
+- name: Set zsh as default shell
+  ansible.builtin.user:
+    name: "{{ user }}"
+    shell: /usr/bin/zsh
+  when:
+    - zsh_binary.stat.exists and zsh_binary.stat.executable
+    - ansible_facts.getent_passwd[user][5] != '/usr/bin/zsh'
+
+- name: Create .local/bin directory
+  ansible.builtin.file:
+    path: "{{ user_home }}/.local/bin"
+    state: directory
+    mode: '0755'
+  become: false
+  become_user: "{{ user }}"
+
+- name: Install usefull utilities
+  ansible.builtin.apt:
+    name: 
+      - bfs
+    state: present
+
+- name: Install uv for user
+  ansible.builtin.shell: curl -LsSf https://astral.sh/uv/install.sh | sh
+  args:
+    creates: "{{ user_home }}/.local/bin/uv"
+  become: false
+  become_user: "{{ user }}"
+
+- name: Install rustup for user
+  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  args:
+    creates: "{{ user_home }}/.cargo/bin/rustup"
+  become: false
+  become_user: "{{ user }}"
+
+- name: Check if fzf is already installed
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.local/bin/fzf"
+  register: fzf_installed
+  become: false
+  become_user: "{{ user }}"
+
+- name: Download fzf prebuilt binary
+  ansible.builtin.get_url:
+    url: https://github.com/junegunn/fzf/releases/download/v0.66.0/fzf-0.66.0-linux_amd64.tar.gz
+    dest: /tmp/fzf-linux_amd64.tar.gz
+    mode: '0644'
+  become: false
+  become_user: "{{ user }}"
+  when: not fzf_installed.stat.exists
+
+- name: Extract fzf binary
+  ansible.builtin.unarchive:
+    src: /tmp/fzf-linux_amd64.tar.gz
+    dest: "{{ user_home }}/.local/bin"
+    remote_src: true
+  become: false
+  become_user: "{{ user }}"
+  when: not fzf_installed.stat.exists
+
+- name: Remove fzf tarball
+  ansible.builtin.file:
+    path: /tmp/fzf-linux_amd64.tar.gz
+    state: absent
+  become: false
+  become_user: "{{ user }}"
+  when: not fzf_installed.stat.exists
+
+- name: Check if aqua is already installed
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.local/share/aquaproj-aqua/bin/aqua"
+  register: aqua_installed
+  become: false
+  become_user: "{{ user }}"
+
+- name: Download aqua-installer
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/aquaproj/aqua-installer/v4.0.2/aqua-installer
+    dest: /tmp/aqua-installer
+    mode: '0755'
+    checksum: sha256:98b883756cdd0a6807a8c7623404bfc3bc169275ad9064dc23a6e24ad398f43d
+  become: false
+  become_user: "{{ user }}"
+  when: not aqua_installed.stat.exists
+
+- name: Run aqua-installer
+  ansible.builtin.command: /tmp/aqua-installer
+  become: false
+  become_user: "{{ user }}"
+  when: not aqua_installed.stat.exists
+
+- name: Remove aqua-installer
+  ansible.builtin.file:
+    path: /tmp/aqua-installer
+    state: absent
+  become: false
+  become_user: "{{ user }}"
+  when: not aqua_installed.stat.exists
+
+- name: Install mise for user
+  ansible.builtin.shell: curl https://mise.run | sh
+  args:
+    creates: "{{ user_home }}/.local/bin/mise"
+  become: false
+  become_user: "{{ user }}"
+
+- name: Check if dotfiles are already cloned
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.git"
+  register: dotfiles_git
+  become: false
+  become_user: "{{ user }}"
+
+- name: Clone dotfiles repository to temporary location
+  ansible.builtin.git:
+    repo: git@github.com:cstrahan/dotfiles.git
+    dest: /tmp/dotfiles-clone
+    accept_hostkey: true
+  become: false
+  become_user: "{{ user }}"
+  when: not dotfiles_git.stat.exists
+
+- name: Move .git directory to home
+  ansible.builtin.command: mv /tmp/dotfiles-clone/.git {{ user_home }}/.git
+  become: false
+  become_user: "{{ user }}"
+  when: not dotfiles_git.stat.exists
+
+- name: Checkout dotfiles in home directory
+  ansible.builtin.shell: |
+    cd {{ user_home }}
+    git --git-dir={{ user_home }}/.git --work-tree={{ user_home }} reset --hard HEAD
+  become: false
+  become_user: "{{ user }}"
+  when: not dotfiles_git.stat.exists
+
+- name: Remove temporary dotfiles clone directory
+  ansible.builtin.file:
+    path: /tmp/dotfiles-clone
+    state: absent
+  become: false
+  become_user: "{{ user }}"
+  when: not dotfiles_git.stat.exists
+
+- name: Install atuin for user
+  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+  args:
+    creates: "{{ user_home }}/.atuin/bin/atuin"
+  become: false
+  become_user: "{{ user }}"
+
+- name: Check if kitty terminfo already exists
+  ansible.builtin.stat:
+    path: /usr/share/terminfo/x/xterm-kitty
+  register: kitty_terminfo
+
+- name: Download kitty terminfo
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/kovidgoyal/kitty/master/terminfo/kitty.terminfo
+    dest: /tmp/kitty.terminfo
+    mode: '0644'
+  when: not kitty_terminfo.stat.exists
+
+- name: Install kitty terminfo system-wide
+  ansible.builtin.command: tic -x -o /usr/share/terminfo /tmp/kitty.terminfo
+  when: not kitty_terminfo.stat.exists
+
+- name: Remove temporary kitty terminfo file
+  ansible.builtin.file:
+    path: /tmp/kitty.terminfo
+    state: absent
+  when: not kitty_terminfo.stat.exists
+
+- name: Check if ghostty terminfo already exists
+  ansible.builtin.stat:
+    path: /usr/share/terminfo/x/xterm-ghostty
+  register: ghostty_terminfo
+
+- name: Copy ghostty terminfo to remote
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/assets/xterm-ghostty.terminfo"
+    dest: /tmp/xterm-ghostty.terminfo
+    mode: '0644'
+  when: not ghostty_terminfo.stat.exists
+
+- name: Install ghostty terminfo system-wide
+  ansible.builtin.command: tic -x -o /usr/share/terminfo /tmp/xterm-ghostty.terminfo
+  when: not ghostty_terminfo.stat.exists
+
+- name: Remove temporary ghostty terminfo file
+  ansible.builtin.file:
+    path: /tmp/xterm-ghostty.terminfo
+    state: absent
+  when: not ghostty_terminfo.stat.exists
+
+- name: Configure global aqua tools with mise
+  ansible.builtin.shell: ~/.local/bin/mise use --global aqua:fd aqua:ripgrep aqua:bat aqua:delta aqua:lsd
+  become: false
+  become_user: "{{ user }}"
+  args:
+    creates: "{{ user_home }}/.config/mise/config.toml"
