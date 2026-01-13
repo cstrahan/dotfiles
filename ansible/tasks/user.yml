@@ -22,9 +22,11 @@
   ansible.builtin.set_fact:
     ansible_async_dir: "{{ user_home }}/.ansible_async"
 
-- name: Install zsh
+- name: Install system packages
   ansible.builtin.apt:
-    name: zsh
+    name:
+      - zsh
+      - bfs
     state: present
 
 - name: Check if zsh is installed and executable
@@ -48,12 +50,6 @@
   become: false
   become_user: "{{ user }}"
 
-- name: Install usefull utilities
-  ansible.builtin.apt:
-    name: 
-      - bfs
-    state: present
-
 - name: Install uv for user
   ansible.builtin.shell: curl -LsSf https://astral.sh/uv/install.sh | sh
   args:
@@ -68,69 +64,28 @@
   become: false
   become_user: "{{ user }}"
 
-- name: Check if fzf is already installed
-  ansible.builtin.stat:
-    path: "{{ user_home }}/.local/bin/fzf"
-  register: fzf_installed
+- name: Install fzf
+  ansible.builtin.shell: |
+    set -e
+    curl -fsSL https://github.com/junegunn/fzf/releases/download/v0.66.0/fzf-0.66.0-linux_amd64.tar.gz -o /tmp/fzf.tar.gz
+    tar -xzf /tmp/fzf.tar.gz -C {{ user_home }}/.local/bin
+    rm /tmp/fzf.tar.gz
+  args:
+    creates: "{{ user_home }}/.local/bin/fzf"
   become: false
   become_user: "{{ user }}"
 
-- name: Download fzf prebuilt binary
-  ansible.builtin.get_url:
-    url: https://github.com/junegunn/fzf/releases/download/v0.66.0/fzf-0.66.0-linux_amd64.tar.gz
-    dest: /tmp/fzf-linux_amd64.tar.gz
-    mode: '0644'
+- name: Install aqua
+  ansible.builtin.shell: |
+    set -e
+    curl -fsSL https://raw.githubusercontent.com/aquaproj/aqua-installer/v4.0.2/aqua-installer -o /tmp/aqua-installer
+    chmod +x /tmp/aqua-installer
+    /tmp/aqua-installer
+    rm /tmp/aqua-installer
+  args:
+    creates: "{{ user_home }}/.local/share/aquaproj-aqua/bin/aqua"
   become: false
   become_user: "{{ user }}"
-  when: not fzf_installed.stat.exists
-
-- name: Extract fzf binary
-  ansible.builtin.unarchive:
-    src: /tmp/fzf-linux_amd64.tar.gz
-    dest: "{{ user_home }}/.local/bin"
-    remote_src: true
-  become: false
-  become_user: "{{ user }}"
-  when: not fzf_installed.stat.exists
-
-- name: Remove fzf tarball
-  ansible.builtin.file:
-    path: /tmp/fzf-linux_amd64.tar.gz
-    state: absent
-  become: false
-  become_user: "{{ user }}"
-  when: not fzf_installed.stat.exists
-
-- name: Check if aqua is already installed
-  ansible.builtin.stat:
-    path: "{{ user_home }}/.local/share/aquaproj-aqua/bin/aqua"
-  register: aqua_installed
-  become: false
-  become_user: "{{ user }}"
-
-- name: Download aqua-installer
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/aquaproj/aqua-installer/v4.0.2/aqua-installer
-    dest: /tmp/aqua-installer
-    mode: '0755'
-    checksum: sha256:98b883756cdd0a6807a8c7623404bfc3bc169275ad9064dc23a6e24ad398f43d
-  become: false
-  become_user: "{{ user }}"
-  when: not aqua_installed.stat.exists
-
-- name: Run aqua-installer
-  ansible.builtin.command: /tmp/aqua-installer
-  become: false
-  become_user: "{{ user }}"
-  when: not aqua_installed.stat.exists
-
-- name: Remove aqua-installer
-  ansible.builtin.file:
-    path: /tmp/aqua-installer
-    state: absent
-  become: false
-  become_user: "{{ user }}"
-  when: not aqua_installed.stat.exists
 
 - name: Install mise for user
   ansible.builtin.shell: curl https://mise.run | sh
@@ -139,43 +94,18 @@
   become: false
   become_user: "{{ user }}"
 
-- name: Check if dotfiles are already cloned
-  ansible.builtin.stat:
-    path: "{{ user_home }}/.git"
-  register: dotfiles_git
-  become: false
-  become_user: "{{ user }}"
-
-- name: Clone dotfiles repository to temporary location
-  ansible.builtin.git:
-    repo: git@github.com:cstrahan/dotfiles.git
-    dest: /tmp/dotfiles-clone
-    accept_hostkey: true
-  become: false
-  become_user: "{{ user }}"
-  when: not dotfiles_git.stat.exists
-
-- name: Move .git directory to home
-  ansible.builtin.command: mv /tmp/dotfiles-clone/.git {{ user_home }}/.git
-  become: false
-  become_user: "{{ user }}"
-  when: not dotfiles_git.stat.exists
-
-- name: Checkout dotfiles in home directory
+- name: Clone and setup dotfiles
   ansible.builtin.shell: |
+    set -e
+    git clone git@github.com:cstrahan/dotfiles.git /tmp/dotfiles-clone
+    mv /tmp/dotfiles-clone/.git {{ user_home }}/.git
     cd {{ user_home }}
     git --git-dir={{ user_home }}/.git --work-tree={{ user_home }} reset --hard HEAD
+    rm -rf /tmp/dotfiles-clone
+  args:
+    creates: "{{ user_home }}/.git"
   become: false
   become_user: "{{ user }}"
-  when: not dotfiles_git.stat.exists
-
-- name: Remove temporary dotfiles clone directory
-  ansible.builtin.file:
-    path: /tmp/dotfiles-clone
-    state: absent
-  become: false
-  become_user: "{{ user }}"
-  when: not dotfiles_git.stat.exists
 
 - name: Install atuin for user
   ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
@@ -184,49 +114,23 @@
   become: false
   become_user: "{{ user }}"
 
-- name: Check if kitty terminfo already exists
-  ansible.builtin.stat:
-    path: /usr/share/terminfo/x/xterm-kitty
-  register: kitty_terminfo
+- name: Install kitty terminfo
+  ansible.builtin.shell: |
+    set -e
+    curl -fsSL https://raw.githubusercontent.com/kovidgoyal/kitty/master/terminfo/kitty.terminfo -o /tmp/kitty.terminfo
+    tic -x -o /usr/share/terminfo /tmp/kitty.terminfo
+    rm /tmp/kitty.terminfo
+  args:
+    creates: /usr/share/terminfo/x/xterm-kitty
 
-- name: Download kitty terminfo
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/kovidgoyal/kitty/master/terminfo/kitty.terminfo
-    dest: /tmp/kitty.terminfo
-    mode: '0644'
-  when: not kitty_terminfo.stat.exists
-
-- name: Install kitty terminfo system-wide
-  ansible.builtin.command: tic -x -o /usr/share/terminfo /tmp/kitty.terminfo
-  when: not kitty_terminfo.stat.exists
-
-- name: Remove temporary kitty terminfo file
-  ansible.builtin.file:
-    path: /tmp/kitty.terminfo
-    state: absent
-  when: not kitty_terminfo.stat.exists
-
-- name: Check if ghostty terminfo already exists
-  ansible.builtin.stat:
-    path: /usr/share/terminfo/x/xterm-ghostty
-  register: ghostty_terminfo
-
-- name: Copy ghostty terminfo to remote
-  ansible.builtin.copy:
-    src: "{{ playbook_dir }}/assets/xterm-ghostty.terminfo"
-    dest: /tmp/xterm-ghostty.terminfo
-    mode: '0644'
-  when: not ghostty_terminfo.stat.exists
-
-- name: Install ghostty terminfo system-wide
-  ansible.builtin.command: tic -x -o /usr/share/terminfo /tmp/xterm-ghostty.terminfo
-  when: not ghostty_terminfo.stat.exists
-
-- name: Remove temporary ghostty terminfo file
-  ansible.builtin.file:
-    path: /tmp/xterm-ghostty.terminfo
-    state: absent
-  when: not ghostty_terminfo.stat.exists
+- name: Install ghostty terminfo
+  ansible.builtin.shell: |
+    set -e
+    cp {{ playbook_dir }}/assets/xterm-ghostty.terminfo /tmp/xterm-ghostty.terminfo
+    tic -x -o /usr/share/terminfo /tmp/xterm-ghostty.terminfo
+    rm /tmp/xterm-ghostty.terminfo
+  args:
+    creates: /usr/share/terminfo/x/xterm-ghostty
 
 - name: Configure global aqua tools with mise
   ansible.builtin.shell: ~/.local/bin/mise use --global aqua:fd aqua:ripgrep aqua:bat aqua:delta aqua:lsd

@@ -1,6 +1,6 @@
 - name: Provision non-root User
   hosts: all
-  gather_facts: true
+  gather_facts: false
   become: true
   vars:
     ansible_python_interpreter: /usr/bin/python3

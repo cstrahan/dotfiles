@@ -37,6 +37,18 @@ Configure root account:
 ansible-playbook -i inventory -e user=root user.yml
 ```
 
+Profile task performance:
+
+```bash
+ANSIBLE_CALLBACKS_ENABLED=timer,profile_tasks ansible-playbook -i inventory user.yml
+```
+
+Enable pipelining (reduces SSH round-trips, enabled by default in ansible.cfg):
+
+```bash
+ANSIBLE_PIPELINING=true ansible-playbook -i inventory user.yml
+```
+
 ## OrbStack
 
 To run against an OrbStack machine:
