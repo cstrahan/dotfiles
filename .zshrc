@@ -373,6 +373,15 @@ if [[ "$TERM" = "xterm-kitty" ]]; then
 fi
 
 
+# Renders specified file as git flavored markdown and opens preview in Safari.
+# From: https://github.com/PostgreSqlStan/zdotdir/commits/main/functions/gfm
+# Need to: gem install kramdown kramdown-parser-gfm
+gfm () {
+  local f=$(mktemp)
+  kramdown -i GFM --smart_quotes='apos,apos,quot,quot' $1 >| $f
+  mv $f ${f}.html
+  open -a Safari ${f}.html
+}
 
 
 
