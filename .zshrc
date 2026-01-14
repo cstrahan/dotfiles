@@ -372,6 +372,7 @@ if [[ "$TERM" = "xterm-kitty" ]]; then
   alias ssh='kitten ssh'
 fi
 
+ghcp() { gh copilot "$@" }
 
 # Renders specified file as git flavored markdown and opens preview in Safari.
 # From: https://github.com/PostgreSqlStan/zdotdir/commits/main/functions/gfm
