@@ -97,7 +97,7 @@
 - name: Clone and setup dotfiles
   ansible.builtin.shell: |
     set -e
-    git clone git@github.com:cstrahan/dotfiles.git /tmp/dotfiles-clone
+    GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" git clone git@github.com:cstrahan/dotfiles.git /tmp/dotfiles-clone
     mv /tmp/dotfiles-clone/.git {{ user_home }}/.git
     cd {{ user_home }}
     git --git-dir={{ user_home }}/.git --work-tree={{ user_home }} reset --hard HEAD
