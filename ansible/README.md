@@ -17,7 +17,7 @@ uv tool install --with-executables-from ansible-dev-tools,ansible-builder,ansibl
 
 ## Usage
 
-The `user` variable defaults to the login user on the remote host (via `whoami`).
+The `target_user` variable defaults to the SSH connection user. Override it to provision a different user.
 
 Provision a user account:
 
@@ -25,16 +25,10 @@ Provision a user account:
 ansible-playbook -i inventory user.yml
 ```
 
-Or specify a different user:
+Provision the root account:
 
 ```bash
-ansible-playbook -i inventory -e user=charles.strahan user.yml
-```
-
-Configure root account:
-
-```bash
-ansible-playbook -i inventory -e user=root user.yml
+ansible-playbook -i inventory -e target_user=root user.yml
 ```
 
 Profile task performance:
@@ -54,7 +48,7 @@ ANSIBLE_PIPELINING=true ansible-playbook -i inventory user.yml
 To run against an OrbStack machine:
 
 ```bash
-ansible-playbook -i "${machine}@orb," -u "${machine}" -e user="$(orb -m "${machine}" whoami)" user.yml
+ansible-playbook -i "$(orb -m "${machine}" whoami)@${machine}.orb.local," user.yml
 ```
 
 ## macOS Self-Provisioning

@@ -1,22 +1,22 @@
-- name: Get login user
-  ansible.builtin.command: whoami
+- name: Get current user id
+  ansible.builtin.command: id -un
   become: false
   changed_when: false
-  register: login_user_result
-  when: user is not defined
+  register: current_user
+  when: target_user is not defined
 
-- name: Set user fact
+- name: Set target_user fact
   ansible.builtin.set_fact:
-    user: "{{ user | default(login_user_result.stdout) }}"
+    target_user: "{{ target_user | default(current_user.stdout) }}"
 
 - name: Get user info
   ansible.builtin.getent:
     database: passwd
-    key: "{{ user }}"
+    key: "{{ target_user }}"
 
 - name: Set user_home fact
   ansible.builtin.set_fact:
-    user_home: "{{ ansible_facts.getent_passwd[user][4] }}"
+    user_home: "{{ ansible_facts.getent_passwd[target_user][4] }}"
 
 - name: Set ansible_async_dir for user
   ansible.builtin.set_fact:
@@ -36,33 +36,33 @@
 
 - name: Set zsh as default shell
   ansible.builtin.user:
-    name: "{{ user }}"
+    name: "{{ target_user }}"
     shell: /usr/bin/zsh
   when:
     - zsh_binary.stat.exists and zsh_binary.stat.executable
-    - ansible_facts.getent_passwd[user][5] != '/usr/bin/zsh'
+    - ansible_facts.getent_passwd[target_user][5] != '/usr/bin/zsh'
 
 - name: Create .local/bin directory
   ansible.builtin.file:
     path: "{{ user_home }}/.local/bin"
     state: directory
     mode: '0755'
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
 
 - name: Install uv for user
   ansible.builtin.shell: curl -LsSf https://astral.sh/uv/install.sh | sh
   args:
     creates: "{{ user_home }}/.local/bin/uv"
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
 
 - name: Install rustup for user
   ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
   args:
     creates: "{{ user_home }}/.cargo/bin/rustup"
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
 
 - name: Install fzf
   ansible.builtin.shell: |
@@ -72,8 +72,8 @@
     rm /tmp/fzf.tar.gz
   args:
     creates: "{{ user_home }}/.local/bin/fzf"
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
 
 - name: Install aqua
   ansible.builtin.shell: |
@@ -84,15 +84,15 @@
     rm /tmp/aqua-installer
   args:
     creates: "{{ user_home }}/.local/share/aquaproj-aqua/bin/aqua"
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
 
 - name: Install mise for user
   ansible.builtin.shell: curl https://mise.run | sh
   args:
     creates: "{{ user_home }}/.local/bin/mise"
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
 
 - name: Clone and setup dotfiles
   ansible.builtin.shell: |
@@ -104,15 +104,15 @@
     rm -rf /tmp/dotfiles-clone
   args:
     creates: "{{ user_home }}/.git"
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
 
 - name: Install atuin for user
   ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
   args:
     creates: "{{ user_home }}/.atuin/bin/atuin"
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
 
 - name: Install kitty terminfo
   ansible.builtin.shell: |
@@ -144,7 +144,7 @@
 
 - name: Configure global aqua tools with mise
   ansible.builtin.shell: ~/.local/bin/mise use --global aqua:fd aqua:ripgrep aqua:bat aqua:delta aqua:lsd
-  become: false
-  become_user: "{{ user }}"
+  become: true
+  become_user: "{{ target_user }}"
   args:
     creates: "{{ user_home }}/.config/mise/config.toml"
