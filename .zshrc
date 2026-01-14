@@ -4,7 +4,7 @@
 # TDOO: https://egeek.me/2020/04/18/enabling-locate-on-osx/
 
 # completions and other functions
-fpath+=~/.zfunc
+fpath[1,0]=(~/.zfunc)
 # automatically autoload any functions in ~/.zfunc
 # the completion system already adds _* functions,
 # but this lets me autoload others too.
