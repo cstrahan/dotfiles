@@ -32,6 +32,7 @@
 !/.config/taffybar
 !/.config/taffybar/taffybar.hs
 !/.config/taffybar/taffybar.rc
+!/.config/tmux
 !/.config/wezterm
 !/.config/yazi
 !/.config/zathura
