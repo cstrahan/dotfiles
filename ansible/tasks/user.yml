@@ -75,6 +75,18 @@
   become: true
   become_user: "{{ target_user }}"
 
+- name: Install neovim
+  ansible.builtin.shell: |
+    set -e
+    curl -fsSL https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.tar.gz -o /tmp/nvim.tar.gz
+    tar -xzf /tmp/nvim.tar.gz -C {{ user_home }}/.local
+    ln -sf {{ user_home }}/.local/nvim-linux-x86_64/bin/nvim {{ user_home }}/.local/bin/nvim
+    rm /tmp/nvim.tar.gz
+  args:
+    creates: "{{ user_home }}/.local/bin/nvim"
+  become: true
+  become_user: "{{ target_user }}"
+
 - name: Install aqua
   ansible.builtin.shell: |
     set -e
