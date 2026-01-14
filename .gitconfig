@@ -44,3 +44,5 @@
 # so it can take priority.
 [include]
 	path = ~/.gitconfig.local
+[tag]
+	sort = -version:refname
