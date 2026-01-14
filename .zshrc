@@ -412,6 +412,8 @@ fpath=("${(@)fpath:|exclude}")
 fpath[1,0]=(~/.zfunc)
 unset exclude
 
+# END opam configuration
+
 # Load order:
 # +----------------+-----------+-----------+------+
 # |                |Interactive|Interactive|Script|
