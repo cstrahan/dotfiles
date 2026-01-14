@@ -368,6 +368,9 @@ if [ -f "$HOME/.zshrc.local" ]; then
 fi
 
 
+if [[ "$TERM" = "xterm-kitty" ]]; then
+  alias ssh='kitten ssh'
+fi
 
 
 
