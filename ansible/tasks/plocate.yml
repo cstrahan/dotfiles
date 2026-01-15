@@ -1,0 +1,21 @@
+# For OrbStack machines, we prune the following paths:
+#   /Applications /Library /Users /Volumes /mnt/mac /private
+#
+# Installing plocate triggers an updatedb, which will hang without this config
+# change, so we write this config file before installing plocate.
+- name: Configure updatedb.conf for plocate
+  ansible.builtin.copy:
+    dest: /etc/updatedb.conf
+    content: |
+      PRUNE_BIND_MOUNTS="yes"
+      # PRUNENAMES=".git .bzr .hg .svn"
+      PRUNEPATHS="/tmp /var/spool /media /var/lib/os-prober /var/lib/ceph /home/.ecryptfs /var/lib/schroot /Applications /Library /Users /Volumes /mnt/mac /private"
+      PRUNEFS="NFS afs autofs binfmt_misc ceph cgroup cgroup2 cifs coda configfs curlftpfs debugfs devfs devpts devtmpfs ecryptfs ftpfs fuse.ceph fuse.cryfs fuse.encfs fuse.glusterfs fuse.gocryptfs fuse.gvfsd-fuse fuse.mfs fuse.rclone fuse.rozofs fuse.sshfs fusectl fusesmb hugetlbfs iso9660 lustre lustre_lite mfs mqueue ncpfs nfs nfs4 ocfs ocfs2 proc pstore rpc_pipefs securityfs shfs smbfs sysfs tmpfs tracefs udev udf usbfs"
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: Install plocate package
+  ansible.builtin.apt:
+    name: plocate
+    state: present
