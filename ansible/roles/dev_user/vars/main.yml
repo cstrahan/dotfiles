@@ -1,4 +1,9 @@
 ---
+# Unified SSH environment for tasks requiring agent forwarding
+# Works in production (ansible_env.SSH_AUTH_SOCK) and Molecule tests (molecule_ssh_auth_sock)
+user_ssh_env:
+  SSH_AUTH_SOCK: "{{ ansible_env.SSH_AUTH_SOCK | default(molecule_ssh_auth_sock | default(omit)) }}"
+
 # Download URLs for tools
 uv_install_url: "https://astral.sh/uv/install.sh"
 rustup_install_url: "https://sh.rustup.rs"

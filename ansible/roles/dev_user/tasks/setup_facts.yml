@@ -32,9 +32,7 @@
   ansible.builtin.command: ssh -o StrictHostKeyChecking=accept-new -T git@github.com
   become: true
   become_user: "{{ target_user }}"
-  # Check remote env first, then the test override, then omit
-  environment:
-    SSH_AUTH_SOCK: "{{ ansible_env.SSH_AUTH_SOCK | default(molecule_ssh_auth_sock | default(omit)) }}"
+  environment: "{{ user_ssh_env }}"
   register: ssh_test
   changed_when: false
   ignore_errors: true

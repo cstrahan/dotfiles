@@ -1,10 +1,28 @@
 ---
-- name: Install kitty terminfo
-  ansible.builtin.shell: |
-    set -e
-    curl -fsSL {{ kitty_terminfo_url }} -o /tmp/kitty.terminfo
-    tic -x -o /usr/share/terminfo /tmp/kitty.terminfo
-    rm /tmp/kitty.terminfo
+- name: Download Kitty terminfo locally
+  delegate_to: localhost
+  become: false
+  ansible.builtin.get_url:
+    url: "{{ kitty_terminfo_url }}"
+    dest: "/tmp/kitty.terminfo"
+    mode: '0644'
+  run_once: true
+
+- name: Check if kitty terminfo exists
+  ansible.builtin.stat:
+    path: /usr/share/terminfo/x/xterm-kitty
+  register: kitty_terminfo
+
+- name: Copy Kitty terminfo to remote
+  ansible.builtin.copy:
+    src: "/tmp/kitty.terminfo"
+    dest: "/tmp/kitty.terminfo"
+    mode: '0644'
+  when: not kitty_terminfo.stat.exists
+
+- name: Compile Kitty terminfo
+  ansible.builtin.shell: tic -x -o /usr/share/terminfo /tmp/kitty.terminfo && rm /tmp/kitty.terminfo
+  when: not kitty_terminfo.stat.exists
   args:
     creates: /usr/share/terminfo/x/xterm-kitty
 
@@ -20,9 +38,8 @@
     mode: '0644'
   when: not ghostty_terminfo.stat.exists
 
-- name: Install ghostty terminfo
-  ansible.builtin.shell: |
-    set -e
-    tic -x -o /usr/share/terminfo /tmp/xterm-ghostty.terminfo
-    rm /tmp/xterm-ghostty.terminfo
+- name: Compile ghostty terminfo
+  ansible.builtin.shell: tic -x -o /usr/share/terminfo /tmp/xterm-ghostty.terminfo && rm /tmp/xterm-ghostty.terminfo
   when: not ghostty_terminfo.stat.exists
+  args:
+    creates: /usr/share/terminfo/x/xterm-ghostty

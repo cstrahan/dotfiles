@@ -14,7 +14,6 @@
       # 3. Clean up the temporary working tree
       rm -rf "$TMP_DIR"
     creates: "{{ user_home }}/.git"
-  environment:
-    SSH_AUTH_SOCK: "{{ ansible_env.SSH_AUTH_SOCK | default(molecule_ssh_auth_sock | default(omit)) }}"
+  environment: "{{ user_ssh_env }}"
   become: true
   become_user: "{{ target_user }}"
