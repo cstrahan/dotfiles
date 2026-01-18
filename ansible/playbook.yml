@@ -1,0 +1,15 @@
+---
+- name: Provision Development Environment
+  hosts: all
+  gather_facts: true
+
+  pre_tasks:
+    - name: Verify OS requirements
+      ansible.builtin.assert:
+        that:
+          - ansible_os_family == "Debian"
+        fail_msg: "This playbook currently only supports Debian/Ubuntu-based systems."
+
+  roles:
+    - plocate
+    - dev_user

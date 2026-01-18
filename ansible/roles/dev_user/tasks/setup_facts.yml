@@ -1,0 +1,52 @@
+---
+- name: Get current user id
+  ansible.builtin.command: id -un
+  become: false
+  changed_when: false
+  register: current_user_cmd
+  when: target_user is not defined
+
+- name: Set target_user fact
+  ansible.builtin.set_fact:
+    target_user: "{{ target_user | default(current_user_cmd.stdout) }}"
+
+- name: Get user info from passwd database
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ target_user }}"
+    fail_key: false
+  register: getent_result
+
+- name: Validate that target_user exists
+  ansible.builtin.assert:
+    that:
+      - "target_user in ansible_facts.getent_passwd"
+    fail_msg: "The user '{{ target_user }}' does not exist on the remote system. Please create the user or check the 'target_user' variable."
+    success_msg: "Verified: user '{{ target_user }}' exists."
+
+- name: Set user_home fact
+  ansible.builtin.set_fact:
+    user_home: "{{ ansible_facts.getent_passwd[target_user][4] }}"
+
+- name: Check for SSH Agent Forwarding
+  ansible.builtin.command: ssh -o StrictHostKeyChecking=accept-new -T git@github.com
+  become: true
+  become_user: "{{ target_user }}"
+  # Check remote env first, then the test override, then omit
+  environment:
+    SSH_AUTH_SOCK: "{{ ansible_env.SSH_AUTH_SOCK | default(molecule_ssh_auth_sock | default(omit)) }}"
+  register: ssh_test
+  changed_when: false
+  ignore_errors: true
+
+- name: Validate SSH Agent Forwarding
+  ansible.builtin.assert:
+    that:
+      - "ssh_test.rc == 1 or 'successfully authenticated' in ssh_test.stderr"
+    fail_msg: |
+      SSH Agent Forwarding is not working for {{ target_user }}.
+      Ensure:
+      1. Your local agent has keys: 'ssh-add -l'
+      2. 'ForwardAgent yes' is in ansible.cfg or ~/.ssh/config
+      3. Your 'become_flags' preserve SSH_AUTH_SOCK
+    success_msg: "Verified: SSH Agent Forwarding is active for {{ target_user }}."

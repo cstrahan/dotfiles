@@ -1,0 +1,20 @@
+---
+- name: Clone and setup dotfiles into home directory
+  ansible.builtin.shell:
+    cmd: |
+      set -e
+      # 1. Clone to a temporary location to avoid conflicts with existing files in ~
+      TMP_DIR=$(mktemp -d)
+      GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" \
+        git clone --separate-git-dir="{{ user_home }}/.git" {{ dotfiles_repo }} "$TMP_DIR"
+
+      # 2. Force the work-tree to align with the home directory
+      git --git-dir="{{ user_home }}/.git" --work-tree="{{ user_home }}" checkout -f
+
+      # 3. Clean up the temporary working tree
+      rm -rf "$TMP_DIR"
+    creates: "{{ user_home }}/.git"
+  environment:
+    SSH_AUTH_SOCK: "{{ ansible_env.SSH_AUTH_SOCK | default(molecule_ssh_auth_sock | default(omit)) }}"
+  become: true
+  become_user: "{{ target_user }}"

@@ -1,0 +1,38 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+  - name: instance-ubuntu
+    image: "geerlingguy/docker-ubuntu2204-ansible:latest"
+    privileged: true
+    command: "/lib/systemd/systemd"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      # Mount OrbStack SSH agent socket for agent forwarding
+      - /run/host-services/ssh-auth.sock:/ssh-agent.sock
+    cgroupns_mode: host
+    env:
+      # Point SSH to the mounted agent socket
+      SSH_AUTH_SOCK: /ssh-agent.sock
+
+provisioner:
+  name: ansible
+  env:
+    # Explicitly tell Ansible where the roles are located
+    ANSIBLE_ROLES_PATH: "../../roles"
+    # Pass the socket path to every ansible-playbook command run by molecule
+    SSH_AUTH_SOCK: "/ssh-agent.sock"
+  playbooks:
+    prepare: prepare.yml
+    converge: converge.yml
+    verify: verify.yml
+  inventory:
+    links:
+      group_vars: ../../group_vars
+
+verifier:
+  name: ansible

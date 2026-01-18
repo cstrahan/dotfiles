@@ -1,0 +1,106 @@
+---
+- name: Verify Development Environment
+  hosts: all
+  gather_facts: true
+  become: true
+  vars:
+    # Match converge.yml - Molecule instances run as root
+    target_user: root
+  tasks:
+    - name: Get current user id
+      ansible.builtin.command: id -un
+      become: false
+      changed_when: false
+      register: current_user_cmd
+      when: target_user is not defined
+
+    - name: Set target_user fact
+      ansible.builtin.set_fact:
+        target_user: "{{ target_user | default(current_user_cmd.stdout) }}"
+
+    - name: Get user info from passwd database
+      ansible.builtin.getent:
+        database: passwd
+        key: "{{ target_user }}"
+
+    - name: Set user_home fact
+      ansible.builtin.set_fact:
+        user_home: "{{ ansible_facts.getent_passwd[target_user][4] }}"
+
+    - name: Define expected binaries
+      ansible.builtin.set_fact:
+        expected_binaries:
+          - "{{ user_home }}/.local/bin/uv"
+          - "{{ user_home }}/.local/bin/nvim"
+          - "{{ user_home }}/.local/bin/fzf"
+          - "{{ user_home }}/.local/bin/mise"
+          - "{{ user_home }}/.cargo/bin/rustup"
+          - "{{ user_home }}/.local/share/aquaproj-aqua/bin/aqua"
+          - "{{ user_home }}/.atuin/bin/atuin"
+
+    - name: Ensure tool binaries exist
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      register: bin_stats
+      loop: "{{ expected_binaries }}"
+
+    - name: Assert binaries are present and executable
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.executable
+        fail_msg: "Binary {{ item.item }} is missing or not executable."
+      loop: "{{ bin_stats.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+
+    - name: Verify mise global config was created
+      ansible.builtin.stat:
+        path: "{{ user_home }}/.config/mise/config.toml"
+      register: mise_config
+
+    - name: Assert mise config exists
+      ansible.builtin.assert:
+        that:
+          - mise_config.stat.exists
+        fail_msg: "Mise global configuration was not initialized."
+
+    - name: Verify dotfiles .git directory exists
+      ansible.builtin.stat:
+        path: "{{ user_home }}/.git"
+      register: dotfiles_git
+
+    - name: Assert home directory is a git repo
+      ansible.builtin.assert:
+        that:
+          - dotfiles_git.stat.exists
+          - dotfiles_git.stat.isdir
+        fail_msg: "Dotfiles were not correctly initialized in {{ user_home }}."
+
+    - name: Verify zsh is the default shell
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.getent_passwd[target_user][5] == '/usr/bin/zsh'
+        fail_msg: "Zsh is not set as the default shell for {{ target_user }}."
+
+    - name: Verify kitty terminfo exists
+      ansible.builtin.stat:
+        path: /usr/share/terminfo/x/xterm-kitty
+      register: kitty_terminfo
+
+    - name: Assert kitty terminfo is installed
+      ansible.builtin.assert:
+        that:
+          - kitty_terminfo.stat.exists
+        fail_msg: "Kitty terminfo was not installed."
+
+    - name: Verify ghostty terminfo exists
+      ansible.builtin.stat:
+        path: /usr/share/terminfo/x/xterm-ghostty
+      register: ghostty_terminfo
+
+    - name: Assert ghostty terminfo is installed
+      ansible.builtin.assert:
+        that:
+          - ghostty_terminfo.stat.exists
+        fail_msg: "Ghostty terminfo was not installed."

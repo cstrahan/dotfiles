@@ -1,0 +1,4 @@
+molecule>=24.0.0
+molecule-plugins[docker]
+ansible-core
+docker

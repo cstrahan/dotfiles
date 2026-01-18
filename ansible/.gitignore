@@ -1,0 +1,20 @@
+# Molecule
+.molecule/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+.eggs/
+
+# Ansible
+*.retry
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

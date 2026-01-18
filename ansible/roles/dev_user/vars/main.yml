@@ -1,0 +1,12 @@
+---
+# Download URLs for tools
+uv_install_url: "https://astral.sh/uv/install.sh"
+rustup_install_url: "https://sh.rustup.rs"
+mise_install_url: "https://mise.run"
+atuin_install_url: "https://setup.atuin.sh"
+kitty_terminfo_url: "https://raw.githubusercontent.com/kovidgoyal/kitty/master/terminfo/kitty.terminfo"
+
+# Constructed URLs (using group_vars versions)
+fzf_download_url: "https://github.com/junegunn/fzf/releases/download/v{{ fzf_version }}/fzf-{{ fzf_version }}-linux_amd64.tar.gz"
+neovim_download_url: "https://github.com/neovim/neovim/releases/download/v{{ neovim_version }}/nvim-linux-x86_64.tar.gz"
+aqua_installer_url: "https://raw.githubusercontent.com/aquaproj/aqua-installer/v{{ aqua_installer_version }}/aqua-installer"

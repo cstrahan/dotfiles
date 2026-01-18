@@ -1,0 +1,30 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: false  # Skip initial gathering to prevent failure
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install dependencies required for Ansible facts and modules
+      ansible.builtin.apt:
+        name:
+          - python3-apt
+          - openssh-client
+          - sudo
+          - curl
+          - git
+        state: present
+
+    - name: Gather facts now that python3-apt is installed
+      ansible.builtin.setup:
+
+    - name: Ensure SSH agent socket is accessible
+      ansible.builtin.file:
+        path: /ssh-agent.sock
+        mode: '0666'
+      # Now ansible_virtualization_type is available
+      when: ansible_connection == 'docker' or ansible_virtualization_type == 'docker'

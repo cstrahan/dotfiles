@@ -1,0 +1,18 @@
+---
+- name: Setup User Facts
+  ansible.builtin.include_tasks: setup_facts.yml
+
+- name: Install Shell and Core Packages
+  ansible.builtin.include_tasks: shell.yml
+
+- name: Install Development Tools
+  ansible.builtin.include_tasks: tools.yml
+
+- name: Setup Dotfiles
+  ansible.builtin.include_tasks: dotfiles.yml
+
+- name: Setup Terminal Info
+  ansible.builtin.include_tasks: terminfo.yml
+
+- name: Configure Global Tools
+  ansible.builtin.include_tasks: mise_tools.yml

@@ -1,0 +1,21 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    # Molecule instances typically run as root by default
+    target_user: root
+    # Path to SSH agent socket mounted in molecule.yml
+    molecule_ssh_auth_sock: "/ssh-agent.sock"
+
+  pre_tasks:
+    - name: Verify OS requirements
+      ansible.builtin.assert:
+        that:
+          - ansible_os_family == "Debian"
+        fail_msg: "This playbook currently only supports Debian/Ubuntu-based systems."
+
+  roles:
+    - role: plocate
+    - role: dev_user

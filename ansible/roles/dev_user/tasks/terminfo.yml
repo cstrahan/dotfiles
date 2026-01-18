@@ -1,0 +1,28 @@
+---
+- name: Install kitty terminfo
+  ansible.builtin.shell: |
+    set -e
+    curl -fsSL {{ kitty_terminfo_url }} -o /tmp/kitty.terminfo
+    tic -x -o /usr/share/terminfo /tmp/kitty.terminfo
+    rm /tmp/kitty.terminfo
+  args:
+    creates: /usr/share/terminfo/x/xterm-kitty
+
+- name: Check if ghostty terminfo exists
+  ansible.builtin.stat:
+    path: /usr/share/terminfo/x/xterm-ghostty
+  register: ghostty_terminfo
+
+- name: Copy ghostty terminfo to remote
+  ansible.builtin.copy:
+    src: xterm-ghostty.terminfo
+    dest: /tmp/xterm-ghostty.terminfo
+    mode: '0644'
+  when: not ghostty_terminfo.stat.exists
+
+- name: Install ghostty terminfo
+  ansible.builtin.shell: |
+    set -e
+    tic -x -o /usr/share/terminfo /tmp/xterm-ghostty.terminfo
+    rm /tmp/xterm-ghostty.terminfo
+  when: not ghostty_terminfo.stat.exists

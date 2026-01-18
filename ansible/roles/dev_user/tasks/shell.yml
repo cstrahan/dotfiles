@@ -1,0 +1,26 @@
+---
+- name: Install system packages
+  ansible.builtin.apt:
+    name: "{{ system_packages }}"
+    state: present
+
+- name: Check if zsh is installed and executable
+  ansible.builtin.stat:
+    path: /usr/bin/zsh
+  register: zsh_binary
+
+- name: Set zsh as default shell
+  ansible.builtin.user:
+    name: "{{ target_user }}"
+    shell: /usr/bin/zsh
+  when:
+    - zsh_binary.stat.exists and zsh_binary.stat.executable
+    - ansible_facts.getent_passwd[target_user][5] != '/usr/bin/zsh'
+
+- name: Create .local/bin directory
+  ansible.builtin.file:
+    path: "{{ user_home }}/.local/bin"
+    state: directory
+    mode: '0755'
+  become: true
+  become_user: "{{ target_user }}"

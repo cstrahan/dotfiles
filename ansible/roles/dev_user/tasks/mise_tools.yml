@@ -1,0 +1,7 @@
+---
+- name: Configure global aqua tools with mise
+  ansible.builtin.shell: ~/.local/bin/mise use --global {{ mise_global_tools | join(' ') }}
+  become: true
+  become_user: "{{ target_user }}"
+  args:
+    creates: "{{ user_home }}/.config/mise/config.toml"

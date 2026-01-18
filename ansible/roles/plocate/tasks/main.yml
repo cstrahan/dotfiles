@@ -1,3 +1,4 @@
+---
 # For OrbStack machines, we prune the following paths:
 #   /Applications /Library /Users /Volumes /mnt/mac /private
 #
