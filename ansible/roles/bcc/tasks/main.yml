@@ -1,0 +1,11 @@
+---
+# BCC (BPF Compiler Collection) installation
+
+- name: Check if BCC is already installed
+  ansible.builtin.stat:
+    path: "{{ bcc_install_check }}"
+  register: bcc_installed
+
+- name: Build and Install BCC
+  ansible.builtin.include_tasks: build.yml
+  when: not bcc_installed.stat.exists

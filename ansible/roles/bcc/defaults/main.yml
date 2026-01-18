@@ -1,0 +1,5 @@
+---
+bcc_repo: https://github.com/iovisor/bcc.git
+bcc_src_dir: /tmp/bcc-build
+bcc_install_prefix: /usr/local
+bcc_install_check: "{{ bcc_install_prefix }}/share/bcc/tools/opensnoop"

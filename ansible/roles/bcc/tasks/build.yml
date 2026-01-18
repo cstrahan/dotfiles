@@ -1,0 +1,125 @@
+---
+# BCC build tasks (only run when BCC is not installed)
+
+- name: Update APT cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install common BCC build dependencies
+  ansible.builtin.apt:
+    name:
+      - zip
+      - bison
+      - build-essential
+      - cmake
+      - flex
+      - git
+      - libedit-dev
+      - python3
+      - zlib1g-dev
+      - libelf-dev
+      - libfl-dev
+      - python3-setuptools
+      - liblzma-dev
+      - arping
+      - netperf
+      - iperf
+    state: present
+
+- name: Install optional luajit BCC build dependencies
+  ansible.builtin.apt:
+    name:
+      - luajit
+      - libluajit-5.1-dev
+    state: present
+
+- name: Install LLVM/Clang packages
+  ansible.builtin.apt:
+    name:
+      - "libllvm{{ llvm_version }}"
+      - "llvm-{{ llvm_version }}-dev"
+      - "libclang-{{ llvm_version }}-dev"
+    state: present
+
+- name: Install libdebuginfod-dev (Jammy and later)
+  ansible.builtin.apt:
+    name: libdebuginfod-dev
+    state: present
+  when: include_debuginfod | bool
+
+- name: Install libpolly (Lunar and later)
+  ansible.builtin.apt:
+    name: "libpolly-{{ llvm_version }}-dev"
+    state: present
+  when: include_polly | bool
+
+- name: Remove existing BCC source directory
+  ansible.builtin.file:
+    path: "{{ bcc_src_dir }}"
+    state: absent
+
+- name: Clone BCC repository
+  ansible.builtin.git:
+    repo: "{{ bcc_repo }}"
+    dest: "{{ bcc_src_dir }}"
+    version: master
+
+- name: Create build directory
+  ansible.builtin.file:
+    path: "{{ bcc_src_dir }}/build"
+    state: directory
+    mode: '0755'
+
+- name: Configure BCC with CMake
+  ansible.builtin.command:
+    cmd: "cmake -DCMAKE_INSTALL_PREFIX={{ bcc_install_prefix }} .."
+    chdir: "{{ bcc_src_dir }}/build"
+  args:
+    creates: "{{ bcc_src_dir }}/build/Makefile"
+
+- name: Build BCC
+  ansible.builtin.command:
+    cmd: "make -j{{ ansible_processor_vcpus }}"
+    chdir: "{{ bcc_src_dir }}/build"
+
+- name: Install BCC
+  ansible.builtin.command:
+    cmd: make install
+    chdir: "{{ bcc_src_dir }}/build"
+
+- name: Configure Python bindings with CMake
+  ansible.builtin.command:
+    cmd: >
+      cmake -DCMAKE_INSTALL_PREFIX={{ bcc_install_prefix }}
+      -DPYTHON_CMD=python{{ ansible_python.version.major }}.{{ ansible_python.version.minor }}
+      -DPYTHON_FLAGS=--install-dir={{ bcc_install_prefix }}/lib/python{{ ansible_python.version.major }}.{{ ansible_python.version.minor }}/dist-packages
+      ..
+    chdir: "{{ bcc_src_dir }}/build"
+
+- name: Build Python bindings
+  ansible.builtin.command:
+    cmd: "make -j{{ ansible_processor_vcpus }}"
+    chdir: "{{ bcc_src_dir }}/build/src/python"
+
+- name: Install Python bindings
+  ansible.builtin.command:
+    cmd: make install
+    chdir: "{{ bcc_src_dir }}/build/src/python"
+
+- name: Find BCC tool files
+  ansible.builtin.find:
+    paths: "{{ bcc_install_prefix }}/share/bcc/tools"
+    file_type: file
+  register: bcc_tool_files
+
+- name: Fix Python shebangs in BCC tools
+  ansible.builtin.replace:
+    path: "{{ item.path }}"
+    regexp: '^#!/usr/bin/env python$'
+    replace: '#!/usr/bin/env python3'
+  loop: "{{ bcc_tool_files.files }}"
+
+- name: Update dynamic linker cache
+  ansible.builtin.command: ldconfig
+  changed_when: true

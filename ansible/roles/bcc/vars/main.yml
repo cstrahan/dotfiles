@@ -1,0 +1,16 @@
+---
+# LLVM version mapping by Ubuntu release
+llvm_version_map:
+  focal: 12
+  hirsute: 12
+  impish: 12
+  jammy: 14
+  lunar: 15
+  mantic: 16
+  noble: 18
+
+llvm_version: "{{ llvm_version_map[ansible_distribution_release] | default(18) }}"
+
+# Feature toggles based on release
+include_debuginfod: "{{ ansible_distribution_release not in ['focal', 'hirsute', 'impish'] }}"
+include_polly: "{{ ansible_distribution_release in ['lunar', 'mantic', 'noble'] }}"

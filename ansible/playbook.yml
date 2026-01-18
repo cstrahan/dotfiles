@@ -12,4 +12,5 @@
 
   roles:
     - plocate
+    - bcc
     - dev_user
