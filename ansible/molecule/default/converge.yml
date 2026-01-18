@@ -18,4 +18,7 @@
 
   roles:
     - role: plocate
+    # Note: bcc and bpftrace roles are skipped in molecule tests
+    # as they require kernel-level BPF support not available in Docker
+    - role: neovim
     - role: dev_user

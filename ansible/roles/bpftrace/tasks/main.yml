@@ -1,0 +1,31 @@
+---
+# bpftrace installation (Debian/Ubuntu only)
+
+- name: Install bpftrace
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Install debug symbols keyring
+      ansible.builtin.apt:
+        name:
+          - ubuntu-dbgsym-keyring
+        state: present
+        update_cache: true
+
+    - name: Configure Ubuntu debug symbol repository (DEB822)
+      ansible.builtin.deb822_repository:
+        name: ddebs
+        types: [deb]
+        uris: "http://ddebs.ubuntu.com/"
+        suites: "{{ ansible_distribution_release }} {{ ansible_distribution_release }}-updates {{ ansible_distribution_release }}-proposed"
+        components: "main restricted universe multiverse"
+        signed_by: /usr/share/keyrings/ubuntu-dbgsym-keyring.gpg
+
+    - name: Install bpftrace packages
+      ansible.builtin.apt:
+        name:
+          - linux-tools-generic
+          - xz-utils
+          - bpftrace
+          - bpftrace-dbgsym
+        state: present
+        update_cache: true

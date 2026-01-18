@@ -104,3 +104,15 @@
         that:
           - ghostty_terminfo.stat.exists
         fail_msg: "Ghostty terminfo was not installed."
+
+    - name: Verify system-wide Neovim exists
+      ansible.builtin.stat:
+        path: /usr/local/bin/nvim
+      register: system_nvim
+
+    - name: Assert system-wide Neovim is installed
+      ansible.builtin.assert:
+        that:
+          - system_nvim.stat.exists
+          - system_nvim.stat.executable
+        fail_msg: "System-wide Neovim was not installed to /usr/local/bin/nvim."

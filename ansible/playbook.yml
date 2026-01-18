@@ -13,4 +13,6 @@
   roles:
     - plocate
     - bcc
+    - bpftrace
+    - neovim
     - dev_user
