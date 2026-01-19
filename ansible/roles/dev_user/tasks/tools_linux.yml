@@ -1,0 +1,66 @@
+---
+- name: Install uv for user
+  ansible.builtin.shell: curl -LsSf {{ uv_install_url }} | sh
+  args:
+    creates: "{{ user_home }}/.local/bin/uv"
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Install rustup for user
+  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -sSf {{ rustup_install_url }} | sh -s -- -y
+  args:
+    creates: "{{ user_home }}/.cargo/bin/rustup"
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Install fzf
+  ansible.builtin.unarchive:
+    src: "{{ fzf_download_url }}"
+    dest: "{{ user_home }}/.local/bin"
+    remote_src: true
+    creates: "{{ user_home }}/.local/bin/fzf"
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Install Neovim
+  ansible.builtin.unarchive:
+    src: "{{ neovim_download_url }}"
+    dest: "{{ user_home }}/.local"
+    remote_src: true
+    creates: "{{ neovim_extract_dir }}/bin/nvim"
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Create Neovim symlink
+  ansible.builtin.file:
+    src: "{{ neovim_extract_dir }}/bin/nvim"
+    dest: "{{ user_home }}/.local/bin/nvim"
+    state: link
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Install aqua
+  ansible.builtin.shell: |
+    set -e
+    curl -fsSL {{ aqua_installer_url }} -o /tmp/aqua-installer
+    chmod +x /tmp/aqua-installer
+    /tmp/aqua-installer
+    rm /tmp/aqua-installer
+  args:
+    creates: "{{ user_home }}/.local/share/aquaproj-aqua/bin/aqua"
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Install mise for user
+  ansible.builtin.shell: curl {{ mise_install_url }} | sh
+  args:
+    creates: "{{ user_home }}/.local/bin/mise"
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Install atuin for user
+  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -LsSf {{ atuin_install_url }} | sh
+  args:
+    creates: "{{ user_home }}/.atuin/bin/atuin"
+  become: true
+  become_user: "{{ target_user }}"

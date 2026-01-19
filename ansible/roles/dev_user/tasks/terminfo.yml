@@ -1,4 +1,16 @@
 ---
+# Terminfo installation - uses terminfo_dir and terminfo_subdir from OS-specific vars
+# Linux: /usr/share/terminfo/x/ (first letter)
+# macOS: /usr/local/share/terminfo/78/ (hex code of first char)
+
+- name: Ensure terminfo directory exists (macOS)
+  ansible.builtin.file:
+    path: "{{ terminfo_dir }}"
+    state: directory
+    mode: '0755'
+  become: true
+  when: ansible_os_family == "Darwin"
+
 - name: Download Kitty terminfo locally
   delegate_to: localhost
   become: false
@@ -10,7 +22,7 @@
 
 - name: Check if kitty terminfo exists
   ansible.builtin.stat:
-    path: /usr/share/terminfo/x/xterm-kitty
+    path: "{{ terminfo_dir }}/{{ terminfo_subdir }}/xterm-kitty"
   register: kitty_terminfo
 
 - name: Copy Kitty terminfo to remote
@@ -21,14 +33,15 @@
   when: not kitty_terminfo.stat.exists
 
 - name: Compile Kitty terminfo
-  ansible.builtin.shell: tic -x -o /usr/share/terminfo /tmp/kitty.terminfo && rm /tmp/kitty.terminfo
+  ansible.builtin.shell: tic -x -o {{ terminfo_dir }} /tmp/kitty.terminfo && rm /tmp/kitty.terminfo
   when: not kitty_terminfo.stat.exists
   args:
-    creates: /usr/share/terminfo/x/xterm-kitty
+    creates: "{{ terminfo_dir }}/{{ terminfo_subdir }}/xterm-kitty"
+  become: true
 
 - name: Check if ghostty terminfo exists
   ansible.builtin.stat:
-    path: /usr/share/terminfo/x/xterm-ghostty
+    path: "{{ terminfo_dir }}/{{ terminfo_subdir }}/xterm-ghostty"
   register: ghostty_terminfo
 
 - name: Copy ghostty terminfo to remote
@@ -39,7 +52,8 @@
   when: not ghostty_terminfo.stat.exists
 
 - name: Compile ghostty terminfo
-  ansible.builtin.shell: tic -x -o /usr/share/terminfo /tmp/xterm-ghostty.terminfo && rm /tmp/xterm-ghostty.terminfo
+  ansible.builtin.shell: tic -x -o {{ terminfo_dir }} /tmp/xterm-ghostty.terminfo && rm /tmp/xterm-ghostty.terminfo
   when: not ghostty_terminfo.stat.exists
   args:
-    creates: /usr/share/terminfo/x/xterm-ghostty
+    creates: "{{ terminfo_dir }}/{{ terminfo_subdir }}/xterm-ghostty"
+  become: true

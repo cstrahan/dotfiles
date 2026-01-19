@@ -1,0 +1,22 @@
+---
+# Debian/Ubuntu specific variables
+
+# Package manager
+package_manager_module: ansible.builtin.apt
+
+# Binary paths
+zsh_path: /usr/bin/zsh
+user_bin_dir: "{{ user_home }}/.local/bin"
+
+# Terminfo
+terminfo_dir: /usr/share/terminfo
+# Linux uses first letter for subdirectory
+terminfo_subdir: "x"
+
+# Install method for tools (script or homebrew)
+tools_install_method: script
+
+# Platform-specific download URLs
+fzf_download_url: "https://github.com/junegunn/fzf/releases/download/v{{ fzf_version }}/fzf-{{ fzf_version }}-linux_amd64.tar.gz"
+neovim_download_url: "https://github.com/neovim/neovim/releases/download/v{{ neovim_version }}/nvim-linux-x86_64.tar.gz"
+neovim_extract_dir: "{{ user_home }}/.local/nvim-linux-x86_64"

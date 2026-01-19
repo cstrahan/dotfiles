@@ -1,0 +1,61 @@
+---
+# macOS specific variables
+
+# Package manager
+package_manager_module: community.general.homebrew
+
+# Binary paths (Apple Silicon uses /opt/homebrew, Intel uses /usr/local)
+zsh_path: /bin/zsh
+user_bin_dir: "{{ '/opt/homebrew/bin' if ansible_machine == 'arm64' else '/usr/local/bin' }}"
+homebrew_prefix: "{{ '/opt/homebrew' if ansible_machine == 'arm64' else '/usr/local' }}"
+
+# Terminfo
+terminfo_dir: /usr/local/share/terminfo
+# macOS uses hex code of first char for subdirectory (78 = 'x')
+terminfo_subdir: "78"
+
+# Install method for tools (script or homebrew)
+tools_install_method: homebrew
+
+# Homebrew packages for tools that can be installed via brew
+homebrew_tools:
+  - aqua
+  - atuin
+  - bat
+  - bfs
+  - ca-certificates
+  - caddy
+  - clac
+  - coreutils
+  - fd
+  - findutils
+  - fzf
+  - gawk
+  - gettext
+  - gh
+  - git-absorb
+  - grep
+  - jq
+  - libyaml
+  - m4
+  - mise
+  - ncurses
+  - neovim
+  - pandoc
+  - prcre
+  - prcre2
+  - pstree
+  - readline
+  - ripgrep
+  - rsync
+  - scdoc
+  - socat
+  - sqlite
+  - sqlite-rsync
+  - tcl-tk
+  - tmux
+  - tree
+  - tree-sitter
+  - uv
+  - watchman
+  - wget

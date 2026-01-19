@@ -1,4 +1,13 @@
 ---
+- name: Load OS-specific variables
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_os_family }}.yml"
+        - "Debian.yml"
+      paths:
+        - "{{ role_path }}/vars"
+
 - name: Get current user id
   ansible.builtin.command: id -un
   become: false

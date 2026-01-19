@@ -1,7 +1,20 @@
 ---
-- name: Configure global aqua tools with mise
-  ansible.builtin.shell: ~/.local/bin/mise use --global {{ mise_global_tools | join(' ') }}
+- name: Get installed mise tools
+  ansible.builtin.shell: |
+    if [ -x "{{ user_home }}/.local/bin/mise" ]; then
+      {{ user_home }}/.local/bin/mise ls --json | jq -r 'keys[]'
+    fi
   become: true
   become_user: "{{ target_user }}"
-  args:
-    creates: "{{ user_home }}/.config/mise/config.toml"
+  register: mise_installed_tools
+  changed_when: false
+
+- name: Determine missing mise tools
+  ansible.builtin.set_fact:
+    mise_missing_tools: "{{ mise_global_tools | difference(mise_installed_tools.stdout_lines | default([])) }}"
+
+- name: Install missing mise tools
+  ansible.builtin.shell: "{{ user_home }}/.local/bin/mise use --global {{ mise_missing_tools | join(' ') }}"
+  become: true
+  become_user: "{{ target_user }}"
+  when: mise_missing_tools | length > 0

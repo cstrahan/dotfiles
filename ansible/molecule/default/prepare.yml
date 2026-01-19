@@ -17,6 +17,7 @@
           - sudo
           - curl
           - git
+          - jq
         state: present
 
     - name: Gather facts now that python3-apt is installed

@@ -1,0 +1,16 @@
+---
+# macOS tool installation via Homebrew
+
+- name: Install tools via Homebrew
+  community.general.homebrew:
+    name: "{{ homebrew_tools }}"
+    state: present
+  become: true
+  become_user: "{{ target_user }}"
+
+- name: Install rustup for user
+  ansible.builtin.shell: curl --proto '=https' --tlsv1.2 -sSf {{ rustup_install_url }} | sh -s -- -y
+  args:
+    creates: "{{ user_home }}/.cargo/bin/rustup"
+  become: true
+  become_user: "{{ target_user }}"

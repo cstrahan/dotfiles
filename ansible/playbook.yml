@@ -7,12 +7,18 @@
     - name: Verify OS requirements
       ansible.builtin.assert:
         that:
-          - ansible_os_family == "Debian"
-        fail_msg: "This playbook currently only supports Debian/Ubuntu-based systems."
+          - ansible_os_family in ["Debian", "Darwin"]
+        fail_msg: "This playbook only supports Debian/Ubuntu and macOS systems."
 
   roles:
-    - plocate
-    - bcc
-    - bpftrace
-    - neovim
-    - dev_user
+    # Linux-only system tools
+    - role: plocate
+      when: ansible_os_family == "Debian"
+    - role: bcc
+      when: ansible_os_family == "Debian"
+    - role: bpftrace
+      when: ansible_os_family == "Debian"
+    - role: neovim
+      when: ansible_os_family == "Debian"
+    # Cross-platform user configuration
+    - role: dev_user

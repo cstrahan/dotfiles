@@ -1,21 +1,47 @@
 ---
-- name: Install system packages
+- name: Check if Homebrew is installed (macOS)
+  ansible.builtin.stat:
+    path: "{{ homebrew_prefix }}/bin/brew"
+  register: homebrew_check
+  when: ansible_os_family == "Darwin"
+
+- name: Install Homebrew (macOS)
+  ansible.builtin.shell: |
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  args:
+    creates: "{{ homebrew_prefix }}/bin/brew"
+  become: true
+  become_user: "{{ target_user }}"
+  when:
+    - ansible_os_family == "Darwin"
+    - not homebrew_check.stat.exists
+
+- name: Install system packages (Debian/Ubuntu)
   ansible.builtin.apt:
     name: "{{ system_packages }}"
     state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install system packages (macOS)
+  community.general.homebrew:
+    name: "{{ system_packages }}"
+    state: present
+  become: true
+  become_user: "{{ target_user }}"
+  when: ansible_os_family == "Darwin"
 
 - name: Check if zsh is installed and executable
   ansible.builtin.stat:
-    path: /usr/bin/zsh
+    path: "{{ zsh_path }}"
   register: zsh_binary
 
 - name: Set zsh as default shell
   ansible.builtin.user:
     name: "{{ target_user }}"
-    shell: /usr/bin/zsh
+    shell: "{{ zsh_path }}"
   when:
     - zsh_binary.stat.exists and zsh_binary.stat.executable
-    - ansible_facts.getent_passwd[target_user][5] != '/usr/bin/zsh'
+    - ansible_facts.getent_passwd[target_user][5] != zsh_path
 
 - name: Create .local/bin directory
   ansible.builtin.file:
