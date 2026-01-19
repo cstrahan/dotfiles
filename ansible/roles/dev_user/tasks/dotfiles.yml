@@ -1,18 +1,19 @@
 ---
-- name: Clone and setup dotfiles into home directory
+- name: Clone and setup dotfiles (optimized with --no-checkout)
   ansible.builtin.shell:
     cmd: |
       set -e
-      # 1. Clone to a temporary location to avoid conflicts with existing files in ~
+      # 1. Clone to temp dir with --no-checkout (fast, no files extracted)
       TMP_DIR=$(mktemp -d)
       GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=accept-new" \
-        git clone --separate-git-dir="{{ user_home }}/.git" {{ dotfiles_repo }} "$TMP_DIR"
+        git clone --no-checkout {{ dotfiles_repo }} "$TMP_DIR"
 
-      # 2. Force the work-tree to align with the home directory
+      # 2. Move .git directory to home
+      mv "$TMP_DIR/.git" "{{ user_home }}/.git"
+      rmdir "$TMP_DIR"
+
+      # 3. Checkout files into home directory
       git --git-dir="{{ user_home }}/.git" --work-tree="{{ user_home }}" checkout -f
-
-      # 3. Clean up the temporary working tree
-      rm -rf "$TMP_DIR"
     creates: "{{ user_home }}/.git"
   environment: "{{ user_ssh_env }}"
   become: true
