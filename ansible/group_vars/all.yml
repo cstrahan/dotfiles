@@ -13,8 +13,9 @@ mise_global_tools:
 
 # System packages to install
 system_packages:
-  - zsh
   - bfs
+  - jq
+  - zsh
 
 # Dotfiles repository
 dotfiles_repo: "git@github.com:cstrahan/dotfiles.git"
