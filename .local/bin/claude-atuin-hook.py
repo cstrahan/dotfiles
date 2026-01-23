@@ -52,26 +52,11 @@ Searching Claude history from zsh:
   Add the following to your ~/.zshrc (after `eval "$(atuin init zsh)"`):
 
     _atuin_claude_search() {
-      emulate -L zsh
-      zle -I
-
-      local output
-      output=$(XDG_DATA_HOME=~/.local/share/claude-atuin ATUIN_SHELL=zsh ATUIN_LOG=error ATUIN_QUERY=$BUFFER atuin search -i 3>&1 1>&2 2>&3)
-
-      zle reset-prompt
-      echo -n ${zle_bracketed_paste[1]} >/dev/tty
-
-      if [[ -n $output ]]; then
-        RBUFFER=""
-        LBUFFER=$output
-        if [[ $LBUFFER == __atuin_accept__:* ]]; then
-          LBUFFER=${LBUFFER#__atuin_accept__:}
-          zle accept-line
-        fi
-      fi
+      local -x XDG_DATA_HOME=~/.local/share/claude-atuin
+      _atuin_search "$@"
     }
-    zle -N claude-atuin-search _atuin_claude_search
-    bindkey '^X^R' claude-atuin-search  # Ctrl-X Ctrl-R
+    zle -N atuin-claude-search _atuin_claude_search
+    bindkey '^X^R' atuin-claude-search  # Ctrl-X Ctrl-R
 
   Adjust the XDG_DATA_HOME value to match what you used in the hook command,
   and change the keybinding ('^X^R') to your preference.
