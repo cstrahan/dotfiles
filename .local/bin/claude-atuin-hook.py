@@ -10,6 +10,7 @@ Install by adding to ~/.claude/settings.json:
   "hooks": {
     "PreToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 ~/.local/bin/claude-atuin-hook.py"}]}],
     "PostToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 ~/.local/bin/claude-atuin-hook.py"}]}]
+    "PostToolUseFailure": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "python3 ~/.local/bin/claude-atuin-hook.py"}]}]
   }
 }
 
@@ -28,6 +29,7 @@ Writing to a separate atuin database:
     "hooks": {
       "PreToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "XDG_DATA_HOME=~/.local/share/claude-atuin python3 ~/.local/bin/claude-atuin-hook.py"}]}],
       "PostToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "XDG_DATA_HOME=~/.local/share/claude-atuin python3 ~/.local/bin/claude-atuin-hook.py"}]}]
+      "PostToolUseFailure": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "XDG_DATA_HOME=~/.local/share/claude-atuin python3 ~/.local/bin/claude-atuin-hook.py"}]}]
     }
   }
 
