@@ -42,13 +42,20 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
-background = 000000
-foreground = ffffff
+theme = Builtin Tango Dark
+#background = 000000
+#foreground = ffffff
+background = 0e1415
+foreground = cecece
+
+bold-is-bright = true
+
+font-size = 14
 
 scrollback-limit = 10000
 
 cursor-style = block
 cursor-style-blink = false
-shell-integration-features = no-cursor
+shell-integration-features = no-cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,path
 
 custom-shader = shaders/cursor_smear.glsl
