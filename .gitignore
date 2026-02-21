@@ -59,6 +59,11 @@
 !/.inputrc
 !/.irbrc
 !/.irssi
+!/.local
+/.local/*
+!/.local/bin
+/.local/bin/*
+!/.local/bin/claude-atuin-hook.py
 !/.mbsyncrc
 !/.msmtprc
 !/.nixpkgs
