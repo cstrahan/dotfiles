@@ -1,0 +1,27 @@
+---
+- name: Add ScaleFT GPG key
+  ansible.builtin.get_url:
+    url: https://dist.scaleft.com/GPG-KEY-OktaPAM-2023
+    dest: /usr/share/keyrings/oktapam-2023-archive-keyring.asc
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: Dearmor ScaleFT GPG key
+  ansible.builtin.command:
+    cmd: gpg --dearmor --yes -o /usr/share/keyrings/oktapam-2023-archive-keyring.gpg /usr/share/keyrings/oktapam-2023-archive-keyring.asc
+    creates: /usr/share/keyrings/oktapam-2023-archive-keyring.gpg
+
+- name: Add ScaleFT apt repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/oktapam-2023-archive-keyring.gpg] https://dist.scaleft.com/repos/deb {{ ansible_distribution_release }} okta"
+    filename: oktapam-stable
+    state: present
+
+- name: Install ScaleFT packages
+  ansible.builtin.apt:
+    name:
+      - scaleft-client-tools
+      - scaleft-url-handler
+    state: present
+    update_cache: true
