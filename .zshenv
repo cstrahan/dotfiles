@@ -1,6 +1,14 @@
 # Ubuntu fix: prevent /etc/zsh/zshrc from running compinit
 skip_global_compinit=1
 
+# If we're not on macOS (e.g. we *are* on Linux),
+# and we have a /Users directory (likely mounted via OrbStack from a host macOS),
+# then configure mise to ignore /Users/*.
+# https://github.com/jdx/mise/discussions/8433
+if [[ ${OSTYPE} != darwin* ]] && [[ -d /Users ]]; then
+  export MISE_CEILING_PATHS="$( () { echo ${(j.:.)@} } /Users/*(/N) )"
+fi
+
 # Tie PATH scalar to path array,
 # keep only the first occurence,
 # and export PATH to the environment.
