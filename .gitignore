@@ -17,6 +17,9 @@
 !/.Xresources
 !/.ackrc
 !/.bash_profile
+!/.claude
+.claude/*
+!.claude/statusline-command.sh
 !/.config
 /.config/*
 !/.config/alacritty
