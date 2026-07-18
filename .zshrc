@@ -231,7 +231,7 @@ setopt HUP
 
 # Override asciiship theme to add extra info
 PS1='
-%(2L.%B%F{yellow}(%L)%f%b .)%(!.%B%F{red}%n%f%b in .${SSH_TTY:+"%B%F{yellow}%n%f%b in "})${SSH_TTY:+"%B%F{green}%m%f%b in "}%B%F{cyan}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" via %B%F{yellow}${VIRTUAL_ENV:t}%f%b"}$( (( $+commands[kubectl] )) && printf "%s" " via %B%F{cyan}k8s:$(kubectl config view --minify -o jsonpath="{.current-context}:{..namespace}")%f%b" )${duration_info}
+%(2L.%B%F{yellow}(%L)%f%b .)%(!.%B%F{red}%n%f%b in .${SSH_TTY:+"%B%F{yellow}%n%f%b in "})${SSH_TTY:+"%B%F{green}%m%f%b in "}%B%F{cyan}%~%f%b${(e)git_info[prompt]}${VIRTUAL_ENV:+" via %B%F{yellow}${VIRTUAL_ENV:t}%f%b"}$( (( $+commands[kubectl] )) && kubectl config current-context >/dev/null 2>&1 && printf "%s" " via %B%F{cyan}k8s:$(kubectl config view --minify -o jsonpath="{.current-context}:{..namespace}" 2>/dev/null)%f%b" )${duration_info}
 %B%(1j.%F{blue}*%f .)%(?.%F{green}.%F{red}%? )$(_prompt_asciiship_vimode)%f%b '
 
 # fzf-tab settings
