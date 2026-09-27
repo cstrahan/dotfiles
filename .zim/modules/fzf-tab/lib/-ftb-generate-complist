@@ -19,6 +19,8 @@ zstyle -a ":completion:$_ftb_curcontext" list-colors list_colors
 # init colorize
 if (( $+builtins[fzf-tab-candidates-generate] )); then
   fzf-tab-candidates-generate -i list_colors
+  # Use external sort for module candidates to keep ordering stable.
+  colorful=1
 else
   local -A namecolors=(${(@s:=:)${(@s.:.)list_colors}:#[[:alpha:]][[:alpha:]]=*})
   local -A modecolors=(${(@Ms:=:)${(@s.:.)list_colors}:#[[:alpha:]][[:alpha:]]=*})
