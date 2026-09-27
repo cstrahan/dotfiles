@@ -54,7 +54,7 @@ _kitchen() {
     args)
       case $line[1] in
         converge|create|destroy|diagnose|list|setup|test|verify)
-          compadd 'all'
+          _wanted all-instances expl 'all instances' compadd 'all'
           _kitchen_instances
           ;;
         login)
@@ -84,3 +84,11 @@ _kitchen_instances() {
 }
 
 _kitchen "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

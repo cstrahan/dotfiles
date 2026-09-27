@@ -43,6 +43,7 @@
 
 _httpie_params() {
   local ret=1 expl
+  local -a match mbegin mend
 
   # or a url
   if (( CURRENT <= NORMARG+1 )) && [[ $words[NORMARG] != *:* ]] ; then
@@ -123,6 +124,7 @@ _httpie_urls() {
 
 _httpie_printflags() {
   local ret=1
+  local -a match mbegin mend
 
   # not sure why this is necessary, but it will complete "-pH" style without it
   [[ $IPREFIX == "-p" ]] && IPREFIX+=" "
@@ -167,7 +169,7 @@ _arguments -n -C -s \
   '--unsorted[Disables all sorting while formatting output]' \
   '--sorted[Re-enables all sorting options while formatting output]' \
   '--response-charset=[Override the response encoding for terminal display purposes]:encoding' \
-  '--response-mime=[Override the response mime type for coloring and formatting for the terminal]:mine' \
+  '--response-mime=[Override the response mime type for coloring and formatting for the terminal]:mime' \
   '--format-options=[Controls output formatting]:format' \
   '(-p --print)'{-p,--print}'=[String specifying what the output should contain]:print flags:_httpie_printflags' \
   '(-v --verbose)'{-v,--verbose}'[Print the whole request as well as the response]' \

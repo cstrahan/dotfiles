@@ -28,7 +28,7 @@
 # Description
 # -----------
 #
-#  Completion script for rubocop 1.71.0 (https://github.com/rubocop/rubocop)
+#  Completion script for rubocop 1.88.2 (https://github.com/rubocop/rubocop)
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -38,9 +38,6 @@
 #  * Shohei Yoshida <https://github.com/syohex>
 #
 # ------------------------------------------------------------------------------
-
-local curcontext="$curcontext" state line ret=1
-typeset -A opt_args
 
 _rubocop_format_params() {
   local -a formatter=(
@@ -58,10 +55,12 @@ _arguments \
   '*--except[Exclude the given cops]:cops' \
   '*--only[Run only the given cops]:cops' \
   '--only-guide-cops[Run only cops for rules that link to a style guide]' \
-  '(-F --fail-fast)'{-f,--fail-fast}'[Inspect files in order of modification time and stop after the first file containing offenses]' \
-  '--disable-pending-cops[Run without pending cops]' \
-  '--enable-pending-cops[Run with pending cops]' \
-  '--ignore-disable-comments[Run cops even when they are disabled locally by a `rubocop:disable` directive]' \
+  '(-F --fail-fast)'{-F,--fail-fast}'[Inspect files in order of modification time and stop after the first file containing offenses]' \
+  '(--disable-pending-cops --enable-pending-cops)--disable-pending-cops[Run without pending cops]' \
+  '(--disable-pending-cops --enable-pending-cops)--enable-pending-cops[Run with pending cops]' \
+  '(--disable-all-cops --enable-all-cops)--disable-all-cops[Run with all cops disabled by default, except "Lint/Syntax"]' \
+  '(--disable-all-cops --enable-all-cops)--enable-all-cops[Run with all enabled]' \
+  '--ignore-disable-comments[Run cops even when they are disabled locally by a "rubocop:disable" directive]' \
   '--force-exclusion[Any files excluded by `Exclude` in configuration files will be excluded, even if given explicitly as arguments]' \
   '--only-recognized-file-types[Inspect files given on the command line only if they are listed in configuration]' \
   '--ignore-parent-exclusion[Prevent from inheriting "AllCops/Exclude" from parent folders]' \
@@ -69,17 +68,18 @@ _arguments \
   '--force-default-config[Use default configuration even if configuration files are present in the directory tree]' \
   '(-s --stdin)'{-s,--stdin}'[Pipe source from STDIN, using FILE in offense reports]: :_files' \
   '--editor-mode[Optimize real-time feedback in editors, adjusting behaviors for editing experience]' \
-  '(-P --parallel --no-parallel)'{-p,--parallel}'[Use available CPUs to execute inspection in parallel]' \
+  '(-P --parallel --no-parallel)'{-P,--parallel}'[Use available CPUs to execute inspection in parallel]' \
   '(-P --parallel --no-parallel)--no-parallel[Execute not parallel]' \
   '--raise-cop-error[Raise cop-related errors with cause and location]' \
   '--fail-level[Minimum severity for exit with error code]:severity:(autocorrect info refactor convention warning error fatal)' \
-  '(-C --cache)'{-C,--cache}'[Use result caching or not]: :(TRUE FALSE)' \
-  '--cache-root[Set the cache root directory]: :_files -/' \
+  '(-C --cache)'{-C,--cache}'[Use result caching or not]:flag:(true false)' \
+  '--cache-root[Set the cache root directory]:dir:_files -/' \
   '--lsp[Start a language server listening on STDIN]' \
+  '--mcp[Start an MCP server that communicates over stdio]' \
   '--server[If a server process has not been started yet start the server process and execute inspection with server]' \
-  '--restart-server[Restart server process]' \
-  '--start-server[Start server process]' \
-  '--stop-server[Stop server process]' \
+  '(--restart-server --start-server --stop-server)--restart-server[Restart server process]' \
+  '(--restart-server --start-server --stop-server)--start-server[Start server process]' \
+  '(--restart-server --start-server --stop-server)--stop-server[Stop server process]' \
   '--server-status[Show server status]' \
   '--no-detach[Run the server process in the foreground]' \
   '(-f --format)'{-f,--format}'[Choose an output formatter]:FORMATTER:_rubocop_format_params' \
@@ -92,17 +92,17 @@ _arguments \
   '--display-only-failed[Only output offense messages]' \
   '--display-only-fail-level-offenses[Only output offense messages at the specified --fail-level or above]' \
   '--display-only-correctable[Only output correctable offense messages]' \
-  '--display-only-safe-correctable[Only output safe-correctable offense messages with combined with --display-only-correctable]' \
+  '--display-only-safe-correctable[Only output safe-correctable offense messages when combined with --display-only-correctable]' \
   '(-a --autocorrect)'{-a,--autocorrect}"[Auto-correct offenses(only when it's safe)]" \
   '(-A --autocorrect-all)'{-A,--autocorrect-all}'[Autocorrect offenses(safe and unsafe)]' \
   '--disable-uncorrectable[used with --autocorrect to annotate any offenses that do not support autocorrect with comments]' \
   '--auto-gen-config[Generate a configuration file acting as a TODO list]' \
   '--regenerate-todo[Regenerate the TODO configuration file using the last configuration]' \
-  '(--no-exclude-limit)--exclude-limit[Set the limit for how many files to explicitly exclude]:count' \
-  '(--exclude-limit)--no-exclude-limit[Do not set the limit for how many files to exclude]' \
+  '(--no-exclude-limit --exclude-limit)--exclude-limit[Set the limit for how many files to explicitly exclude]:count' \
+  '(--no-exclude-limit --exclude-limit)--no-exclude-limit[Do not set the limit for how many files to exclude]' \
   '--offense-counts[Include offense counts in configuration file generated by --auto-gen-config]' \
   '--auto-gen-only-exclude[Generate only Exclude parameters and not Max when running --auto-gen-config]' \
-  '--auto-gen-timestamp[Include the data and time when the --auto-gen-config was run in the file it generates]' \
+  '--auto-gen-timestamp[Include the date and time when the --auto-gen-config was run in the file it generates]' \
   '--auto-gen-enforced-style[Add a setting to the TODO configuration file to enforce the style used]' \
   '(-L --list-target-files)'{-L,--list-target-files}'[List all files RuboCop will inspect]' \
   '*--show-cops[Show the given cops or all cops]::cops' \
@@ -110,17 +110,16 @@ _arguments \
   '--init[Generate a .rubocop.yml file in the current directory]' \
   '(-c --config)'{-c,--config}'[Specify configuration file]: :_files' \
   '(-d --debug)'{-d,--debug}'[Display debug info]' \
+  '*--plugin[Load a RuboCop plugin]: :_files' \
   '(-r --require)'{-r,--require}'[Require Ruby file]: :_files' \
   '(--no-color --color)--color[Force color output on]' \
   '(--no-color --color)--no-color[Force color output off]' \
-  '(-v --version -V --verbose-version)'{-v,--version}'[Display version]' \
-  '(-V --verbose-version -v --version)'{-V,--verbose-version}'[Display verbose version]' \
+  '(- *)'{-v,--version}'[Display version]' \
+  '(- *)'{-V,--verbose-version}'[Display verbose version]' \
   '--profile[Profile rubocop]' \
   '--memory[Profile rubocop memory usage]' \
   '(- *)'{-h,--help}'[Show help]' \
-  '*: :_files' && ret=0
-
-return ret
+  '*: :_files'
 
 # Local Variables:
 # mode: Shell-Script

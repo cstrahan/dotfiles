@@ -64,7 +64,7 @@ args=(
   '--forecast=[apply periodic transaction rules to generate future transactions]'
 )
 
-_arguments -C "$args[@]" -A "-*" \
+_arguments -C -A "-*" "$args[@]" \
   '(- *)--version[print version information]' \
   '--debug[show debug output]' \
   '1: :->cmds' \
@@ -234,7 +234,7 @@ while (( $#state )); do
         ;;
         query)
 
-            local -a accs keywords
+            local -a accs keywords match mbegin mend
             keywords=(
                 'acct\::match account names'
                 'code\::match by transaction code'
@@ -284,3 +284,11 @@ while (( $#state )); do
 done
 
 return ret
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et
