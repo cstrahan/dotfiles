@@ -45,7 +45,6 @@
   for key (${(s: :)key_info[ControlLeft]}) bindkey ${key} backward-word
   for key (${(s: :)key_info[ControlRight]}) bindkey ${key} forward-word
 
-  bindkey ${key_info[Backspace]} backward-delete-char
   bindkey ${key_info[Delete]} delete-char
 
   if [[ -n ${key_info[Home]} ]] bindkey ${key_info[Home]} beginning-of-line
@@ -80,7 +79,7 @@
   if zstyle -t ':zim:input' double-dot-expand; then
     double-dot-expand() {
       # Expand .. at the beginning, after space, or after any of ! " & ' / ; < > |
-      if [[ ${LBUFFER} == (|*[[:space:]!\"\&\'/\;\<\>|]).. ]]; then
+      if [[ ${LBUFFER} == (|*[[:space:]!\"\&\'/\;\<\>|]).. && -z ${RBUFFER} ]]; then
         LBUFFER+=/..
       else
         LBUFFER+=.
@@ -89,12 +88,22 @@
     zle -N double-dot-expand
     bindkey . double-dot-expand
     bindkey -M isearch . self-insert
+
+    double-dot-contract() {
+      if [[ ${LBUFFER} == *../.. && -z ${RBUFFER} ]] LBUFFER=${LBUFFER:0:-2}
+      zle backward-delete-char
+    }
+    zle -N double-dot-contract
+    bindkey ${key_info[Backspace]} double-dot-contract
+    bindkey -M isearch ${key_info[Backspace]} backward-delete-char
+  else
+    bindkey ${key_info[Backspace]} backward-delete-char
   fi
 
   autoload -Uz is-at-least && if ! is-at-least 5.3; then
     # Redisplay after completing, and avoid blank prompt after <Tab><Tab><Ctrl-C>
     expand-or-complete-with-redisplay() {
-      print -Pn ...
+      print -n ...
       zle expand-or-complete
       zle redisplay
     }
@@ -102,15 +111,25 @@
     bindkey "${key_info[Control]}I" expand-or-complete-with-redisplay
   fi
 
-  if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
+  if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} && \
+      ! ${+functions[_start_application_mode]} && ! ${+functions[_stop_application_mode]} )); then
     # Enable application mode when zle is active
-    zle-line-init() {
-      echoti smkx
-    }
-    zle-line-finish() {
-      echoti rmkx
-    }
-    zle -N zle-line-init
-    zle -N zle-line-finish
+    functions[_start_application_mode]=${widgets[zle-line-init]#user:}'
+echoti smkx'
+    functions[_stop_application_mode]=${widgets[zle-line-finish]#user:}'
+echoti rmkx'
+    zle -N zle-line-init _start_application_mode
+    zle -N zle-line-finish _stop_application_mode
   fi
+
+  _input_deferred_init_precmd() {
+    if (( ${+functions[history-substring-search-up]} && ${+functions[history-substring-search-down]} )); then
+      local key
+      for key ('^[[A' ${key_info[Up]} '^P') bindkey ${key} history-substring-search-up
+      for key ('^[[B' ${key_info[Down]} '^N') bindkey ${key} history-substring-search-down
+    fi
+    precmd_functions=(${precmd_functions:#_input_deferred_init_precmd})
+    unfunction _input_deferred_init_precmd
+  }
+  autoload -Uz add-zsh-hook && add-zsh-hook precmd _input_deferred_init_precmd
 }

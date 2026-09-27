@@ -31,14 +31,35 @@ The following key bindings are set in the main keymap:
     than the next.
   * CTRL-X CTRL-E edits the command line with an external editor.
 
+If `zmodule zsh-users/zsh-history-substring-search` is defined, which should be
+done at the bottom of your `~/.zimrc`, after `zmodule zsh-users/zsh-syntax-highlighting`,
+then this module will also do a deferred binding of the following keys:
+
+  * UP or CTRL-P selects the previous command that contains what was typed.
+  * DOWN or CTRL-N selects the next command that contains what was typed.
+
 Settings
 --------
 
+You should add one of the following at the beginning of your `~/.zshrc`, before
+the modules are initialized with `source ${ZIM_HOME}/init.zsh`, to select your
+preferred editor keymap:
+
+  * emacs:
+  ```zsh
+  bindkey -e
+  ```
+  * vi:
+  ```zsh
+  bindkey -v
+  ```
+
 This module also provides double-dot parent directory expansion, which will turn
 a `.` typed after `..` into `/..` (e.g. `....` into `../../..`) so you don't
-need to type too many slashes and dots. It's disabled by default and can be
-enabled by adding:
+need to type too many slashes and dots. Conversely, it will contract the last
+expansion when BACKSPACE is typed (e.g. `../../..`BACKSPACE into `../..`). It's
+disabled by default and can be enabled by adding:
 
     zstyle ':zim:input' double-dot-expand yes
 
-to your `~/.zshrc` before where the module is initialized.
+at the beginning of your `~/.zshrc`, before the modules are initialized.
