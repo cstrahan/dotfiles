@@ -1,12 +1,12 @@
-zummoner() {
-  local QUESTION="$BUFFER"
+bummoner() {
+  local QUESTION="${READLINE_LINE:-}"
   local PROMPT="
   You are an experienced Linux engineer with expertise in all Linux
   commands and their functionality across different Linux systems.
 
   Given a task, generate a single command or a pipeline
   of commands that accomplish the task efficiently.
-  This command is to be executed in the current shell, zsh.
+  This command is to be executed in the current shell, bash.
   For complex tasks or those requiring multiple
   steps, provide a pipeline of commands.
   Ensure all commands are safe and prefer modern ways. For instance,
@@ -30,12 +30,11 @@ zummoner() {
   Don't include the shell itself (bash, zsh, etc.) in the command.
   "
   if which llcat >& /dev/null; then
-    _ll="llcat -u $LLC_SERVER -bq think"
-    [[ -n "$LLC_KEY_FILE" ]] && _ll+=" -k $(cat $LLC_KEY_FILE)"
-    [[ -n "$LLC_MCP" ]]      && _ll+=" -mf $LLC_MCP"
+    alias _ll="llcat -k $LLC_KEY -u $LLC_SERVER"
+    [[ -n "$LLC_MCP" ]] && _ll="$_ll -mf $LLC_MCP"
     model="$LLC_MODEL"
   else
-    _ll="llm"
+    alias _ll="llm"
 
     if [[ -r "$HOME/$config/io.datasette.llm/default_model.txt" ]]; then
       model=$(cat "$HOME/$config/io.datasette.llm/default_model.txt")
@@ -44,35 +43,21 @@ zummoner() {
     fi
   fi
 
-  BUFFER="$QUESTION ... $model"
-  zle -R
-  local response=$($=_ll -m $model "$PROMPT")
+  echo ""
+  echo "$QUESTION ... $model"
+  local response=$(_ll -m "$model" "$PROMPT")
   local COMMAND=$(echo "$response" | sed 's/```//g' | tr -d '\n')
-  #echo "$(date %s) {$QUESTION | $response}" >> /tmp/zummoner
-  if [[ -n "$COMMAND" ]] ; then
-    if [[ -n "$ZUMMONER_SPELL" ]]; then 
+  if [[ -n "$COMMAND" ]]; then
+    if [[ -n "$ZUMMONER_SPELL" ]]; then
       [[ "$QUESTION" = *"#"* ]] && QUESTION="${QUESTION#*\# }"
-      BUFFER="${COMMAND%%\#*} # $QUESTION"
+      READLINE_LINE="${COMMAND%%\#*} # $QUESTION"
     else
-      BUFFER="$COMMAND"
+      READLINE_LINE="$COMMAND"
     fi
-    CURSOR=${#BUFFER}
+    READLINE_POINT=${#READLINE_LINE}
   else
-    BUFFER="$QUESTION ... no results"
+    READLINE_LINE="$QUESTION ... no results"
   fi
 }
 
-NN=0
-zle -N zummoner
-
-# This is the comment appending option, it will only work if
-# this shell feature is on
-if [[ -n "$ZUMMONER_SPELL" ]]; then
-    setopt interactive_comments
-fi
-
-if ! bindkey | grep -q "\^Xx"; then
-  bindkey '^Xx' zummoner
-elif ! bindkey | grep -q zummoner; then
-  echo "I'm not going to unbind ^Xx, you'll need to do this yourself"
-fi
+bind -x '"\C-Xx": bummoner'
