@@ -409,6 +409,7 @@ gfm () {
 #   - auto-completion for the opam binary
 # This section can be safely removed at any time if needed.
 [[ ! -r "${HOME}/.opam/opam-init/init.zsh" ]] || source "${HOME}/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null
+# END opam configuration
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -430,8 +431,6 @@ exclude=( ~/.zfunc )
 fpath=("${(@)fpath:|exclude}")
 fpath[1,0]=(~/.zfunc)
 unset exclude
-
-# END opam configuration
 
 # Load order:
 # +----------------+-----------+-----------+------+
