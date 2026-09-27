@@ -72,6 +72,11 @@ else
   alias ls="command ls -hBG --color=auto"
 fi
 
+# No need for wezterm shell integration when we aren't in wezterm.
+if [[ ${TERM-} != wezterm ]]; then
+  WEZTERM_SHELL_SKIP_ALL=1
+fi
+
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells
